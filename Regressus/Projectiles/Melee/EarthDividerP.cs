@@ -64,11 +64,9 @@ namespace Regressus.Projectiles.Melee
             flashPos = Projectile.Center;
             return false;
         }
-        public float Lerp(float value)
+        public float Lerp(float x)
         {
-            return value == 1f ? 1f : (value == 0f
-                ? 0f
-                : (float)Math.Pow(2, value * 10f - 10f) / 2f);
+            return x < 0.5f ? 8 * x * x * x * x : 1 - (float)Math.Pow(-2 * x + 2, 4) / 2;
         }
         public override void AI()
         {
