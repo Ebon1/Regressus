@@ -1,0 +1,9 @@
+displayName = Regressus Mod
+author = Slayer + Team
+version = 0.1
+
+includePDB = true
+includeSource = true
+
+hideCode = false
+hideResources = false

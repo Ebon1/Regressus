@@ -1,3 +1,0 @@
-displayName = Regressus Mod
-author = Slayer + Team
-version = 0.1
