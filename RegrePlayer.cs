@@ -21,6 +21,10 @@ namespace Regressus
         public bool reverseTime;
         public bool starshroomed;
         int thing;
+
+        //Queen Drae's bools
+        public bool AcornFairyPet;
+
         public override void UpdateBadLifeRegen()
         {
             if (starshroomed)
@@ -36,6 +40,7 @@ namespace Regressus
         {
             starshroomed = false;
             reverseTime = false;
+            AcornFairyPet = false;
         }
         public override void PostUpdate()
         {
