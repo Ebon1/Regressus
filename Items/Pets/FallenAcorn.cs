@@ -14,7 +14,7 @@ namespace Regressus.Items.Pets
         public override void SetStaticDefaults()
         {
             ItemID.Sets.ItemNoGravity[Item.type] = true;
-            DisplayName.SetDefault("Fallen Acorn");
+            DisplayName.SetDefault("Fairy Stick");
             Tooltip.SetDefault("Summons a forest friend!");
         }
 

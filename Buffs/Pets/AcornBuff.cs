@@ -10,7 +10,7 @@ namespace Regressus.Buffs.Pets
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Baby Acorn Fairy");
-            Description.SetDefault("A memory from the forest is now following you!");
+            Description.SetDefault("A forest memory is following you!");
             Main.buffNoTimeDisplay[Type] = true;
             Main.vanityPet[Type] = true;
         }
