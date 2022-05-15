@@ -6,6 +6,7 @@ using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Regressus.Dusts;
+using Terraria.ID;
 
 namespace Regressus
 {
@@ -24,6 +25,10 @@ namespace Regressus
 
         //Queen Drae's bools
         public bool AcornFairyPet;
+        public bool LavaBiome;
+        public bool KryptonBiome;
+        public bool ArgonBiome;
+        public bool XenonBiome;
 
         public override void UpdateBadLifeRegen()
         {

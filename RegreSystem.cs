@@ -24,6 +24,10 @@ namespace Regressus
 {
     public class RegreSystem : ModSystem
     {
+        public static int LavaMoss;
+        public static int KryptonMoss;
+        public static int ArgonMoss;
+        public static int XenonMoss;
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
@@ -122,6 +126,21 @@ namespace Regressus
         public static float CameraChangeTransition;
         public static int CameraChangeLength;
         public static bool isChangingCameraPos;
+
+        public override void ResetNearbyTileEffects()
+        {
+            LavaMoss = 0;
+            KryptonMoss = 0;
+            ArgonMoss = 0;
+            XenonMoss = 0;
+        }
+        public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
+        {
+            LavaMoss = tileCounts[TileID.LavaMoss] + tileCounts[TileID.LavaMossBrick];
+            KryptonMoss = tileCounts[TileID.KryptonMoss] + tileCounts[TileID.KryptonMossBrick];
+            ArgonMoss = tileCounts[TileID.ArgonMoss] + tileCounts[TileID.ArgonMossBrick];
+            XenonMoss = tileCounts[TileID.XenonMoss] + tileCounts[TileID.XenonMossBrick];
+        }
 
         public override void PostUpdateEverything()
         {
