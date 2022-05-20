@@ -36,7 +36,7 @@ namespace Regressus.NPCs.Critters
             NPC.damage = 0;
             NPC.defense = 0;
             NPC.npcSlots = 0.5f;
-            NPC.catchItem = (short)ItemType<LavaButterItem>();
+            NPC.catchItem = ItemType<LavaButterItem>();
             NPC.lavaImmune = true;
             AIType = NPCID.Butterfly;
             AnimationType = NPCID.Butterfly;
@@ -72,9 +72,9 @@ namespace Regressus.NPCs.Critters
             spriteBatch.Draw(glowTex, NPC.Center - Main.screenPosition + new Vector2(0f, 4), square, Color.White, NPC.rotation, Utils.Size(square) / 2f, NPC.scale, effects, 0f);
         }
 
-        public override void OnCatchNPC(Player player, Item item)
+        public override void OnCaughtBy(Player player, Item item, bool failed)
         {
-            item.stack = 1;
+            Item.NewItem(new EntitySource_CatchEntity(player, NPC), new Vector2(player.position.X, player.position.Y), ItemType<LavaButterItem>());
         }
     }
 }

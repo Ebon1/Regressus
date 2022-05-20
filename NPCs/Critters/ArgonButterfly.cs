@@ -73,10 +73,9 @@ namespace Regressus.NPCs.Critters
             SpriteEffects effects = (NPC.direction != -1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             spriteBatch.Draw(glowTex, NPC.Center - Main.screenPosition + new Vector2(0f, 3), square, Color.White, NPC.rotation, Utils.Size(square) / 2f, NPC.scale, effects, 0f);
         }
-
-        public override void OnCatchNPC(Player player, Item item)
+        public override void OnCaughtBy(Player player, Item item, bool failed)
         {
-            item.stack = 1;
+            Item.NewItem(new EntitySource_CatchEntity(player, NPC), new Vector2(player.position.X, player.position.Y), ItemType<LavaButterItem>());
         }
     }
 }
