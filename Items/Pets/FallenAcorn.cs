@@ -39,21 +39,5 @@ namespace Regressus.Items.Pets
             type = ModContent.ProjectileType<AcornFairyPet>();
             return base.Shoot(player, source, position, velocity, type, damage, knockback);
         }
-
-        /*public override void AddRecipes()
-        {
-            Mod calamityMod = ModLoader.GetMod("CalamityMod");
-            if (calamityMod != null)
-            {
-                ModRecipe recipe = new ModRecipe(mod);
-                recipe.AddRecipeGroup("AnyHardmodeDrill", 1);
-                recipe.AddIngredient(calamityMod.ItemType("DubiousPlating"), 15);
-                recipe.AddIngredient(calamityMod.ItemType("MysteriousCircuitry"), 5);
-                recipe.AddIngredient(ModLoader.GetMod("CalamityMod").ItemType("PowerCell"), 10);
-                recipe.AddTile(ModLoader.GetMod("CalamityMod").TileType("LaboratoryConsole"));
-                recipe.SetResult(this);
-                recipe.AddRecipe();
-            }
-        }*/
     }
 }

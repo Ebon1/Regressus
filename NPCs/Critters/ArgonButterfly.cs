@@ -75,7 +75,7 @@ namespace Regressus.NPCs.Critters
         }
         public override void OnCaughtBy(Player player, Item item, bool failed)
         {
-            Item.NewItem(new EntitySource_CatchEntity(player, NPC), new Vector2(player.position.X, player.position.Y), ItemType<LavaButterItem>());
+            Item.NewItem(new EntitySource_CatchEntity(player, NPC), new Vector2(player.position.X, player.position.Y), ItemType<ArgonButterItem>());
         }
     }
 }
