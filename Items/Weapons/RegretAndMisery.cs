@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.ObjectModel;
+using Terraria.Audio;
 
 namespace Regressus.Items.Weapons
 {
@@ -36,21 +37,37 @@ namespace Regressus.Items.Weapons
             Item.shootSpeed = 15f;
             Item.shoot = ModContent.ProjectileType<RegretAndMiseryP>();
         }
+
+        public static readonly SoundStyle sussySound = new($"Regressus/Sounds/Custom/Sussy", 3)
+        {
+            Volume = 0.65f,
+            Pitch = -0.1f,
+            PitchVariance = 0.2f
+        };
+        public static readonly SoundStyle sussySound2 = new($"Regressus/Sounds/Custom/Sussy2", 3)
+        {
+            Volume = 0.65f,
+            Pitch = -0.1f,
+            PitchVariance = 0.2f
+        };
+
         int attacks;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (++attacks >= 15)
                 attacks = 0;
-            Terraria.Audio.SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Sussy"));
+            // What the fuck is this cringe
+            SoundEngine.PlaySound(sussySound, Main.LocalPlayer.position);
             Projectile proj = Main.projectile[Projectile.NewProjectile(source, new Vector2(Main.MouseWorld.X, Main.screenPosition.Y), new Vector2(Main.rand.NextFloat(-2.5f, 2.5f), Item.shootSpeed), type, damage, knockback, player.whoAmI)];
             if (attacks == 14)
             {
-                Terraria.Audio.SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Sussy2"));
+                SoundEngine.PlaySound(sussySound2, Main.LocalPlayer.position);
                 proj.scale = 5f;
                 proj.damage = damage * 2;
             }
             return false;
         }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             TooltipLine tooltipLine = tooltips.Find((TooltipLine x) => x.Name == "ItemName");
