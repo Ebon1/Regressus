@@ -3,20 +3,16 @@ using Terraria;
 using Terraria.ModLoader;
 using Regressus.Projectiles.Pets;
 
-namespace Regressus.Buffs.Pets
-{
-    public class AcornBuff : ModBuff
-    {
-        public override void SetStaticDefaults()
-        {
+namespace Regressus.Buffs.Pets {
+    public class AcornBuff : ModBuff {
+        public override void SetStaticDefaults() {
             DisplayName.SetDefault("Baby Acorn Fairy");
             Description.SetDefault("A forest memory is following you!");
             Main.buffNoTimeDisplay[Type] = true;
             Main.vanityPet[Type] = true;
         }
 
-        public override void Update(Player player, ref int buffIndex)
-        {
+        public override void Update(Player player, ref int buffIndex) {
             player.buffTime[buffIndex] = 18000;
             player.GetModPlayer<RegrePlayer>().AcornFairyPet = true;
 

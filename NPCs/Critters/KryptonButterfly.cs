@@ -10,26 +10,21 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Regressus.Items.Critters;
 
-namespace Regressus.NPCs.Critters
-{
-    public class KryptonButterfly : ModNPC
-    {
-        public override void SetStaticDefaults()
-        {
+namespace Regressus.NPCs.Critters {
+    public class KryptonButterfly : ModNPC {
+        public override void SetStaticDefaults() {
             DisplayName.SetDefault("Krypton Moss Glowfly");
             Main.npcFrameCount[NPC.type] = 3;
             Main.npcCatchable[NPC.type] = true;
         }
-        public override void SetBestiary(Terraria.GameContent.Bestiary.BestiaryDatabase database, Terraria.GameContent.Bestiary.BestiaryEntry bestiaryEntry)
-        {
+        public override void SetBestiary(Terraria.GameContent.Bestiary.BestiaryDatabase database, Terraria.GameContent.Bestiary.BestiaryEntry bestiaryEntry) {
             bestiaryEntry.UIInfoProvider = new Terraria.GameContent.Bestiary.CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[Type], quickUnlock: true);
             bestiaryEntry.Info.AddRange(new Terraria.GameContent.Bestiary.IBestiaryInfoElement[] {
                 new Terraria.GameContent.Bestiary.FlavorTextBestiaryInfoElement("Placeholder!!"),
             });
         }
 
-        public override void SetDefaults()
-        {
+        public override void SetDefaults() {
             NPC.CloneDefaults(NPCID.Butterfly);
             NPC.width = 26;
             NPC.height = 22;
@@ -46,23 +41,19 @@ namespace Regressus.NPCs.Critters
             NPC.value = 0;
         }
 
-        public override void AI()
-        {
+        public override void AI() {
             NPC.spriteDirection = -NPC.direction;
             NPC.TargetClosest(false);
         }
 
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            if (spawnInfo.Player.ZoneRockLayerHeight && RegreSystem.KryptonMoss > 5)
-            {
+        public override float SpawnChance(NPCSpawnInfo spawnInfo) {
+            if (spawnInfo.Player.ZoneRockLayerHeight && RegreSystem.KryptonMoss > 5) {
                 return 5f;
             }
             return 0f;
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-        {
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
             //Æ: Totally legit code, all mine aha
             Texture2D glowTex = Request<Texture2D>("Regressus/NPCs/Critters/KryptonButterflyGlow").Value;
 
@@ -73,8 +64,7 @@ namespace Regressus.NPCs.Critters
             SpriteEffects effects = (NPC.direction != -1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             spriteBatch.Draw(glowTex, NPC.Center - Main.screenPosition + new Vector2(0f, 3), square, Color.White, NPC.rotation, Utils.Size(square) / 2f, NPC.scale, effects, 0f);
         }
-        public override void OnCaughtBy(Player player, Item item, bool failed)
-        {
+        public override void OnCaughtBy(Player player, Item item, bool failed) {
             Item.NewItem(new EntitySource_CatchEntity(player, NPC), new Vector2(player.position.X, player.position.Y), ItemType<KryptonButterItem>());
         }
     }

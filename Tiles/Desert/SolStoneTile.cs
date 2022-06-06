@@ -15,8 +15,7 @@ namespace Regressus.Tiles.Desert {
             Main.tileNoAttach[Type] = true;
             Main.tileFrameImportant[Type] = true;
             Main.tileLighted[Type] = true;
-            ItemDrop = ModContent.ItemType<SolStoneItem>();
-            AddMapEntry(new Color(255, 149, 0), Language.GetText("Sun Crystal"));
+            AddMapEntry(new Color(255, 149, 0), Language.GetText("Sol Crystal"));
             AnimationFrameHeight = 198;
             HitSound = SoundID.Tink;
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);

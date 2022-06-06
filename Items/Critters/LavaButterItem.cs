@@ -2,17 +2,13 @@
 using static Terraria.ModLoader.ModContent;
 using Regressus.NPCs.Critters;
 
-namespace Regressus.Items.Critters
-{
-    public class LavaButterItem : ModItem
-    {
-        public override void SetStaticDefaults()
-        {
+namespace Regressus.Items.Critters {
+    public class LavaButterItem : ModItem {
+        public override void SetStaticDefaults() {
             DisplayName.SetDefault("Lava Glowfly");
         }
 
-        public override void SetDefaults()
-        {
+        public override void SetDefaults() {
             Item.useStyle = 1;
             Item.autoReuse = true;
             Item.useTurn = true;
