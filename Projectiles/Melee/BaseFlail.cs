@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.ModLoader;
 using ReLogic.Content;
 using Terraria.Audio;
+using Terraria.ID;
 
 namespace Regressus.Projectiles.Melee
 {
@@ -43,6 +44,10 @@ namespace Regressus.Projectiles.Melee
             ExtraDefaults();
         }
         public virtual void ExtraDefaults() { }
+        /// <summary>
+        /// The sound the flail will make upon impact
+        /// </summary>
+        public virtual SoundStyle FlailSound => SoundID.NPCHit1;
         public sealed override void AI()
         {
             ExtraAI();
@@ -392,7 +397,7 @@ namespace Regressus.Projectiles.Melee
                 {
                     Collision.HitTiles(Projectile.position, velocity, Projectile.width, Projectile.height);
                 }
-                SoundEngine.PlaySound(Terraria.ID.SoundID.Dig);
+                SoundEngine.PlaySound(FlailSound, Projectile.position);
             }
 
             //If the flail isn't already being forcibly retracted or being held, pull it in.

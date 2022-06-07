@@ -6,6 +6,7 @@ using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Regressus.Dusts;
+using Terraria.ID;
 
 namespace Regressus
 {
@@ -21,6 +22,14 @@ namespace Regressus
         public bool reverseTime;
         public bool starshroomed;
         int thing;
+
+        //Queen Drae's bools
+        public bool AcornFairyPet;
+        public bool LavaBiome;
+        public bool KryptonBiome;
+        public bool ArgonBiome;
+        public bool XenonBiome;
+
         public override void UpdateBadLifeRegen()
         {
             if (starshroomed)
@@ -36,6 +45,7 @@ namespace Regressus
         {
             starshroomed = false;
             reverseTime = false;
+            AcornFairyPet = false;
         }
         public override void PostUpdate()
         {
