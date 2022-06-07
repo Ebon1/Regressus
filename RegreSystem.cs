@@ -1,29 +1,46 @@
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using System.IO;
+using Terraria;
+using Terraria.ID;
+using Terraria.DataStructures;
+using Terraria.GameContent.Generation;
+using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
-using Terraria.ID;
 using ReLogic.Graphics;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using Terraria;
 using Terraria.UI.Chat;
 using Terraria.GameContent.Shaders;
 using Terraria.GameContent.UI;
 using Terraria.GameContent;
-using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.Initializers;
 using Terraria.GameContent.Skies;
-using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Regressus.Effects.Prims;
+using Terraria.WorldBuilding;
+using Regressus.Tiles.Desert;
+using Terraria.IO;
+
 namespace Regressus
 {
     public class RegreSystem : ModSystem
     {
+        public static int LavaMoss;
+        public static int KryptonMoss;
+        public static int ArgonMoss;
+        public static int XenonMoss;
+
+        public override void PostWorldGen()
+        {
+            WorldGen.TileRunner(new Random().Next(WorldGen.UndergroundDesertLocation.Location.X, (int)WorldGen.UndergroundDesertLocation.BottomRight().X),
+                new Random().Next(WorldGen.UndergroundDesertLocation.Location.Y, (int)WorldGen.UndergroundDesertLocation.BottomRight().Y),
+                1, 5, ModContent.TileType<SolStoneTile>(), true, 0, 0, false, false);
+        }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
@@ -122,6 +139,21 @@ namespace Regressus
         public static float CameraChangeTransition;
         public static int CameraChangeLength;
         public static bool isChangingCameraPos;
+
+        public override void ResetNearbyTileEffects()
+        {
+            LavaMoss = 0;
+            KryptonMoss = 0;
+            ArgonMoss = 0;
+            XenonMoss = 0;
+        }
+        public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
+        {
+            LavaMoss = tileCounts[TileID.LavaMoss] + tileCounts[TileID.LavaMossBrick];
+            KryptonMoss = tileCounts[TileID.KryptonMoss] + tileCounts[TileID.KryptonMossBrick];
+            ArgonMoss = tileCounts[TileID.ArgonMoss] + tileCounts[TileID.ArgonMossBrick];
+            XenonMoss = tileCounts[TileID.XenonMoss] + tileCounts[TileID.XenonMossBrick];
+        }
 
         public override void PostUpdateEverything()
         {

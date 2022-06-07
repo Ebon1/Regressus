@@ -49,7 +49,11 @@ namespace Regressus.Items.Weapons.Magic
         }
         public override void AddRecipes()
         {
-            CreateRecipe().AddIngredient<Items.Ammo.Starspore>(25).AddIngredient(ItemID.Mushroom, 35).AddTile(TileID.Anvils).Register();
+            CreateRecipe()
+                .AddIngredient<Items.Ammo.Starspore>(25)
+                .AddIngredient(ItemID.Mushroom, 35)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }
