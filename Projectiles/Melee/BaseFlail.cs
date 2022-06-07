@@ -392,7 +392,7 @@ namespace Regressus.Projectiles.Melee
                 {
                     Collision.HitTiles(Projectile.position, velocity, Projectile.width, Projectile.height);
                 }
-                SoundEngine.PlaySound(0, (int)Projectile.position.X, (int)Projectile.position.Y);
+                SoundEngine.PlaySound(Terraria.ID.SoundID.Dig);
             }
 
             //If the flail isn't already being forcibly retracted or being held, pull it in.

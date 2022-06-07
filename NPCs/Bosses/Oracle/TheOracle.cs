@@ -335,7 +335,7 @@ namespace Regressus.NPCs.Bosses.Oracle
             {
                 if (player.Center.Distance(arenaCenter) >= (1322 / 2) * (2.5f))
                 {
-                    player.Center = arenaCenter;
+                    RegreUtils.TPNoDust(arenaCenter, player);
                     //player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " left the boundaries."), 999999999, 0);
                 }
             }
@@ -361,10 +361,10 @@ namespace Regressus.NPCs.Bosses.Oracle
                 }
                 if (AITimer == 2)
                 {
-                    RegreSystem.ChangeCameraPos(NPC.Center, 175, 1.5f);
-                    player.GetModPlayer<RegrePlayer>().BossNameThing(175, "The Oracle", Color.LightSkyBlue, "--Eschaton of Time--");
+                    RegreSystem.ChangeCameraPos(NPC.Center, 215, 1.5f);
+                    RegreUtils.SetBossTitle(215, "The Oracle", Color.White, "--Eschaton of Time--", BossTitleStyleID.Oracle);
                 }
-                if (AITimer >= 180)
+                if (AITimer >= 220)
                 {
                     AITimer = 0;
                     if (crystal != null)
@@ -391,7 +391,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                     Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/oldOracle");
                     NPC.Center = new Vector2(player.position.X, player.position.Y - 200);
                     RegreSystem.ChangeCameraPos(NPC.Center, 50, 1.5f);
-                    player.GetModPlayer<RegrePlayer>().BossNameThing(120, "The Oracle", Color.LightSkyBlue, "--Construct of Insight--", false);
+                    RegreUtils.SetBossTitle(120, "The Oracle", Color.LightSkyBlue, "--Construct of Insight--");
                 }
                 if (savantFrameCounter < 5)
                 {

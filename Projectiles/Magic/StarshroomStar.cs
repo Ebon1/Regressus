@@ -65,21 +65,8 @@ namespace Regressus.Projectiles.Magic
                 initialVel = Projectile.velocity;
                 runOnce = true;
             }
-            time++;
-            frequencyMultiplier = 0.15f;
-            amplitude = 60;
-            float wave = (float)Math.Sin(time * frequencyMultiplier);
-            Vector2 vector = new Vector2(initialVel.X, initialVel.Y).RotatedBy(MathHelper.ToRadians(90));
-            vector.Normalize();
-            wave *= Projectile.ai[0];
-            wave *= amplitude;
-            Vector2 offset = vector * wave;
-            Projectile.Center = initialCenter + (Projectile.velocity * time);
-            Projectile.Center = Projectile.Center + offset;
+            RegreUtils.SineMovement(Projectile, initialCenter, initialVel, 0.15f, 60);
             Projectile.rotation += MathHelper.ToRadians(5f);
-
-
-            //Projectile.velocity = Projectile.velocity.RotatedBy(Math.Sin(time) * 16);
         }
         public override bool PreDraw(ref Color lightColor)
         {

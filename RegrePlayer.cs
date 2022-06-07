@@ -14,7 +14,7 @@ namespace Regressus
         public int bossTextProgress, bossMaxProgress;
         public string bossName;
         public string bossTitle;
-        public bool bossDramatic;
+        public int bossStyle;
         public Color bossColor;
         public Vector2[] oldCenter = new Vector2[950];
         public int[] oldLife = new int[950], oldDir = new int[950];
@@ -43,10 +43,10 @@ namespace Regressus
                 bossTextProgress--;
             if (bossTextProgress == 0)
             {
-                bossDramatic = false;
                 bossName = null;
                 bossTitle = null;
                 bossMaxProgress = 0;
+                bossStyle = -1;
                 bossColor = Color.White;
             }
             if (!reverseTime)
@@ -87,15 +87,6 @@ namespace Regressus
                         Player.direction = oldDir[thing];
                 }
             }
-        }
-        public void BossNameThing(int progress, string name, Color color, string title = null, bool dramatic = true)
-        {
-            bossDramatic = dramatic;
-            bossTextProgress = progress;
-            bossMaxProgress = progress;
-            bossName = name;
-            bossTitle = title;
-            bossColor = color;
         }
     }
 }

@@ -26,33 +26,11 @@ namespace Regressus
     {
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
             int textIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
             int textIndex2 = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text")) - 1;
             layers.Insert(textIndex, new LegacyGameInterfaceLayer("Regressus: BossText", () =>
             {
-                if (player.bossTextProgress > 0)
-                {
-                    if (!player.bossDramatic)
-                    {
-                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f), player.bossColor, 0, new Vector2(0.5f, 0.5f), new Vector2(1f, 1f));
-                        if (player.bossTitle != null)
-                        {
-                            ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, player.bossTitle, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(player.bossTitle).X / 2, Main.screenHeight * 0.225f), player.bossColor, 0, new Vector2(0.5f, 0.5f), new Vector2(1f, 1f));
-                        }
-                    }
-                    else
-                    {
-                        float progress = Utils.GetLerpValue(0, player.bossMaxProgress, player.bossTextProgress);
-                        float alpha = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
-                        RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
-                        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/textGlow").Value, new Rectangle(-Main.screenWidth, (int)(-25), Main.screenWidth * 4, 256 * 2), player.bossColor * alpha);
-                        if (player.bossTitle != null)
-                            ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, player.bossTitle, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(player.bossTitle).X / 2, Main.screenHeight * 0.225f), player.bossColor * alpha, 0, new Vector2(0.5f, 0.5f), new Vector2(1f, 1f));
-                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f), player.bossColor * alpha, 0, new Vector2(0.5f, 0.5f), new Vector2(1f, 1f));
-                        RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
-                    }
-                }
+                RegreUtils.DrawBossTitle();
                 return true;
             }, InterfaceScaleType.UI));
         }
@@ -125,7 +103,7 @@ namespace Regressus
 
         public override void PostUpdateEverything()
         {
-            Particles.Particle.UpdateParticles();
+            //Particles.Particle.UpdateParticles();
         }
         public static void ChangeCameraPos(Vector2 pos, int length, float zoom = 1.65f)
         {

@@ -35,7 +35,7 @@ namespace Regressus.Items.Weapons.Ranged.Guns
             Item.shootSpeed = 18.5f;
             Item.shoot = ProjectileID.Bullet;
         }
-        public override bool CanConsumeAmmo(Player player)
+        public override bool CanConsumeAmmo(Item ammo, Player player)
         {
             return Main.rand.NextFloat() >= .1f;
         }

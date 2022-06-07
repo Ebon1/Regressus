@@ -26,8 +26,7 @@ namespace Regressus.Projectiles.Melee
                 maxTime = 230;
             else
                 maxTime = 25;
-            Projectile.timeLeft = maxTime;
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.timeLeft = maxTime;;
             Projectile.width = Projectile.height = 82;
             Projectile.friendly = true;
             Projectile.hostile = false;

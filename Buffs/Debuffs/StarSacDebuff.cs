@@ -16,7 +16,7 @@ namespace Regressus.Buffs.Debuffs
 {
     public class StarSacDebuff : ModBuff
     {
-        public override string Texture => "Regressus/Extras/Empty";
+        public override string Texture => RegreUtils.BuffPlaceholder;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Starshroom Poisoning");
@@ -33,7 +33,7 @@ namespace Regressus.Buffs.Debuffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.GetGlobalNPC<NPCs.RegreGlobalNPC>().starshroomed = true;
+            npc.GetGlobalNPC<NPCs.RegreGlobalNPCMisc>().starshroomed = true;
         }
     }
 }

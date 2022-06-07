@@ -15,7 +15,6 @@ namespace Regressus.Buffs.Minions
 {
     public class Tyrfing : ModBuff
     {
-        public override string Texture => "Regressus/Extras/Empty";
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tyrfing");

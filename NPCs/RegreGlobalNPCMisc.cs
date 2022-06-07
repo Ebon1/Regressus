@@ -15,7 +15,7 @@ using Regressus.NPCs.Bosses.Oracle;
 
 namespace Regressus.NPCs
 {
-    public class RegreGlobalNPC : GlobalNPC
+    public class RegreGlobalNPCMisc : GlobalNPC
     {
         public override bool InstancePerEntity
         {

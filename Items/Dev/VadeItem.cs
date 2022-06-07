@@ -68,7 +68,8 @@ namespace Regressus.Items.Dev
             if (player.altFunctionUse == 2)
             {
                 player.AddBuff(ModContent.BuffType<Buffs.Minions.Tyrfing>(), 2);
-                Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<VadeItemP3>(), damage, knockback, player.whoAmI);
+                Projectile proj = Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<VadeItemP3>(), damage, knockback, player.whoAmI);
+                proj.originalDamage = Item.damage;
             }
             attacks++;
             if (attacks >= 3)

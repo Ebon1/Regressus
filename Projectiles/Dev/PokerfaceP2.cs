@@ -42,20 +42,7 @@ namespace Regressus.Projectiles.Dev
                 initialVel = Projectile.velocity;
                 runOnce = true;
             }
-            time++;
-            frequencyMultiplier = 0.15f;
-            amplitude = 60;
-            float wave = (float)Math.Sin(time * frequencyMultiplier);
-            Vector2 vector = new Vector2(initialVel.X, initialVel.Y).RotatedBy(MathHelper.ToRadians(90));
-            vector.Normalize();
-            wave *= Projectile.ai[0];
-            wave *= amplitude;
-            Vector2 offset = vector * wave;
-            Projectile.Center = initialCenter + (Projectile.velocity * time);
-            Projectile.Center = Projectile.Center + offset;
-
-
-            //Projectile.velocity = Projectile.velocity.RotatedBy(Math.Sin(time) * 16);
+            RegreUtils.SineMovement(Projectile, initialCenter, initialVel, 0.15f, 60);
         }
         public override bool PreDraw(ref Color lightColor)
         {

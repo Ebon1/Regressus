@@ -61,10 +61,17 @@ namespace Regressus.Items.Weapons.Melee
             }
             return true;
         }
+        public override bool AltFunctionUse(Player player)
+        {
+            return true;
+        }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             dir = -dir;
-            Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, dir, attacks);
+            if (player.altFunctionUse == 2)
+                Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<ForeshadowP3>(), damage, knockback, player.whoAmI, dir, attacks);
+            else
+                Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, dir, attacks);
             return false;
         }
     }

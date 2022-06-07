@@ -83,7 +83,7 @@ namespace Regressus.Projectiles.Oracle
             float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
             // base scale for the flash so it actually connects with beam
             float scale = Projectile.scale * 4 * mult;
-            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/sun").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Line").Value;
             //Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), 0, new Vector2(texture.Width, texture.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
             rotation += MathHelper.ToRadians(1 * Projectile.ai[1]);
             Texture2D rune1 = ModContent.Request<Texture2D>("Regressus/Extras/rune1").Value;
@@ -268,7 +268,7 @@ namespace Regressus.Projectiles.Oracle
             float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
             // base scale for the flash so it actually connects with beam
             float scale = Projectile.scale * 4 * mult;
-            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/sun").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Line").Value;
             //float scale = Projectile.scale * 2 * mult;
             BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
@@ -530,7 +530,7 @@ namespace Regressus.Projectiles.Oracle
 
             float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly) * 0.1f);
             float scale = Projectile.scale * 4 * mult;
-            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/sun").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Line").Value;
             rotation += MathHelper.ToRadians(1);
             Texture2D rune1 = ModContent.Request<Texture2D>("Regressus/Extras/rune1").Value;
             Texture2D rune2 = ModContent.Request<Texture2D>("Regressus/Extras/rune2").Value;
@@ -660,7 +660,7 @@ namespace Regressus.Projectiles.Oracle
 
             float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * 2) * 0.1f);
             float scale = Projectile.scale * 4 * mult;
-            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/sun").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Line").Value;
             Texture2D TrailTexture1 = Mod.Assets.Request<Texture2D>("Extras/oracleBeam").Value;
             Texture2D TrailTexture2 = Mod.Assets.Request<Texture2D>("Extras/Tentacle").Value;
             Texture2D TrailTexture3 = Mod.Assets.Request<Texture2D>("Extras/laser").Value;

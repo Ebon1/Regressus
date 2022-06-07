@@ -26,13 +26,13 @@ namespace Regressus.NPCs.UG
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
-                new FlavorTextBestiaryInfoElement("Your mom lmao"),
+                new FlavorTextBestiaryInfoElement("These friend-shaped creatures are known to dwell beneath earth in humid caves and they are highly ressistant to attacks, who would even want to hurt them though?"),
             });
         }
         public override void SetDefaults()
         {
             NPC.width = NPC.height = 56;
-            NPC.lifeMax = 20000;
+            NPC.lifeMax = 100;
             NPC.defense = 20;
             NPC.damage = 0;
         }
@@ -92,7 +92,9 @@ namespace Regressus.NPCs.UG
         public override void AI()
         {
             if (NPC.life != NPC.lifeMax)
+            {
                 AIState = Run;
+            }
             if (AIState == Idle)
             {
                 NPC.ai[1]--;
@@ -123,6 +125,11 @@ namespace Regressus.NPCs.UG
             }
             else if (AIState == Run)
             {
+                if (NPC.life < NPC.lifeMax)
+                {
+                    NPC.life += 10;
+                    CombatText.NewText(NPC.getRect(), CombatText.HealLife, 10);
+                }
                 NPC.ai[1]--;
                 NPC.aiStyle = -1;
                 NPC.direction = Main.player[NPC.target].Center.X < NPC.Center.X ? 1 : -1;

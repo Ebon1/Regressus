@@ -5,7 +5,7 @@ using Terraria.GameContent;
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
+using Terraria.Audio;
 
 
 namespace Regressus.Projectiles.Omniclass
@@ -53,7 +53,8 @@ namespace Regressus.Projectiles.Omniclass
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            Terraria.Audio.SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Sussy2"));
+            SoundStyle sus = new SoundStyle("Sounds/Custom/Sussy2");
+            Terraria.Audio.SoundEngine.PlaySound(sus);
         }
     }
 }

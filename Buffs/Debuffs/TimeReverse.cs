@@ -16,7 +16,7 @@ namespace Regressus.Buffs.Debuffs
 {
     public class TimeReverse : ModBuff
     {
-        public override string Texture => "Regressus/Extras/Empty";
+        public override string Texture => RegreUtils.BuffPlaceholder;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Time Reverse");

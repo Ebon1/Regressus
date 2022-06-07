@@ -24,8 +24,13 @@ namespace Regressus.Projectiles.Melee
         {
             return val;
         }
+        public virtual void ExtraAI()
+        {
+
+        }
         public override void AI()
         {
+            ExtraAI();
             AttachToPlayer();
         }
         public override bool ShouldUpdatePosition() => false;

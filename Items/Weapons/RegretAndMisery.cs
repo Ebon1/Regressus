@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.ObjectModel;
+using Terraria.Audio;
 
 namespace Regressus.Items.Weapons
 {
@@ -41,11 +42,13 @@ namespace Regressus.Items.Weapons
         {
             if (++attacks >= 15)
                 attacks = 0;
-            Terraria.Audio.SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Sussy"));
+            SoundStyle sus = new SoundStyle("Sounds/Custom/Sussy");
+            SoundStyle sus2 = new SoundStyle("Sounds/Custom/Sussy2");
+            Terraria.Audio.SoundEngine.PlaySound(sus);
             Projectile proj = Main.projectile[Projectile.NewProjectile(source, new Vector2(Main.MouseWorld.X, Main.screenPosition.Y), new Vector2(Main.rand.NextFloat(-2.5f, 2.5f), Item.shootSpeed), type, damage, knockback, player.whoAmI)];
             if (attacks == 14)
             {
-                Terraria.Audio.SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Sussy2"));
+                Terraria.Audio.SoundEngine.PlaySound(sus2);
                 proj.scale = 5f;
                 proj.damage = damage * 2;
             }

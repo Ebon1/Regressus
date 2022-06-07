@@ -10,33 +10,128 @@ using Terraria.GameContent;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Regressus.Particles;
+//using Regressus.Particles;
 using System;
 using Regressus.Dusts;
 using Terraria.ID;
 using Regressus.Items.Weapons.Magic;
+using System.Collections.Generic;
+using Terraria.GameContent.UI;
+using ReLogic.Graphics;
+using log4net;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using ReLogic.Content;
+using ReLogic.Content.Sources;
+using ReLogic.Graphics;
+using ReLogic.Localization.IME;
+using ReLogic.OS;
+using ReLogic.Peripherals.RGB;
+using ReLogic.Utilities;
+using Steamworks;
+using System;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using Terraria.Achievements;
+using Terraria.Audio;
+using Terraria.Chat;
+using Terraria.Cinematics;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.GameContent;
+using Terraria.GameContent.Achievements;
+using Terraria.GameContent.Ambience;
+using Terraria.GameContent.Creative;
+using Terraria.GameContent.Drawing;
+using Terraria.GameContent.Events;
+using Terraria.GameContent.Golf;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.Liquid;
+using Terraria.GameContent.NetModules;
+using Terraria.GameContent.Skies;
+using Terraria.GameContent.UI;
+using Terraria.GameContent.UI.BigProgressBar;
+using Terraria.GameContent.UI.Chat;
+using Terraria.GameContent.UI.Minimap;
+using Terraria.GameContent.UI.ResourceSets;
+using Terraria.GameContent.UI.States;
+using Terraria.GameInput;
+using Terraria.Graphics;
+using Terraria.Graphics.CameraModifiers;
+using Terraria.Graphics.Capture;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Light;
+using Terraria.Graphics.Renderers;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.Initializers;
+using Terraria.IO;
+using Terraria.Localization;
+using Terraria.Map;
+using Terraria.ModLoader;
+using Terraria.ModLoader.Core;
+using Terraria.ModLoader.Engine;
+using Terraria.ModLoader.IO;
+using Terraria.ModLoader.UI;
+using Terraria.Net;
+using Terraria.ObjectData;
+using Terraria.Social;
+using Terraria.Social.Steam;
+using Terraria.UI;
+using Terraria.UI.Chat;
+using Terraria.UI.Gamepad;
+using Terraria.Utilities;
+using Terraria.WorldBuilding;
 
 namespace Regressus
 {
     public class Regressus : Mod
     {
-        public RenderTarget2D render, render3;
+        public RenderTarget2D render, render3, render4;
         public DrawableTooltipLine line;
         public int a;
         public static Regressus Instance;
         public static Effect BeamShader, Lens, Test1, Test2, LavaRT, Galaxy;
-        public static Effect Tentacle, TentacleBlack, TentacleRT, ScreenDistort, TextGradient, TextGradient2;
+        public static Effect Tentacle, TentacleBlack, TentacleRT, ScreenDistort, TextGradient, TextGradient2, TextGradientY;
+        public DrawableTooltipLine[] lines = new DrawableTooltipLine[Main.maxItems];
+        public DrawableTooltipLine activeLine;
+        public static void GetLine(DrawableTooltipLine line, int index)
+        {
+            for (int i = 0; i < Main.maxItems; i++)
+            {
+                if (i == index)
+                {
+                    Regressus r = new Regressus();
+                    r.lines[i] = line;
+                    r.activeLine = line;
+                }
+            }
+        }
         public override void Load()
         {
-            Particle.Load();
+            /*Particle.Load();
             foreach (Type type in Code.GetTypes())
             {
                 Particle.TryRegisteringParticle(type);
-            }
+            }*/
             Instance = this;
             Test1 = ModContent.Request<Effect>("Regressus/Effects/Test1", (AssetRequestMode)1).Value;
             TextGradient = ModContent.Request<Effect>("Regressus/Effects/TextGradient", (AssetRequestMode)1).Value;
             TextGradient2 = ModContent.Request<Effect>("Regressus/Effects/TextGradient2", (AssetRequestMode)1).Value;
+            TextGradientY = ModContent.Request<Effect>("Regressus/Effects/TextGradientY", (AssetRequestMode)1).Value;
             Test2 = ModContent.Request<Effect>("Regressus/Effects/Test2", (AssetRequestMode)1).Value;
             Galaxy = ModContent.Request<Effect>("Regressus/Effects/Galaxy", (AssetRequestMode)1).Value;
             LavaRT = ModContent.Request<Effect>("Regressus/Effects/LavaRT", (AssetRequestMode)1).Value;
@@ -60,7 +155,7 @@ namespace Regressus
         }
         public override void Unload()
         {
-            Particle.Unload();
+            //Particle.Unload();
             On.Terraria.Graphics.Effects.FilterManager.EndCapture -= FilterManager_EndCapture;
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
             base.Unload();
@@ -80,8 +175,27 @@ namespace Regressus
             {
                 render = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
                 render3 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+                render4 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
             });
         }
+        //if (proj.active && proj.type == ModContent.ProjectileType<Projectiles.Melee.ForeshadowP>())
+        //{
+        //Projectiles.Melee.ForeshadowP foreshadowP = new Projectiles.Melee.ForeshadowP();
+        //    Color color = Color.White;
+        //    proj.ModProjectile.PreDraw(ref color);
+        /*RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
+        Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Melee/Foreshadow_Glow").Value;
+        var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[proj.type];
+        for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[proj.type]; i++)
+        {
+            if (i == proj.localAI[0])
+                continue;
+            Main.spriteBatch.Draw(glow, proj.oldPos[i] - Main.screenPosition + new Vector2(proj.width / 2f, proj.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), Color.DarkViolet * (1f - fadeMult * i), proj.oldRot[i] + (proj.ai[0] == -1 ? 0 : MathHelper.PiOver2 * 3), glow.Size() / 2, proj.scale * (ProjectileID.Sets.TrailCacheLength[proj.type] - i) / ProjectileID.Sets.TrailCacheLength[proj.type], proj.ai[0] == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+        }
+
+        RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
+        foreshadowP.PostDraw(color);*/
+        //}
         private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
         {
             GraphicsDevice gd = Main.instance.GraphicsDevice;
@@ -98,33 +212,15 @@ namespace Regressus
             sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             foreach (Projectile proj in Main.projectile)
             {
+                if (proj.active && proj.type == ModContent.ProjectileType<Projectiles.Melee.ForeshadowP2>())
+                {
+                    Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_03").Value, proj.Center - Main.screenPosition, null, Color.DarkViolet, proj.rotation, ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_03").Size() / 2, new Vector2(proj.ai[1] * proj.scale, (proj.ai[0] == 1 ? 0.5f : 1) * proj.scale), SpriteEffects.None, 0f);
+                }
                 if (proj.active && proj.timeLeft > 1 && proj.type == ModContent.ProjectileType<Projectiles.TentacleRT>() || proj.type == ModContent.ProjectileType<Projectiles.SmolTentacleRT>() || proj.type == ModContent.ProjectileType<Projectiles.Oracle.OracleBeamRT>())
                 {
                     Color color = Color.White;
                     proj.ModProjectile.PreDraw(ref color);
                 }
-                if (proj.active && proj.type == ModContent.ProjectileType<Projectiles.Melee.ForeshadowP2>())
-                {
-                    Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_03").Value, proj.Center - Main.screenPosition, null, Color.DarkViolet, proj.rotation, ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_03").Size() / 2, new Vector2(proj.ai[1], 1), SpriteEffects.None, 0f);
-                }
-                //if (proj.active && proj.type == ModContent.ProjectileType<Projectiles.Melee.ForeshadowP>())
-                //{
-                //Projectiles.Melee.ForeshadowP foreshadowP = new Projectiles.Melee.ForeshadowP();
-                //    Color color = Color.White;
-                //    proj.ModProjectile.PreDraw(ref color);
-                /*RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
-                Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Melee/Foreshadow_Glow").Value;
-                var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[proj.type];
-                for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[proj.type]; i++)
-                {
-                    if (i == proj.localAI[0])
-                        continue;
-                    Main.spriteBatch.Draw(glow, proj.oldPos[i] - Main.screenPosition + new Vector2(proj.width / 2f, proj.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), Color.DarkViolet * (1f - fadeMult * i), proj.oldRot[i] + (proj.ai[0] == -1 ? 0 : MathHelper.PiOver2 * 3), glow.Size() / 2, proj.scale * (ProjectileID.Sets.TrailCacheLength[proj.type] - i) / ProjectileID.Sets.TrailCacheLength[proj.type], proj.ai[0] == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
-                }
-
-                RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
-                foreshadowP.PostDraw(color);*/
-                //}
             }
             sb.End();
 
@@ -141,14 +237,6 @@ namespace Regressus
             sb.Draw(render, Vector2.Zero, Color.White);
             sb.End();
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            /*foreach (Projectile proj in Main.projectile)
-            {
-                if (proj.active && proj.type == ModContent.ProjectileType<Projectiles.Melee.ForeshadowP>())
-                {
-                    Color color = Color.White;
-                    proj.ModProjectile.PostDraw(color);
-                }
-            }*/
             sb.End();
 
             gd.SetRenderTarget(Main.screenTargetSwap);
@@ -200,6 +288,8 @@ namespace Regressus
             LavaRT.Parameters["n"].SetValue(0.01f);
             sb.Draw(render, Vector2.Zero, Color.White);
             sb.End();
+            #endregion
+            #region "dev names"
             #endregion
             #region "lens"
             RenderTarget2D render2 = Main.screenTargetSwap;

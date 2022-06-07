@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace Regressus.Projectiles.Oracle
 {
-    internal class OracleTelegraphLine : OracleBeamTarget
+    public class OracleTelegraphLine : OracleBeamTarget
     {
         public override void SetStaticDefaults()
         {

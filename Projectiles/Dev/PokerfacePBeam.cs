@@ -301,7 +301,6 @@ namespace Regressus.Projectiles.Dev
             float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
             // base scale for the flash so it actually connects with beam
             float scale = Projectile.scale * 4 * mult;
-            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/sun").Value;
             //float scale = Projectile.scale * 2 * mult;
             BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
@@ -351,7 +350,7 @@ namespace Regressus.Projectiles.Dev
             packet3.Send();
             RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);
 
-            texture = ModContent.Request<Texture2D>("Regressus/Extras/Extras2/circle_05").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Extras2/circle_05").Value;
 
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Color.White, 0, new Vector2(texture.Width, texture.Height) / 2, scale * 0.05f, SpriteEffects.None, 0f);
 
