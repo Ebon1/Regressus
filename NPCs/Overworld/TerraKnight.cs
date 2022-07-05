@@ -50,10 +50,10 @@ namespace Regressus.NPCs.Overworld
             SpriteEffects effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Texture2D a = Terraria.GameContent.TextureAssets.Npc[Type].Value;
             Texture2D b = RegreUtils.GetExtraTexture("glow");
-            RegreUtils.Reload(spriteBatch, BlendState.Additive);
-            spriteBatch.Draw(b, NPC.Center - screenPos, null, new Color(0, 255, Main.DiscoB) * 0.75f, NPC.rotation, new Vector2(512, 512) / 2, NPC.scale / 3, effects, 0f);
             spriteBatch.Draw(a, NPC.Center - screenPos, NPC.frame, Color.White, NPC.rotation, NPC.Size / 2, NPC.scale, effects, 0f);
-            RegreUtils.Reload(spriteBatch, BlendState.AlphaBlend);
+            /* RegreUtils.Reload(spriteBatch, BlendState.Additive);
+            spriteBatch.Draw(b, NPC.Center - screenPos, null, new Color(0, 255, Main.DiscoB) * 0.75f, NPC.rotation, new Vector2(512, 512) / 2, NPC.scale / 3, effects, 0f);
+            RegreUtils.Reload(spriteBatch, BlendState.AlphaBlend);*/
             return false;
         }
         int height;

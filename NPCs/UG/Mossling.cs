@@ -26,7 +26,7 @@ namespace Regressus.NPCs.UG
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
-                new FlavorTextBestiaryInfoElement("These friend-shaped creatures are known to dwell beneath earth in humid caves and they are highly ressistant to attacks, who would even want to hurt them though?"),
+                new FlavorTextBestiaryInfoElement("To protect themselves from daemonic corruption, The Mosslings have evolved regenerative capabilities that make them near invincibile"),
             });
         }
         public override void SetDefaults()

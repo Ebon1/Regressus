@@ -101,10 +101,9 @@ namespace Regressus
     public class Regressus : Mod
     {
         public RenderTarget2D render, render3, render4;
-        public DrawableTooltipLine line;
         public int a;
         public static Regressus Instance;
-        public static Effect BeamShader, Lens, Test1, Test2, LavaRT, Galaxy;
+        public static Effect BeamShader, Lens, Test1, Test2, LavaRT, Galaxy, CrystalShine;
         public static Effect Tentacle, TentacleBlack, TentacleRT, ScreenDistort, TextGradient, TextGradient2, TextGradientY;
         public DrawableTooltipLine[] lines = new DrawableTooltipLine[Main.maxItems];
         public DrawableTooltipLine activeLine;
@@ -129,6 +128,7 @@ namespace Regressus
             }*/
             Instance = this;
             Test1 = ModContent.Request<Effect>("Regressus/Effects/Test1", (AssetRequestMode)1).Value;
+            CrystalShine = ModContent.Request<Effect>("Regressus/Effects/CrystalShine", (AssetRequestMode)1).Value;
             TextGradient = ModContent.Request<Effect>("Regressus/Effects/TextGradient", (AssetRequestMode)1).Value;
             TextGradient2 = ModContent.Request<Effect>("Regressus/Effects/TextGradient2", (AssetRequestMode)1).Value;
             TextGradientY = ModContent.Request<Effect>("Regressus/Effects/TextGradientY", (AssetRequestMode)1).Value;
@@ -348,6 +348,24 @@ namespace Regressus
             sb.Draw(render3, Vector2.Zero, Color.White);
             sb.End();
             #endregion
+            /*
+
+            gd.SetRenderTarget(render4);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            var font = FontAssets.DeathText.Value;
+            DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, font, "poopshitter", Vector2.Zero, Color.White, 0, Vector2.Zero, 10, SpriteEffects.None, 0f);
+            sb.End();
+            gd.SetRenderTarget(Main.screenTarget);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            Regressus.TextGradient2.CurrentTechnique.Passes[0].Apply();
+            Regressus.TextGradient2.Parameters["color2"].SetValue(new Vector4(0.7803921568627451f, 0.0941176470588235f, 1, 1));
+            Regressus.TextGradient2.Parameters["color3"].SetValue(new Vector4(0.0509803921568627f, 1, 1, 1));
+            Regressus.TextGradient2.Parameters["amount"].SetValue(Main.GlobalTimeWrappedHourly);
+            sb.Draw(render4, Vector2.Zero, Color.White);
+            sb.End();
+            */
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
         }
     }

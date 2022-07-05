@@ -38,16 +38,16 @@ namespace Regressus.Items.Weapons
             Item.shoot = ModContent.ProjectileType<RegretAndMiseryP>();
         }
 
-        public static readonly SoundStyle sussySound = new($"Regressus/Sounds/Custom/Sussy", 3)
+        public static readonly SoundStyle sussySound = new("Regressus/Sounds/Custom/Sussy", SoundType.Sound)
         {
             Volume = 0.65f,
-            Pitch = -0.1f,
+            Pitch = 0,
             PitchVariance = 0.2f
         };
-        public static readonly SoundStyle sussySound2 = new($"Regressus/Sounds/Custom/Sussy2", 3)
+        public static readonly SoundStyle sussySound2 = new("Regressus/Sounds/Custom/Sussy2", SoundType.Sound)
         {
-            Volume = 0.65f,
-            Pitch = -0.1f,
+            Volume = 0.75f,
+            Pitch = 0,
             PitchVariance = 0.2f
         };
 
@@ -81,6 +81,7 @@ namespace Regressus.Items.Weapons
                 AddIngredient<Items.Weapons.Magic.Vision>(1).
                 AddIngredient(ItemID.LunarBar, 35).
                 AddIngredient(ItemID.SuspiciousLookingEye, 1).
+                AddIngredient(ItemID.SuspiciousLookingTentacle, 1).
                 AddIngredient(ItemID.FragmentVortex, 25).
                 AddIngredient(ItemID.FragmentStardust, 25).
                 AddIngredient(ItemID.FragmentSolar, 25).

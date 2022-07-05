@@ -267,11 +267,18 @@ namespace Regressus.NPCs.Starshroom
             }
             if (AIState == Idle)
             {
-
             }
             else if (AIState == Angery)
             {
                 AITimer++;
+                if (AITimer == 1)
+                {
+                    if (Main.rand.NextBool(1000))
+                    {
+                        NPC.boss = true;
+                        Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/oracle2");
+                    }
+                }
                 if (AITimer > 70)
                 {
                     AITimer = 0;

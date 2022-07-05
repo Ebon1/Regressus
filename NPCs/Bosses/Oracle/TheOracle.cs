@@ -271,17 +271,12 @@ namespace Regressus.NPCs.Bosses.Oracle
         public const int Death = -3;
         public const int Transform = -1;
         public const int Intro = -2;
+        private const int MusicIntroSync = -4;
         public const int PreIntro = 0;
         private const int OrbBlast = 1;
         private const int BeamStar = 2;
         private const int Railgun = 3;
         private const int GroundLasers = 4;
-        private const int CrystalLaserThingy = 5;
-        private const int P2GiantTentacle = 6;
-        private const int P2GroundTentacles = 7;
-        private const int P2TentacleMines = 8;
-        private const int JetsAttack = 9;
-        private const int P2GiantRift = 11;
         bool hasTransformed;
         float rotAngle;
         NPC crystal;
@@ -369,8 +364,21 @@ namespace Regressus.NPCs.Bosses.Oracle
                     AITimer = 0;
                     if (crystal != null)
                         crystal.localAI[0] = 0;
-                    AIState = CrystalLaserThingy;
+                    AIState = MusicIntroSync;
                     NPC.dontTakeDamage = false;
+                }
+            }
+            else if (AIState == MusicIntroSync)
+            {
+                AITimer++;
+                NPC.Center = Vector2.Lerp(NPC.Center, player.Center + new Vector2(0, -300), AITimer / 235);
+                if (AITimer >= 400)
+                {
+                    AITimer = 0;
+                    AITimer2 = 0;
+                    if (crystal != null)
+                        crystal.localAI[0] = 0;
+                    AIState = OrbBlast;
                 }
             }
             else if (AIState == PreIntro)
@@ -891,20 +899,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                     AITimer2 = 0;
                     if (crystal != null)
                         crystal.localAI[0] = 0;
-                    AIState = CrystalLaserThingy;
-                }
-            }
-            else if (AIState == CrystalLaserThingy)
-            {
-                AITimer++;
-                NPC.Center = Vector2.Lerp(NPC.Center, player.Center + new Vector2(0, -300), AITimer / 235);
-                if (AITimer >= 400)
-                {
-                    AITimer = 0;
-                    AITimer2 = 0;
-                    if (crystal != null)
-                        crystal.localAI[0] = 0;
-                    AIState = OrbBlast;
+                    AIState = MusicIntroSync;
                 }
             }
         }

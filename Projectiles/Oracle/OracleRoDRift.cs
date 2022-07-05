@@ -18,11 +18,13 @@ namespace Regressus.Projectiles.Oracle
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
             float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
             float scale = Projectile.scale * 2 * mult;
             Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/vortex").Value, Projectile.Center - Main.screenPosition, null, Color.White, -Main.GameUpdateCount * 0.0075f, new Vector2(256, 256) / 2, scale, SpriteEffects.None, 0f);
-            RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             return false;
         }
         float MAX_TIME = 1000;

@@ -49,12 +49,12 @@ namespace Regressus.Items.Dev
         {
             if (line.Index == 0)
             {
-                RegreUtils.DrawDevName(line);
+                MiscDrawingMethods.DrawDevName(line);
                 return false;
             }
             if (line.Text == "Dedicated to Decrypt.")
             {
-                RegreUtils.DrawDevName(line);
+                MiscDrawingMethods.DrawDevName(line);
                 return false;
             }
             return true;
