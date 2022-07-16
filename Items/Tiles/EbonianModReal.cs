@@ -9,7 +9,7 @@ namespace Regressus.Items.Tiles
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The Eye");
-            Tooltip.SetDefault("\"This makes me think of that one angry lava ball.\"\nDedicated to Ebon.");
+            Tooltip.SetDefault("Behold! Calamity 2\nDedicated to Ebon.");
         }
         public override void SetDefaults()
         {

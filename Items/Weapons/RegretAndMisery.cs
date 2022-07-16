@@ -57,7 +57,7 @@ namespace Regressus.Items.Weapons
             if (++attacks >= 15)
                 attacks = 0;
             // What the fuck is this cringe
-            SoundEngine.PlaySound(sussySound, Main.LocalPlayer.position);
+            SoundEngine.PlaySound(sussySound, player.position);
             Projectile proj = Main.projectile[Projectile.NewProjectile(source, new Vector2(Main.MouseWorld.X, Main.screenPosition.Y), new Vector2(Main.rand.NextFloat(-2.5f, 2.5f), Item.shootSpeed), type, damage, knockback, player.whoAmI)];
             if (attacks == 14)
             {

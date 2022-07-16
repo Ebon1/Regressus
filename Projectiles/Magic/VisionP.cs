@@ -27,7 +27,7 @@ namespace Regressus.Projectiles.Magic
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 2;
+            Projectile.localNPCHitCooldown = 6;
         }
         Vector2 mousePos;
         public override void AI()

@@ -18,8 +18,8 @@ namespace Regressus.NPCs.UG
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneRockLayerHeight)
-                return 0.45f;
+            if (spawnInfo.Player.ZoneRockLayerHeight && spawnInfo.Player.ZonePurity)
+                return 0.25f;
             return 0;
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

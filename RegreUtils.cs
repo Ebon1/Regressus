@@ -18,12 +18,34 @@ using Terraria.Chat;
 using Terraria.GameContent.UI.Chat;
 using System.IO;
 using Regressus.Items.Dev;
+using static Regressus.MiscDrawingMethods;
+using static Terraria.ModLoader.ModContent;
 namespace Regressus
 {
     public class BossTitleStyleID
     {
         public static readonly int Generic = -1;
         public static readonly int Oracle = 0;
+    }
+    public class BiomeID
+    {
+        public static readonly int Forest = 0;
+        public static readonly int Jungle = 1;
+        public static readonly int InfectionBiomes = 2;
+        public static readonly int Hallow = 3;
+        public static readonly int Mushroom = 4;
+        public static readonly int Caves = 5;
+        public static readonly int Dungeon = 6;
+        public static readonly int Desert = 7;
+        public static readonly int Tundra = 8;
+        public static readonly int Ocean = 9;
+        public static readonly int Granite = 10;
+        public static readonly int Marble = 11;
+        public static readonly int Temple = 12;
+        public static readonly int Chronolands = 13;
+        public static readonly int Space = 14;
+        public static readonly int Meteorite = 15;
+        public static readonly int Hell = 16;
     }
     public static class RegreUtils
     {
@@ -58,6 +80,8 @@ namespace Regressus
             ModContent.ItemType<DecryptItem>(),
             ModContent.ItemType<VadeItem>(),
             ModContent.ItemType<PokerfaceItem>(),
+            ModContent.ItemType<Items.Tiles.EbonianModReal>(),
+            ModContent.ItemType<CorruptedTriangle>(),
         };
         public static Texture2D GetExtraTexture(string tex, bool uh = false)
         {
@@ -84,6 +108,11 @@ namespace Regressus
         public static Vector4 ColorToVector4(Vector3 color)
         {
             return new Vector4(color.X / 255f, color.Y / 255f, color.Z / 255f, 1);
+        }
+        public static Player[] players = new Player[Main.maxPlayers];
+        public static Player GetRandomPlayer()
+        {
+            return Main.player[Main.rand.Next(players.Length)];
         }
         public static void Reload(this SpriteBatch spriteBatch, SpriteSortMode sortMode = SpriteSortMode.Deferred)
         {
@@ -148,6 +177,16 @@ namespace Regressus
             player.bossColor = color;
             player.bossStyle = style;
         }
+        public static void SetBiomeTitle(string name, Color color, string title, int biome)
+        {
+            RegrePlayer player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
+            int Progress = player.notFirstTimeEnteringBiome[biome] ? 150 : 300;
+            player.biomeTextProgress = Progress;
+            player.biomeMaxProgress = Progress;
+            player.biomeName = name;
+            player.biomeTitle = title;
+            player.biomeColor = color;
+        }
         public static void DrawBossTitle()
         {
             var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
@@ -156,16 +195,48 @@ namespace Regressus
                 switch (player.bossStyle)
                 {
                     case -1:
-                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f), player.bossColor, 0, new Vector2(0.5f, 0.5f), new Vector2(1f, 1f));
+                        float progress = Utils.GetLerpValue(0, player.bossMaxProgress, player.bossTextProgress);
+                        float alpha = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
+                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f), player.bossColor * alpha, 0, new Vector2(0.5f, 0.5f), new Vector2(1f, 1f));
                         if (player.bossTitle != null)
                         {
-                            ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, player.bossTitle, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(player.bossTitle).X / 2, Main.screenHeight * 0.225f), player.bossColor, 0, new Vector2(0.5f, 0.5f), new Vector2(1f, 1f));
+                            ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, player.bossTitle, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(player.bossTitle).X / 2, Main.screenHeight * 0.225f), player.bossColor * alpha, 0, new Vector2(0.5f, 0.5f), new Vector2(1f, 1f));
                         }
                         break;
 
                     case 0:
-                        MiscDrawingMethods.DrawOracleTitle();
+                        BossTitles.DrawOracleTitle();
                         break;
+                }
+            }
+        }
+        public static void DrawBiomeTitle()
+        {
+            var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
+            if (player.biomeTextProgress > 0)
+            {
+                float progress = Utils.GetLerpValue(0, player.biomeMaxProgress, player.biomeTextProgress);
+                float alpha = MathHelper.Clamp((float)Math.Sin(progress * Math.PI), 0, 1);
+                Vector2 namePos = new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.biomeName).X / 2, Main.screenHeight * 0.25f);
+                Vector2 extrapos1 = new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.biomeName).X / 1.65f, Main.screenHeight * 0.275f);
+                Vector2 extrapos2 = new Vector2(Main.screenWidth / 2 + FontAssets.DeathText.Value.MeasureString(player.biomeName).X / 1.65f, Main.screenHeight * 0.275f);
+                Vector2 titlePos = new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(player.biomeTitle).X / 2, Main.screenHeight * 0.225f);
+                Vector2 scale = Vector2.One;
+                if (player.biomeMaxProgress == 150)
+                {
+                    namePos = new Vector2(0, Main.screenHeight - 40);
+                    titlePos = new Vector2(0, Main.screenHeight - 55);
+                    scale = Vector2.One / 1.5f;
+                }
+                ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.DeathText.Value, player.biomeName, namePos, player.biomeColor * alpha, 0, new Vector2(0.5f, 0.5f), scale);
+                ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, player.biomeTitle, titlePos, player.biomeColor * alpha, 0, new Vector2(0.5f, 0.5f), scale);
+                if (player.biomeMaxProgress != 150)
+                {
+                    float rot = MathHelper.ToRadians(90);
+                    Reload(Main.spriteBatch, BlendState.Additive);
+                    Main.spriteBatch.Draw(GetExtraTexture("Extras2/slash_02"), extrapos1, null, player.biomeColor * alpha, rot, GetExtraTexture("Extras2/slash_02").Size() / 2, .5f, SpriteEffects.None, 0);
+                    Main.spriteBatch.Draw(GetExtraTexture("Extras2/slash_02"), extrapos2, null, player.biomeColor * alpha, MathHelper.ToRadians(-90), GetExtraTexture("Extras2/slash_02").Size() / 2, .5f, SpriteEffects.None, 0);
+                    Reload(Main.spriteBatch, BlendState.AlphaBlend);
                 }
             }
         }
@@ -206,7 +277,7 @@ namespace Regressus
             }
             _ = vector - player.position;
             TPNoDust(vector, player);
-            NetMessage.SendData(65, -1, -1, null, 0, player.whoAmI, vector.X, vector.Y, 0);
+            NetMessage.SendData(MessageID.Teleport, -1, -1, null, 0, player.whoAmI, vector.X, vector.Y, 0);
         }
         public static void TPNoDust(Vector2 newPos, Player player)
         {

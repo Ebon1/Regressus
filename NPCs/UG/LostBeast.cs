@@ -18,8 +18,8 @@ namespace Regressus.NPCs.UG
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneRockLayerHeight)
-                return 0.25f;
+            if (spawnInfo.Player.ZoneRockLayerHeight && spawnInfo.Player.ZonePurity)
+                return 0.1f;
             return 0;
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -39,24 +39,24 @@ namespace Regressus.NPCs.UG
         }
         public override void FindFrame(int frameHeight)
         {
-            if (NPC.IsABestiaryIconDummy)
-            {
-                NPC.frameCounter++;
-                if (NPC.frameCounter < 5)
-                    NPC.frame.Y = 0 * frameHeight;
-                else if (NPC.frameCounter < 10)
-                    NPC.frame.Y = 1 * frameHeight;
-                else if (NPC.frameCounter < 15)
-                    NPC.frame.Y = 2 * frameHeight;
-                else if (NPC.frameCounter < 20)
-                    NPC.frame.Y = 3 * frameHeight;
-                else if (NPC.frameCounter < 25)
-                    NPC.frame.Y = 4 * frameHeight;
-                else if (NPC.frameCounter < 30)
-                    NPC.frame.Y = 5 * frameHeight;
-                else
-                    NPC.frameCounter = 0;
-            }
+            //if (NPC.IsABestiaryIconDummy)
+            //{
+            NPC.frameCounter++;
+            if (NPC.frameCounter < 5)
+                NPC.frame.Y = 0 * frameHeight;
+            else if (NPC.frameCounter < 10)
+                NPC.frame.Y = 1 * frameHeight;
+            else if (NPC.frameCounter < 15)
+                NPC.frame.Y = 2 * frameHeight;
+            else if (NPC.frameCounter < 20)
+                NPC.frame.Y = 3 * frameHeight;
+            else if (NPC.frameCounter < 25)
+                NPC.frame.Y = 4 * frameHeight;
+            else if (NPC.frameCounter < 30)
+                NPC.frame.Y = 5 * frameHeight;
+            else
+                NPC.frameCounter = 0;
+            //}
         }
         private const int Distracted = -1;
         private const int Walk = 0;

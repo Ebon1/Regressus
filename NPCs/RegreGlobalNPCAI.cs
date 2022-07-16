@@ -186,9 +186,12 @@ namespace Regressus.NPCs
         }
         public override void OnKill(NPC npc)
         {
-            NPC parent = Main.npc[(int)npc.ai[0]];
-            parent.life -= 100;
-            int num = (Main.expertMode ? 15 : 10);
+            if (npc.type == NPCID.ServantofCthulhu)
+            {
+                NPC parent = Main.npc[(int)npc.ai[0]];
+                parent.life -= 100;
+                int num = (Main.expertMode ? 15 : 10);
+            }
         }
         Vector2 EoCarenaCenter;
         public override void AI(NPC npc)

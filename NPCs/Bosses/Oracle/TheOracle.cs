@@ -357,7 +357,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 if (AITimer == 2)
                 {
                     RegreSystem.ChangeCameraPos(NPC.Center, 215, 1.5f);
-                    RegreUtils.SetBossTitle(215, "The Oracle", Color.White, "--Eschaton of Time--", BossTitleStyleID.Oracle);
+                    RegreUtils.SetBossTitle(215, "The Oracle", Color.DarkCyan, "--Eschaton of Time--", BossTitleStyleID.Oracle);
                 }
                 if (AITimer >= 220)
                 {

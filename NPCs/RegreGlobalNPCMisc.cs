@@ -35,7 +35,7 @@ namespace Regressus.NPCs
         {
             if (Main.hardMode && Main.LocalPlayer.RollLuck(200) == 0 && npc.HasPlayerTarget && npc.lifeMax > 5 && !npc.friendly && npc.value > 0f)
             {
-                if ((double)(npc.position.Y / 16f) > (Main.rockLayer + (double)(Main.maxTilesY * 2)) / 3.0 && !Main.player[npc.target].ZoneDungeon && Main.rand.Next(2) == 0)
+                if ((double)(npc.position.Y / 16f) > (Main.rockLayer + (double)(Main.maxTilesY * 2)) / 3.0 && !Main.player[npc.target].ZoneDungeon && Main.rand.NextBool(2))
                 {
                     Item.NewItem(npc.GetSource_DropAsItem(), npc.getRect(), ModContent.ItemType<Items.Weapons.Ranged.Guns.Hellshot>(), 1, noBroadcast: false);
                 }

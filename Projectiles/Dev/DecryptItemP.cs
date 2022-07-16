@@ -35,7 +35,7 @@ namespace Regressus.Projectiles.Dev
             Projectile.DamageType = DamageClass.Melee;
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 7;
+            Projectile.localNPCHitCooldown = 9;
         }
         public override float Lerp(float x)
         {
@@ -105,7 +105,7 @@ namespace Regressus.Projectiles.Dev
             Projectile.DamageType = DamageClass.Melee;
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 7;
+            Projectile.localNPCHitCooldown = 9;
         }
         public override float Lerp(float x)
         {
@@ -167,7 +167,7 @@ namespace Regressus.Projectiles.Dev
             Projectile.DamageType = DamageClass.Melee;
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 7;
+            Projectile.localNPCHitCooldown = 9;
         }
         public override void SetStaticDefaults()
         {
@@ -302,7 +302,7 @@ namespace Regressus.Projectiles.Dev
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 7;
+            Projectile.localNPCHitCooldown = 9;
         }
 
         public override void AI()
@@ -357,7 +357,7 @@ namespace Regressus.Projectiles.Dev
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 7;
+            Projectile.localNPCHitCooldown = 9;
         }
 
         public override void AI()

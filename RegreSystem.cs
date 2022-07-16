@@ -34,7 +34,19 @@ namespace Regressus
         public static int KryptonMoss;
         public static int ArgonMoss;
         public static int XenonMoss;
-
+        public static int CloudTiles;
+        public static int TempleBricks;
+        public override void PostUpdatePlayers()
+        {
+            for (int i = 0; i < Main.maxPlayers; i++)
+            {
+                Player player = Main.player[i];
+                if (player.active && !(player.dead || player.ghost) && player != null)
+                {
+                    RegreUtils.players[i] = player;
+                }
+            }
+        }
         public override void PostWorldGen()
         {
             WorldGen.TileRunner(new Random().Next(WorldGen.UndergroundDesertLocation.Location.X, (int)WorldGen.UndergroundDesertLocation.BottomRight().X),
@@ -48,6 +60,11 @@ namespace Regressus
             layers.Insert(textIndex, new LegacyGameInterfaceLayer("Regressus: BossText", () =>
             {
                 RegreUtils.DrawBossTitle();
+                return true;
+            }, InterfaceScaleType.UI));
+            layers.Insert(textIndex2, new LegacyGameInterfaceLayer("Regressus: BiomeText", () =>
+            {
+                RegreUtils.DrawBiomeTitle();
                 return true;
             }, InterfaceScaleType.UI));
         }
@@ -124,6 +141,8 @@ namespace Regressus
             KryptonMoss = 0;
             ArgonMoss = 0;
             XenonMoss = 0;
+            TempleBricks = 0;
+            CloudTiles = 0;
         }
         public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         {
@@ -131,10 +150,35 @@ namespace Regressus
             KryptonMoss = tileCounts[TileID.KryptonMoss] + tileCounts[TileID.KryptonMossBrick];
             ArgonMoss = tileCounts[TileID.ArgonMoss] + tileCounts[TileID.ArgonMossBrick];
             XenonMoss = tileCounts[TileID.XenonMoss] + tileCounts[TileID.XenonMossBrick];
+            CloudTiles = tileCounts[TileID.Cloud];
+            TempleBricks = tileCounts[TileID.LihzahrdBrick];
         }
-
+        public static int AerialBudsCooldown;
         public override void PostUpdateEverything()
         {
+            RegrePlayer regrePlayer = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
+            if (!Main.dayTime)
+            {
+                if (Main.time > 32399.0)
+                {
+                    if (AerialBudsCooldown > 0)
+                    {
+                        AerialBudsCooldown--;
+                    }
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (regrePlayer.AerialBudItem[i] != 0)
+                        {
+                            Projectile.NewProjectile(new EntitySource_Misc("Aerial Bud"), Main.LocalPlayer.Center - new Vector2(0, Main.screenHeight / 2), Vector2.Zero, ModContent.ProjectileType<NPCs.Sky.AerialBudGiveBack>(), 0, 0, Main.myPlayer, i);
+                        }
+                    }
+                }
+            }
+            if (AerialBudsCooldown == 0 && regrePlayer.AerialBudsGiven >= regrePlayer.AerialBudsMax)
+            {
+                AerialBudsCooldown = 5;
+                regrePlayer.AerialBudsGiven = 0;
+            }
             //Particles.Particle.UpdateParticles();
         }
         public static void ChangeCameraPos(Vector2 pos, int length, float zoom = 1.65f)

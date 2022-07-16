@@ -65,7 +65,7 @@ namespace Regressus.NPCs.Critters
             {
                 //  NPC.ai[2] = 1;
             }
-            NPC.spriteDirection = NPC.direction = player.Center.X > NPC.Center.X ? 1 : -1;
+            NPC.spriteDirection = NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
             if (NPC.ai[2] == 0)
             {
                 NPC.aiStyle = NPCAIStyleID.Butterfly;
