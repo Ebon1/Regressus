@@ -1,100 +1,15 @@
 using Terraria.ModLoader;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
-using Terraria.GameContent.Skies;
 using Regressus.Skies;
 using Terraria;
 using Regressus.NPCs.Bosses.Oracle;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-//using Regressus.Particles;
-using System;
 using Regressus.Dusts;
-using Terraria.ID;
-using Regressus.Items.Weapons.Magic;
-using System.Collections.Generic;
-using Terraria.GameContent.UI;
-using ReLogic.Graphics;
-using log4net;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using ReLogic.Content;
-using ReLogic.Content.Sources;
-using ReLogic.Graphics;
-using ReLogic.Localization.IME;
-using ReLogic.OS;
-using ReLogic.Peripherals.RGB;
-using ReLogic.Utilities;
-using Steamworks;
-using System;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Terraria.Achievements;
-using Terraria.Audio;
-using Terraria.Chat;
-using Terraria.Cinematics;
-using Terraria.DataStructures;
-using Terraria.Enums;
-using Terraria.GameContent;
-using Terraria.GameContent.Achievements;
-using Terraria.GameContent.Ambience;
-using Terraria.GameContent.Creative;
-using Terraria.GameContent.Drawing;
-using Terraria.GameContent.Events;
-using Terraria.GameContent.Golf;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent.Liquid;
-using Terraria.GameContent.NetModules;
-using Terraria.GameContent.Skies;
-using Terraria.GameContent.UI;
-using Terraria.GameContent.UI.BigProgressBar;
-using Terraria.GameContent.UI.Chat;
-using Terraria.GameContent.UI.Minimap;
-using Terraria.GameContent.UI.ResourceSets;
-using Terraria.GameContent.UI.States;
-using Terraria.GameInput;
-using Terraria.Graphics;
-using Terraria.Graphics.CameraModifiers;
-using Terraria.Graphics.Capture;
-using Terraria.Graphics.Effects;
-using Terraria.Graphics.Light;
-using Terraria.Graphics.Renderers;
-using Terraria.Graphics.Shaders;
-using Terraria.ID;
-using Terraria.Initializers;
-using Terraria.IO;
-using Terraria.Localization;
-using Terraria.Map;
-using Terraria.ModLoader;
-using Terraria.ModLoader.Core;
-using Terraria.ModLoader.Engine;
-using Terraria.ModLoader.IO;
-using Terraria.ModLoader.UI;
-using Terraria.Net;
-using Terraria.ObjectData;
-using Terraria.Social;
-using Terraria.Social.Steam;
-using Terraria.UI;
-using Terraria.UI.Chat;
-using Terraria.UI.Gamepad;
-using Terraria.Utilities;
-using Terraria.WorldBuilding;
+using Regressus.Effects.Prims;
 
 namespace Regressus
 {
@@ -103,7 +18,7 @@ namespace Regressus
         public RenderTarget2D render, render3, render4;
         public int a;
         public static Regressus Instance;
-        public static Effect BeamShader, Lens, Test1, Test2, LavaRT, Galaxy, CrystalShine;
+        public static Effect BeamShader, Lens, Test1, Test2, LavaRT, Galaxy, CrystalShine, TrailShader;
         public static Effect Tentacle, TentacleBlack, TentacleRT, ScreenDistort, TextGradient, TextGradient2, TextGradientY;
         public DrawableTooltipLine[] lines = new DrawableTooltipLine[Main.maxItems];
         public DrawableTooltipLine activeLine;
@@ -141,6 +56,7 @@ namespace Regressus
             TentacleRT = ModContent.Request<Effect>("Regressus/Effects/TentacleRT", (AssetRequestMode)1).Value;
             ScreenDistort = ModContent.Request<Effect>("Regressus/Effects/DistortMove", (AssetRequestMode)1).Value;
             TentacleBlack = ModContent.Request<Effect>("Regressus/Effects/TentacleBlack", (AssetRequestMode)1).Value;
+            TrailShader = ModContent.Request<Effect>("Regressus/Effects/TrailShader", (AssetRequestMode)1).Value;
             Filters.Scene["Regressus:Oracle"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.16f, .42f, .87f).UseOpacity(0f), EffectPriority.Medium);
             SkyManager.Instance["Regressus:Oracle"] = new OracleSkyP1();
             Filters.Scene["Regressus:Oracle2"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.78f, .33f, 1.11f).UseOpacity(.9f), EffectPriority.Medium);
@@ -149,14 +65,30 @@ namespace Regressus
             Filters.Scene["Regressus:OracleVoid1"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:OracleVoid2"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
+            On.Terraria.Main.DrawProjectiles += DrawPrimitives;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
             CreateRender();
             base.Load();
         }
+
+        private void DrawPrimitives(On.Terraria.Main.orig_DrawProjectiles orig, Main self)
+        {
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile projectile = Main.projectile[i];
+                if (projectile.active && projectile.ModProjectile is IPrimitiveDrawer)
+                {
+                    (projectile.ModProjectile as IPrimitiveDrawer).DrawPrimitives();
+                }
+            }
+            orig(self);
+        }
+
         public override void Unload()
         {
             //Particle.Unload();
             On.Terraria.Graphics.Effects.FilterManager.EndCapture -= FilterManager_EndCapture;
+            On.Terraria.Main.DrawProjectiles -= DrawPrimitives;
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
             base.Unload();
         }

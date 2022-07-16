@@ -24,6 +24,7 @@ namespace Regressus
         public int[] oldLife = new int[950], oldDir = new int[950];
         public bool reverseTime;
         public bool starshroomed;
+        public bool bladeSummon;
         int thing;
 
         //Queen Drae's bools
@@ -52,6 +53,7 @@ namespace Regressus
             starshroomed = false;
             reverseTime = false;
             AcornFairyPet = false;
+            bladeSummon = false;
         }
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
