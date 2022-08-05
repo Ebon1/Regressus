@@ -7,6 +7,7 @@ using Terraria.DataStructures;
 using Terraria.GameInput;
 using Regressus.Dusts;
 using Terraria.ID;
+using Regressus.Systems;
 
 namespace Regressus
 {
@@ -37,6 +38,9 @@ namespace Regressus
         public int AerialBudsMax = 3;
         public int[] AerialBudItem = new int[3];
         public int[] AerialBudItemStack = new int[3];
+
+        public bool ShrineBiome = false;
+
         public override void UpdateBadLifeRegen()
         {
             if (starshroomed)
@@ -96,6 +100,9 @@ namespace Regressus
         }
         public void BiomeCheck()
         {
+
+            ShrineBiome = ShrineBiomeSystem.IsInOrNearShrine(Player);
+
             //RegreUtils.SetBiomeTitle("The Chronolands", Color.SlateGray, "End of Time", 0);
             if (!inBiome[0])
             {
