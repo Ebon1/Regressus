@@ -75,6 +75,7 @@ namespace Regressus.Projectiles.Melee
             player.ChangeDir(Projectile.velocity.X < 0 ? -1 : 1);
             player.itemRotation = rot * player.direction;
             pos += rot.ToRotationVector2() * holdOffset;
+            player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rot - MathHelper.PiOver2);
             Projectile.rotation = (pos - player.Center).ToRotation() + MathHelper.PiOver2 - MathHelper.PiOver4 * Projectile.spriteDirection;
             Projectile.Center = pos;
             player.itemTime = 2;

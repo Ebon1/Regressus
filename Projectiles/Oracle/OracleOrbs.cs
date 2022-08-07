@@ -246,7 +246,7 @@ namespace Regressus.Projectiles.Oracle
             #region "positions"
             float factor = 0.18f;
             Projectile.velocity = moveTo * factor;
-            if (Projectile.ai[1] == -2 || Projectile.ai[1] == -3 || Projectile.ai[1] == 5 || Projectile.ai[1] == 4 || (Projectile.ai[1] == 2 && center.ai[1] < 40) || Projectile.ai[1] == -1 || Projectile.ai[1] == 2)
+            if (Projectile.ai[1] == -2 || Projectile.ai[1] == -3 || Projectile.ai[1] == 5 || Projectile.ai[1] == -4 || Projectile.ai[1] == 4 || (Projectile.ai[1] == 2 && center.ai[1] < 40) || Projectile.ai[1] == -1 || Projectile.ai[1] == 2)
             {
                 switch (Projectile.localAI[0])
                 {

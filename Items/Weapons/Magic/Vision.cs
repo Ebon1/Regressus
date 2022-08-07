@@ -50,7 +50,7 @@ namespace Regressus.Items.Weapons.Magic
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
                 Regressus.Galaxy.CurrentTechnique.Passes[0].Apply();
-                Regressus.Galaxy.Parameters["galaxy"].SetValue(ModContent.Request<Texture2D>("Regressus/Extras/starSky3").Value);
+                Regressus.Galaxy.Parameters["galaxy"].SetValue(ModContent.Request<Texture2D>("Regressus/Extras/starSky2").Value);
                 var font = FontAssets.MouseText.Value;
                 //Utils.DrawBorderString(Main.spriteBatch, line.text, new Vector2(line.X, line.Y), Color.White, 1);
                 DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, font, line.Text, new Vector2(line.X, line.Y), Color.White);

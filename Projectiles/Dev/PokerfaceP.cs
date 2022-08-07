@@ -164,6 +164,7 @@ namespace Regressus.Projectiles.Dev
 
 
 
+            player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.velocity.ToRotation() - MathHelper.PiOver2);
             player.ChangeDir(Projectile.direction);
             player.heldProj = Projectile.whoAmI;
             player.itemTime = 2;

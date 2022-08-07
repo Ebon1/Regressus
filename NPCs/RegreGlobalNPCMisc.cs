@@ -15,6 +15,20 @@ using Regressus.NPCs.Bosses.Oracle;
 
 namespace Regressus.NPCs
 {
+    public class RegreGlobalNPCShop : GlobalNPC
+    {
+        public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        {
+            if (type == NPCID.TravellingMerchant)
+            {
+                if (Main.rand.NextBool(10))
+                {
+                    shop.item[nextSlot].SetDefaults(ModContent.ItemType<Items.Weapons.Melee.TheBaguette>());
+                    nextSlot++;
+                }
+            }
+        }
+    }
     public class RegreGlobalNPCMisc : GlobalNPC
     {
         public override bool InstancePerEntity
@@ -39,6 +53,10 @@ namespace Regressus.NPCs
                 {
                     Item.NewItem(npc.GetSource_DropAsItem(), npc.getRect(), ModContent.ItemType<Items.Weapons.Ranged.Guns.Hellshot>(), 1, noBroadcast: false);
                 }
+            }
+            if (npc.type == NPCID.Bunny && Main.LocalPlayer.RollLuck(10) == 0)
+            {
+                Item.NewItem(npc.GetSource_DropAsItem(), npc.getRect(), ModContent.ItemType<Items.Consumables.Food.Carrot>(), 1, noBroadcast: false);
             }
         }
         public override void UpdateLifeRegen(NPC npc, ref int damage)

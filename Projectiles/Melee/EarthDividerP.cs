@@ -26,7 +26,7 @@ namespace Regressus.Projectiles.Melee
                 maxTime = 230;
             else
                 maxTime = 25;
-            Projectile.timeLeft = maxTime;;
+            Projectile.timeLeft = maxTime; ;
             Projectile.width = Projectile.height = 82;
             Projectile.friendly = true;
             Projectile.hostile = false;
@@ -69,6 +69,10 @@ namespace Regressus.Projectiles.Melee
             return x < 0.5f ? 8 * x * x * x * x : 1 - (float)Math.Pow(-2 * x + 2, 4) / 2;
         }
         float scale;
+        public float ScaleFunction(float progress)
+        {
+            return 0.7f + (float)Math.Sin(progress * Math.PI) * 0.5f;
+        }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -130,19 +134,22 @@ namespace Regressus.Projectiles.Melee
             }
             else
             {
-                float start = Projectile.velocity.ToRotation() - ((MathHelper.PiOver2) - 0.2f);
-                float end = Projectile.velocity.ToRotation() + ((MathHelper.PiOver2) - 0.2f);
-                float progress = Lerp(Utils.GetLerpValue(0f, maxTime, Projectile.timeLeft));
-                float rot = Projectile.ai[0] == 1 ? start.AngleLerp(end, progress) : start.AngleLerp(end, 1f - progress);
-                Vector2 pos = player.RotatedRelativePoint(player.MountedCenter);
+                int direction = (int)Projectile.ai[0];
+                float swingProgress = Lerp(Utils.GetLerpValue(0f, maxTime, Projectile.timeLeft));
+                float defRot = Projectile.velocity.ToRotation();
+                float start = defRot - (MathHelper.PiOver2 + MathHelper.PiOver4);
+                float end = defRot + (MathHelper.PiOver2 + MathHelper.PiOver4);
+                float rotation = direction == 1 ? start + MathHelper.Pi * 3 / 2 * swingProgress : end - MathHelper.Pi * 3 / 2 * swingProgress;
+                Vector2 position = player.GetFrontHandPosition(Player.CompositeArmStretchAmount.Full, rotation - MathHelper.PiOver2) +
+                    rotation.ToRotationVector2() * offset * ScaleFunction(swingProgress);
+                Projectile.Center = position;
+                Projectile.rotation = (position - player.Center).ToRotation() + MathHelper.PiOver4;
+
                 player.ChangeDir(Projectile.velocity.X < 0 ? -1 : 1);
-                player.itemRotation = rot * player.direction;
-                pos += rot.ToRotationVector2() * offset;
-                Projectile.rotation = (pos - player.Center).ToRotation() + MathHelper.PiOver4;
-                Projectile.Center = pos;
+                player.heldProj = Projectile.whoAmI;
+                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - MathHelper.PiOver2);
                 player.itemTime = 2;
                 player.itemAnimation = 2;
-                //scale = MathHelper.Clamp(progress, 0, 1);
             }
         }
         public override void PostDraw(Color lightColor)

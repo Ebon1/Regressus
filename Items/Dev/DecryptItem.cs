@@ -45,16 +45,17 @@ namespace Regressus.Items.Dev
             Item.shootSpeed = .5f;
             Item.shoot = ModContent.ProjectileType<DecryptItemP>();
         }
+        ParticleSystem sys = new();
         public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
             if (line.Index == 0)
             {
-                MiscDrawingMethods.DrawDevName(line);
+                MiscDrawingMethods.DrawDevName(line, sys);
                 return false;
             }
             if (line.Text == "Dedicated to Decrypt.")
             {
-                MiscDrawingMethods.DrawDevName(line);
+                MiscDrawingMethods.DrawDevName(line, sys);
                 return false;
             }
             return true;

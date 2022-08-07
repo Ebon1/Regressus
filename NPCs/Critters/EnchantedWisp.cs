@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ReLogic.Content;
+using Terraria.GameContent.Bestiary;
 using Microsoft.Xna.Framework.Graphics;
 using Regressus.Items.Critters;
 
@@ -23,6 +24,9 @@ namespace Regressus.NPCs.Critters
         {
             bestiaryEntry.UIInfoProvider = new Terraria.GameContent.Bestiary.CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[Type], quickUnlock: true);
             bestiaryEntry.Info.AddRange(new Terraria.GameContent.Bestiary.IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Visuals.Moon,
                 new Terraria.GameContent.Bestiary.FlavorTextBestiaryInfoElement("Sometimes the lost souls of the caverns manage to escape the Blind's One grip of terror, and finally find peace on the surface"),
             });
         }

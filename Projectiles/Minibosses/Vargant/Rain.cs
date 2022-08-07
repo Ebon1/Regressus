@@ -17,13 +17,19 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         }
         public override Color? GetAlpha(Color lightColor)
         {
-            return Color.White * 0.5f;
+
+            return Color.White;
+        }
+
+        public override void PostDraw(Color lightColor)
+        {
+            Utils.DrawLine(Main.spriteBatch, Projectile.position, Projectile.position + Projectile.velocity * 250, Color.White * 0f, Color.Red, 1);
         }
         public override void SetDefaults()
         {
             Projectile.width = 40;
             Projectile.height = 42;
-            Projectile.aiStyle = 1;
+            Projectile.aiStyle = -1;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.timeLeft = 500;
@@ -32,6 +38,7 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
+            Projectile.velocity *= 1.025f;
         }
     }
     public class Rain2 : ModProjectile
@@ -42,13 +49,18 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         }
         public override Color? GetAlpha(Color lightColor)
         {
-            return Color.White * 0.5f;
+
+            return Color.White;
+        }
+        public override void PostDraw(Color lightColor)
+        {
+            Utils.DrawLine(Main.spriteBatch, Projectile.position, Projectile.position + Projectile.velocity * 250, Color.White * 0f, Color.Red, 1);
         }
         public override void SetDefaults()
         {
             Projectile.width = 18;
             Projectile.height = 18;
-            Projectile.aiStyle = 1;
+            Projectile.aiStyle = -1;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.timeLeft = 500;
@@ -57,6 +69,7 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
+            Projectile.velocity *= 1.025f;
         }
     }
     public class Rain3 : ModProjectile
@@ -67,14 +80,19 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         }
         public override Color? GetAlpha(Color lightColor)
         {
-            return Color.White * 0.5f;
+
+            return Color.White;
         }
 
+        public override void PostDraw(Color lightColor)
+        {
+            Utils.DrawLine(Main.spriteBatch, Projectile.position, Projectile.position + Projectile.velocity * 250, Color.White * 0f, Color.Red, 1);
+        }
         public override void SetDefaults()
         {
             Projectile.width = 30;
             Projectile.height = 32;
-            Projectile.aiStyle = 1;
+            Projectile.aiStyle = -1;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.timeLeft = 500;
@@ -83,6 +101,7 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
+            Projectile.velocity *= 1.025f;
         }
     }
 }

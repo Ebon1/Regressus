@@ -9,6 +9,7 @@ using Terraria.DataStructures;
 using Regressus.Projectiles;
 using ReLogic.Content;
 using Regressus.Buffs.Debuffs;
+using ReLogic.Graphics;
 
 namespace Regressus.NPCs.Bosses.Oracle
 {
@@ -68,25 +69,22 @@ namespace Regressus.NPCs.Bosses.Oracle
             }
             else if (phase2 && AIState != Transform)
             {
+                NPC.frame.Y = frameHeight;
                 if (NPC.frameCounter < 5)
                 {
-                    NPC.frame.Y = 0;
-                    NPC.frame.X = 4 * frameWidth;
+                    NPC.frame.X = 0 * frameWidth;
                 }
                 else if (NPC.frameCounter < 10)
                 {
-                    NPC.frame.Y = frameHeight;
-                    NPC.frame.X = 0 * frameWidth;
+                    NPC.frame.X = 1 * frameWidth;
                 }
                 else if (NPC.frameCounter < 15)
                 {
-                    NPC.frame.Y = frameHeight;
-                    NPC.frame.X = 1 * frameWidth;
+                    NPC.frame.X = 2 * frameWidth;
                 }
                 else if (NPC.frameCounter < 20)
                 {
-                    NPC.frame.Y = frameHeight;
-                    NPC.frame.X = 2 * frameWidth;
+                    NPC.frame.X = 3 * frameWidth;
                 }
                 else
                 {
@@ -95,26 +93,32 @@ namespace Regressus.NPCs.Bosses.Oracle
             }
         }
         float minuteHandRot, hourHandRot, clockAlpha;
+        int theFinalCountdown = 3600 * 4;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 pos, Color lightColor)
         {
             if (arenaCenter != Vector2.Zero)
             {
                 if (!Main.player[NPC.target].HasBuff(ModContent.BuffType<TimeReverse>()))
                 {
-                    minuteHandRot += 0.1666668f * 2;
-                    hourHandRot += 0.0138889f * 2;
+                    minuteHandRot += 0.1666668f / (4 * 8);
+                    hourHandRot += 0.0138889f / (4 * 8);
                 }
                 else
                 {
-                    minuteHandRot -= 0.1666668f * 2;
-                    hourHandRot -= 0.0138889f * 2;
+                    minuteHandRot -= 0.1666668f / (4 * 8);
+                    hourHandRot -= 0.0138889f / (4 * 8);
                 }
                 RegreUtils.Reload(spriteBatch, BlendState.Additive);
+                float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
+                float scale = 2 * mult;
                 spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clock").Value, arenaCenter - pos, null, Color.White * clockAlpha, 0, ModContent.Request<Texture2D>("Regressus/Extras/clock").Value.Size() / 2, 2.5f, SpriteEffects.None, 0);
                 spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clock").Value, arenaCenter - pos, null, Color.White * clockAlpha, 0, ModContent.Request<Texture2D>("Regressus/Extras/clock").Value.Size() / 2, .25f, SpriteEffects.None, 0);
                 spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/PulseCircle").Value, arenaCenter - pos, null, Color.White * clockAlpha, 0, ModContent.Request<Texture2D>("Regressus/Extras/PulseCircle").Value.Size() / 2, 2f * 3.5f, SpriteEffects.None, 0);
                 spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clockHand1").Value, arenaCenter - pos, null, Color.White * clockAlpha, MathHelper.ToRadians(hourHandRot), ModContent.Request<Texture2D>("Regressus/Extras/clockHand1").Value.Size() / 2, 2.5f, SpriteEffects.None, 0);
                 spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clockHand2").Value, arenaCenter - pos, null, Color.White * clockAlpha, MathHelper.ToRadians(minuteHandRot), ModContent.Request<Texture2D>("Regressus/Extras/clockHand2").Value.Size() / 2, 2.5f, SpriteEffects.None, 0);
+                for (int i = 0; i < 3; i++)
+                    Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/vortex2").Value, arenaCenter - pos, null, Color.DarkViolet * clockAlpha, -Main.GameUpdateCount * 0.0075f, new Vector2(1230, 1264) / 2, scale, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/vortex").Value, arenaCenter - pos, null, Color.DarkViolet * clockAlpha, -Main.GameUpdateCount * 0.005f, new Vector2(256, 256) / 2, scale * 2, SpriteEffects.None, 0f);
                 RegreUtils.Reload(spriteBatch, BlendState.AlphaBlend);
             }
             if (!NPC.hide)
@@ -123,7 +127,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 {
                     Vector2 drawOrigin = new Vector2((ModContent.Request<Texture2D>("Regressus/NPCs/Bosses/Oracle/TheOracle").Value.Width / 2) * 0.5F, (ModContent.Request<Texture2D>("Regressus/NPCs/Bosses/Oracle/TheOracle").Value.Height / Main.npcFrameCount[NPC.type]) * 0.5F);
                     Vector2 drawPos = new Vector2(
-                        NPC.position.X - pos.X + (NPC.width / 5) - (ModContent.Request<Texture2D>("Regressus/NPCs/Bosses/Oracle/TheOracle").Value.Width / 5) * NPC.scale / 5 + drawOrigin.X * NPC.scale,
+                        NPC.position.X - pos.X + (NPC.width / 4) - (ModContent.Request<Texture2D>("Regressus/NPCs/Bosses/Oracle/TheOracle").Value.Width / 4) * NPC.scale / 4 + drawOrigin.X * NPC.scale,
                         NPC.position.Y - pos.Y + NPC.height - ModContent.Request<Texture2D>("Regressus/NPCs/Bosses/Oracle/TheOracle").Value.Height * NPC.scale / Main.npcFrameCount[NPC.type] + 4f + drawOrigin.Y * NPC.scale + NPC.gfxOffY
                         );
                     spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/NPCs/Bosses/Oracle/TheOracle").Value, drawPos, NPC.frame, lightColor, NPC.rotation, drawOrigin, NPC.scale, SpriteEffects.None, 0);
@@ -281,8 +285,10 @@ namespace Regressus.NPCs.Bosses.Oracle
         float rotAngle;
         NPC crystal;
         Vector2[] random = new Vector2[7];
+        public static int _finalCountdown;
         public override void AI()
         {
+            Player player = Main.player[NPC.target];
             if (AIState != PreIntro && !phase2)
             {
                 if (!Terraria.Graphics.Effects.Filters.Scene["Regressus:OracleSummon"].IsActive())
@@ -297,11 +303,13 @@ namespace Regressus.NPCs.Bosses.Oracle
             }
             if (phase2)
             {
+                theFinalCountdown--;
                 if (Terraria.Graphics.Effects.Filters.Scene["Regressus:OracleSummon"].IsActive())
                 {
                     Terraria.Graphics.Effects.Filters.Scene.Deactivate("Regressus:OracleSummon");
                 }
             }
+            _finalCountdown = theFinalCountdown;
             if (NPC.life <= NPC.lifeMax / 2 && !hasTransformed)
             {
                 AIState = -9;
@@ -311,7 +319,6 @@ namespace Regressus.NPCs.Bosses.Oracle
                 hasTransformed = true;
             }
             _phase2 = phase2;
-            Player player = Main.player[NPC.target];
             if (!player.active || player.dead)
             {
                 NPC.TargetClosest(false);
@@ -338,12 +345,13 @@ namespace Regressus.NPCs.Bosses.Oracle
             {
                 Projectile.NewProjectile(NPC.GetSource_FromThis(), (Main.MouseWorld.Distance(arenaCenter) < (1322 / 2) * 2.5f ? Main.MouseWorld : arenaCenter), Vector2.Zero, ModContent.ProjectileType<OracleRoDRift>(), 0, 0, player.whoAmI);
             }
+            if (!phase2 && !NPC.AnyNPCs(ModContent.NPCType<OracleCrystal>()) && AIState != PreIntro && AIState != Transform)
+                crystal = Main.npc[NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OracleCrystal>(), ai0: NPC.whoAmI, Target: player.whoAmI)];
             if (AIState == Intro)
             {
                 AITimer++;
                 if (AITimer == 1)
                 {
-                    crystal = Main.npc[NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OracleCrystal>(), ai0: NPC.whoAmI, Target: player.whoAmI)];
                     if (player.ownedProjectileCounts[ModContent.ProjectileType<OracleOrbs>()] <= 0)
                     {
                         for (int i = 0; i < 4; i++)
@@ -392,13 +400,13 @@ namespace Regressus.NPCs.Bosses.Oracle
                 AITimer++;
                 if (AITimer > 50)
                 {
-                    RegreSystem.ChangeCameraPos(NPC.Center, 10, 1.5f);
+                    RegreSystem.ChangeCameraPos(NPC.Center, 10, 1.25f);
                 }
                 if (AITimer == 1)
                 {
                     Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/oldOracle");
                     NPC.Center = new Vector2(player.position.X, player.position.Y - 200);
-                    RegreSystem.ChangeCameraPos(NPC.Center, 50, 1.5f);
+                    RegreSystem.ChangeCameraPos(NPC.Center, 50, 1);
                     RegreUtils.SetBossTitle(120, "The Oracle", Color.LightSkyBlue, "--Construct of Insight--");
                 }
                 if (savantFrameCounter < 5)
@@ -892,6 +900,14 @@ namespace Regressus.NPCs.Bosses.Oracle
                     }
                     int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[6], -Vector2.UnitY, ModContent.ProjectileType<OracleBeam>(), 45, 0, player.whoAmI, 0, 1.875f);
                     Main.projectile[projectile].timeLeft = 20;
+
+                    for (int i = 0; i < 6; i++)
+                    {
+                        int projectilea = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[i] - Vector2.UnitY * (Main.screenHeight + 400), Vector2.UnitY, ModContent.ProjectileType<OracleBeam>(), 45, 0, player.whoAmI, 0, 1.875f);
+                        Main.projectile[projectilea].timeLeft = 20;
+                    }
+                    int projectile2 = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[6] - Vector2.UnitY * (Main.screenHeight + 400), Vector2.UnitY, ModContent.ProjectileType<OracleBeam>(), 45, 0, player.whoAmI, 0, 1.875f);
+                    Main.projectile[projectile2].timeLeft = 20;
                 }
                 if (AITimer >= 45 * 12)
                 {

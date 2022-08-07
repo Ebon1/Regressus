@@ -32,7 +32,7 @@ namespace Regressus.NPCs.UG
         public override void SetDefaults()
         {
             NPC.width = NPC.height = 56;
-            NPC.lifeMax = 100;
+            NPC.lifeMax = 350;
             NPC.defense = 20;
             NPC.damage = 0;
         }
@@ -88,6 +88,14 @@ namespace Regressus.NPCs.UG
         {
             get => NPC.ai[AISlot];
             set => NPC.ai[AISlot] = value;
+        }
+        public override bool CheckDead()
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, 910, 0.7f + Main.rand.NextFloat() * 0.6f);
+            }
+            return true;
         }
         public override void AI()
         {

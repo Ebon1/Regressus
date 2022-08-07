@@ -17,6 +17,7 @@ using ReLogic.Graphics;
 using Terraria.Chat;
 using Terraria.GameContent.UI.Chat;
 using System.IO;
+using System.Text;
 using Regressus.Items.Dev;
 using static Regressus.MiscDrawingMethods;
 using static Terraria.ModLoader.ModContent;
@@ -26,6 +27,18 @@ namespace Regressus
     {
         public static readonly int Generic = -1;
         public static readonly int Oracle = 0;
+    }
+    public struct Text
+    {
+        public string text;
+        public Rectangle rect;
+        public string wrappedString;
+        public Text(Rectangle rect, DynamicSpriteFont font, string text)
+        {
+            this.text = text;
+            this.rect = rect;
+            this.wrappedString = RegreUtils.WrapText(font, this.text, this.rect.Width);
+        }
     }
     public class BiomeID
     {
@@ -47,8 +60,37 @@ namespace Regressus
         public static readonly int Meteorite = 15;
         public static readonly int Hell = 16;
     }
+
     public static class RegreUtils
     {
+        public static string WrapText(DynamicSpriteFont spriteFont, string text, float maxLineWidth)
+        {
+            string[] words = text.Split(' ');
+
+            StringBuilder sb = new StringBuilder();
+
+            float lineWidth = 0f;
+
+            float spaceWidth = spriteFont.MeasureString(" ").X;
+
+            foreach (string word in words)
+            {
+                Vector2 size = spriteFont.MeasureString(word);
+
+                if (lineWidth + size.X < maxLineWidth)
+                {
+                    sb.Append(word + " ");
+                    lineWidth += size.X + spaceWidth;
+                }
+                else
+                {
+                    sb.Append("\n" + word + " ");
+                    lineWidth = size.X + spaceWidth;
+                }
+            }
+
+            return sb.ToString();
+        }
         public static string BuffPlaceholder = "Regressus/Buffs/Debuffs/DecryptCooldown";
         public static class TRay
         {
@@ -93,6 +135,18 @@ namespace Regressus
         {
             return ModContent.Request<Texture2D>("Regressus/" + path).Value;
         }
+        public static Texture2D GetThisTexture(Item obj)
+        {
+            return TextureAssets.Item[obj.type].Value;
+        }
+        public static Texture2D GetThisTexture(NPC obj)
+        {
+            return TextureAssets.Npc[obj.type].Value;
+        }
+        public static Texture2D GetThisTexture(Projectile obj)
+        {
+            return TextureAssets.Projectile[obj.type].Value;
+        }
         public static Texture2D GetTextureAlt(string path)
         {
             return Regressus.Instance.Assets.Request<Texture2D>(path).Value;
@@ -109,10 +163,10 @@ namespace Regressus
         {
             return new Vector4(color.X / 255f, color.Y / 255f, color.Z / 255f, 1);
         }
-        public static Player[] players = new Player[Main.maxPlayers];
+        public static Player[] activePlayers = new Player[Main.maxPlayers];
         public static Player GetRandomPlayer()
         {
-            return Main.player[Main.rand.Next(players.Length)];
+            return Main.player[Main.rand.Next(activePlayers.Length)];
         }
         public static void Reload(this SpriteBatch spriteBatch, SpriteSortMode sortMode = SpriteSortMode.Deferred)
         {
@@ -139,6 +193,20 @@ namespace Regressus
             DepthStencilState depthStencilState = (DepthStencilState)spriteBatch.GetType().GetField("depthStencilState", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
             RasterizerState rasterizerState = (RasterizerState)spriteBatch.GetType().GetField("rasterizerState", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
             Effect effect = (Effect)spriteBatch.GetType().GetField("customEffect", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+            Matrix matrix = (Matrix)spriteBatch.GetType().GetField("transformMatrix", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+            spriteBatch.Begin(sortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, matrix);
+        }
+        public static void Reload(this SpriteBatch spriteBatch, Effect effect = null)
+        {
+            if ((bool)spriteBatch.GetType().GetField("beginCalled", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch))
+            {
+                spriteBatch.End();
+            }
+            SpriteSortMode sortMode = SpriteSortMode.Deferred;
+            BlendState blendState = (BlendState)spriteBatch.GetType().GetField("blendState", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+            SamplerState samplerState = (SamplerState)spriteBatch.GetType().GetField("samplerState", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+            DepthStencilState depthStencilState = (DepthStencilState)spriteBatch.GetType().GetField("depthStencilState", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+            RasterizerState rasterizerState = (RasterizerState)spriteBatch.GetType().GetField("rasterizerState", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
             Matrix matrix = (Matrix)spriteBatch.GetType().GetField("transformMatrix", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
             spriteBatch.Begin(sortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, matrix);
         }

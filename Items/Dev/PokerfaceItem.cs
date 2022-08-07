@@ -65,16 +65,17 @@ namespace Regressus.Items.Dev
             }
             return base.CanUseItem(player);
         }*/
+        ParticleSystem sys = new();
         public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
             if (line.Index == 0)
             {
-                MiscDrawingMethods.DrawDevName(line);
+                MiscDrawingMethods.DrawDevName(line, sys);
                 return false;
             }
             if (line.Text == "Dedicated to Pokerface.")
             {
-                MiscDrawingMethods.DrawDevName(line);
+                MiscDrawingMethods.DrawDevName(line, sys);
                 return false;
             }
             return true;

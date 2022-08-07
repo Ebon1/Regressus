@@ -27,16 +27,17 @@ namespace Regressus.Items.Tiles
             Item.consumable = true;
             Item.createTile = ModContent.TileType<EbonianModTile>();
         }
+        ParticleSystem sys = new();
         public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
             if (line.Index == 0)
             {
-                MiscDrawingMethods.DrawDevName(line);
+                MiscDrawingMethods.DrawDevName(line, sys);
                 return false;
             }
             if (line.Text == "Dedicated to Ebon.")
             {
-                MiscDrawingMethods.DrawDevName(line);
+                MiscDrawingMethods.DrawDevName(line, sys);
                 return false;
             }
             return true;

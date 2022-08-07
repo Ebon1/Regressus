@@ -25,6 +25,7 @@ using Regressus.Effects.Prims;
 using Terraria.WorldBuilding;
 using Regressus.Tiles.Desert;
 using Terraria.IO;
+using static Terraria.ModLoader.ModContent;
 
 namespace Regressus
 {
@@ -43,7 +44,7 @@ namespace Regressus
                 Player player = Main.player[i];
                 if (player.active && !(player.dead || player.ghost) && player != null)
                 {
-                    RegreUtils.players[i] = player;
+                    RegreUtils.activePlayers[i] = player;
                 }
             }
         }
@@ -52,6 +53,22 @@ namespace Regressus
             WorldGen.TileRunner(new Random().Next(WorldGen.UndergroundDesertLocation.Location.X, (int)WorldGen.UndergroundDesertLocation.BottomRight().X),
                 new Random().Next(WorldGen.UndergroundDesertLocation.Location.Y, (int)WorldGen.UndergroundDesertLocation.BottomRight().Y),
                 1, 5, ModContent.TileType<SolStoneTile>(), true, 0, 0, false, false);
+
+            for (int chestIndex = 0; chestIndex < 1000; chestIndex++)
+            {
+                Chest chest = Main.chest[chestIndex];
+                if (chest != null && Main.tile[chest.x, chest.y].TileType == TileID.Containers && Main.tile[chest.x, chest.y].TileFrameX == 13 * 36)
+                {
+                    for (int inventoryIndex = 0; inventoryIndex < 40; inventoryIndex++)
+                    {
+                        if (chest.item[inventoryIndex].type == ItemID.None)
+                        {
+                            chest.item[inventoryIndex].SetDefaults(ItemType<Items.Consumables.Food.WyvernSteak>());
+                            break;
+                        }
+                    }
+                }
+            }
         }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
@@ -62,9 +79,29 @@ namespace Regressus
                 RegreUtils.DrawBossTitle();
                 return true;
             }, InterfaceScaleType.UI));
+            layers.Insert(textIndex, new LegacyGameInterfaceLayer("Regressus: OracleTimer", () =>
+            {
+                DynamicSpriteFont a = Mod.Assets.Request<DynamicSpriteFont>("Extras/OracleFont").Value;
+                if (NPC.AnyNPCs(ModContent.NPCType<NPCs.Bosses.Oracle.TheOracle>()) && NPCs.Bosses.Oracle.TheOracle._phase2)
+                    DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, a, "Time Left: " + NPCs.Bosses.Oracle.TheOracle._finalCountdown / 60, new Vector2(Main.screenWidth / 2 - a.MeasureString("Time Left: " + NPCs.Bosses.Oracle.TheOracle._finalCountdown / 60).X, Main.screenHeight * 0.05f), Color.Black, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
+                return true;
+            }, InterfaceScaleType.UI));
             layers.Insert(textIndex2, new LegacyGameInterfaceLayer("Regressus: BiomeText", () =>
             {
                 RegreUtils.DrawBiomeTitle();
+                return true;
+            }, InterfaceScaleType.UI));
+            layers.Insert(textIndex2, new LegacyGameInterfaceLayer("Regressus: Page", () =>
+            {
+
+                /*Texture2D book = RegreUtils.GetExtraTexture("paper");
+                //"The following codex contains all of the knowledge gathered from the Galaxy Omega-4, the closest presumed galaxy to the Primordial Chaos in which the Aeons reside. The codex must be kept under strict surveillance and it must not be revealed to the masses due to it's arcane prowess."
+                DynamicSpriteFont a = Mod.Assets.Request<DynamicSpriteFont>("Extras/Handwriting").Value;
+                Main.spriteBatch.Reload(BlendState.Additive);
+                Main.spriteBatch.Draw(book, new Vector2(Main.screenWidth / 2, Main.screenHeight / 2), null, Color.White, 0, book.Size() / 2, 1.1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Reload(BlendState.AlphaBlend);
+                Text text = new Text(new Rectangle(0, 0, book.Width, book.Height), a, pageText);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, a, text.wrappedString, new Vector2(Main.screenWidth / 2.6f, Main.screenHeight / 5), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0f);*/
                 return true;
             }, InterfaceScaleType.UI));
         }
@@ -81,7 +118,7 @@ namespace Regressus
             {
                 if (CameraChangeLength > 0)
                 {
-                    if (zoomAmount != 1 && zoomAmount < zoomBefore)
+                    if (zoomAmount != 1 && zoomAmount > zoomBefore)
                     {
                         Main.GameZoomTarget = Utils.Clamp(Main.GameZoomTarget + 0.05f, 1f, zoomAmount);
                     }
@@ -161,6 +198,8 @@ namespace Regressus
             {
                 if (Main.time > 32399.0)
                 {
+                    if (regrePlayer.CantEatBaguette)
+                        regrePlayer.CantEatBaguette = false;
                     if (AerialBudsCooldown > 0)
                     {
                         AerialBudsCooldown--;

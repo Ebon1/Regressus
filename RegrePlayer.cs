@@ -26,6 +26,7 @@ namespace Regressus
         public bool starshroomed;
         public bool bladeSummon;
         int thing;
+        public bool CantEatBaguette;
 
         //Queen Drae's bools
         public bool AcornFairyPet;
@@ -69,6 +70,7 @@ namespace Regressus
                 packet.Write(AerialBudItemStack[i]);
             }
             packet.Write(AerialBudsGiven);
+            packet.Write(CantEatBaguette);
 
             packet.Send(toWho, fromWho);
         }
@@ -82,6 +84,7 @@ namespace Regressus
                 tag.Set("StackBud" + i, AerialBudItemStack[i]);
             }
             tag.Set("Buds", AerialBudsGiven);
+            tag.Set("Baguette", CantEatBaguette);
         }
         public override void LoadData(TagCompound tag)
         {
@@ -93,6 +96,7 @@ namespace Regressus
                 AerialBudItemStack[i] = tag.GetInt("StackBud" + i);
             }
             AerialBudsGiven = tag.GetInt("Buds");
+            CantEatBaguette = tag.GetBool("Baguette");
         }
         public void BiomeCheck()
         {

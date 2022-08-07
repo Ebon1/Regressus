@@ -14,9 +14,13 @@ namespace Regressus.NPCs.Snow
 {
     public class SnowballWisp : ModNPC
     {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Mr. Ball");
+        }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneSnow && Main.dayTime)
+            if (Main.invasionType == InvasionID.SnowLegion && spawnInfo.Invasion)
                 return 0.42f;
             return 0;
         }
@@ -30,8 +34,8 @@ namespace Regressus.NPCs.Snow
         }
         public override void SetDefaults()
         {
-            NPC.height = 34;
-            NPC.width = 34;
+            NPC.height = 44;
+            NPC.width = 46;
             NPC.damage = 10;
             NPC.friendly = false;
             NPC.lifeMax = 65;
@@ -61,9 +65,10 @@ namespace Regressus.NPCs.Snow
         float distance = 1750f;
         int ballAmnt;
         bool justCollided;
-        Projectile[] balls = new Projectile[6];
+        Projectile[] balls = new Projectile[7];
         public override bool CheckDead()
         {
+            balls[6].ai[1] = 1;
             Color newColor7 = Color.CornflowerBlue;
             for (int num613 = 0; num613 < 7; num613++)
             {
@@ -113,6 +118,10 @@ namespace Regressus.NPCs.Snow
             {
                 NPC.velocity *= 0.98f;
                 AITimer++;
+                if (AITimer == 1)
+                {
+                    balls[6] = Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MrBallHat>(), 10, 1, player.whoAmI, NPC.whoAmI)];
+                }
                 if (AITimer >= 100)
                 {
                     for (int i = 0; i < ballAmnt; i++)
@@ -170,6 +179,8 @@ namespace Regressus.NPCs.Snow
                 }
                 if (balls[ballAmnt - 1].localAI[0] == 1 || !balls[ballAmnt - 1].active)
                 {
+                    balls[6].ai[1] = 1;
+                    balls[6].velocity = Vector2.UnitY * -10f;
                     AITimer = 0;
                     AIState = Roll;
                 }

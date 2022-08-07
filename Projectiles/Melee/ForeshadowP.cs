@@ -21,7 +21,7 @@ namespace Regressus.Projectiles.Melee
         public override void SetDefaults()
         {
             SwingTime = 25;
-            holdOffset = 65f;
+            holdOffset = 87.5f;
             Projectile.width = Projectile.height = 82;
             Projectile.friendly = true;
             Projectile.hostile = false;

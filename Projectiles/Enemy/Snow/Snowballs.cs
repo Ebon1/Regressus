@@ -9,6 +9,44 @@ using Terraria.DataStructures;
 
 namespace Regressus.Projectiles.Enemy.Snow
 {
+    public class MrBallHat : ModProjectile
+    {
+        public override void SetDefaults()
+        {
+            Projectile.width = 22;
+            Projectile.height = 22;
+
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+            Projectile.hostile = true;
+            Projectile.penetrate = -1;
+            Projectile.netImportant = true;
+        }
+        float rot = 1;
+        public override void AI()
+        {
+            NPC center = Main.npc[(int)Projectile.ai[0]];
+            if (center.type != ModContent.NPCType<NPCs.Snow.SnowballWisp>() || !center.active)
+            {
+                Projectile.ai[1] = 1;
+            }
+            Projectile.timeLeft = 5;
+            if (Projectile.ai[1] == 0)
+            {
+                Projectile.Center = center.Center - new Vector2(-12 * center.direction, 18).RotatedBy(center.rotation);
+                Projectile.rotation = center.rotation;
+                Projectile.direction = Projectile.spriteDirection = center.direction;
+            }
+            else
+            {
+                Projectile.tileCollide = true;
+                rot += 0.015f;
+                Projectile.rotation += 0.1f;
+                Projectile.velocity = new Vector2((float)Math.Sin(rot * 5) * rot * 2, 2.55f);
+            }
+        }
+
+    }
     public class Snowball1 : ModProjectile
     {
         public override void SetDefaults()

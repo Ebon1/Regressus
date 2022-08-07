@@ -60,6 +60,7 @@ namespace Regressus.Projectiles
             Projectile.rotation = RegreUtils.FromAToB(player.Center, Main.MouseWorld).ToRotation();
             player.itemRotation = Projectile.rotation * player.direction;
             player.ChangeDir(Main.MouseWorld.X < player.Center.X ? -1 : 1);
+            player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, RegreUtils.FromAToB(player.Center, Main.MouseWorld).ToRotation() - MathHelper.PiOver2);
             //  Lighting.AddLight(Projectile.Center, TorchID.White);
         }
     }

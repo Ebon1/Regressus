@@ -249,7 +249,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                         }
                 }
             }*/
-            if (NPC.ai[1] == -2 || NPC.ai[1] == 1 || NPC.ai[1] == 4 || NPC.ai[1] == 2 || NPC.ai[1] == -9)
+            if (NPC.ai[1] == -2 || NPC.ai[1] == 1 || NPC.ai[1] == -4 || NPC.ai[1] == 4 || NPC.ai[1] == 2 || NPC.ai[1] == -9)
             {
                 aiTimer = 0;
                 pos = center.Center + new Vector2(0, -86);

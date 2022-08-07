@@ -46,7 +46,48 @@ namespace Regressus
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
             }
         }
-        public static void DrawDevName(DrawableTooltipLine line)
+        public static void DrawDevName(DrawableTooltipLine line, ParticleSystem sys)
+        {
+            Color currentColor = Main.hslToRgb((float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2 + 0.5f, 1f, 0.5f);
+
+            Vector2 size = FontAssets.MouseText.Value.MeasureString(line.Text);
+            Rectangle rect = new Rectangle(0, (int)(size.Y / 4), (int)size.X, (int)size.Y / 2);
+            if (Main.GameUpdateCount % 2 == 0)
+            {
+                sys.CreateParticle((part) =>
+                {
+                    if (part.ai[0] > 30)
+                    {
+                        part.dead = true;
+                    }
+                    part.ai[0]++;
+                    part.scale = (float)Math.Sin(part.ai[0] * Math.PI / 30) * part.ai[1];
+                    part.alpha = (float)Math.Sin(part.ai[0] * Math.PI / 30);
+                }, new[]
+                {
+                    ModContent.Request<Texture2D>("Regressus/Extras/Star").Value
+                }, (part, line, spriteBatch) =>
+                {
+                    Color c = Main.hslToRgb((float)Math.Sin(Main.GlobalTimeWrappedHourly + part.ai[0] / 60 * Math.PI) / 2 + 0.5f, 1f, 0.5f);
+                    spriteBatch.Reload(BlendState.Additive);
+                    spriteBatch.Draw(part.textures[0], part.position + new Vector2(line.X, line.Y), null, c, part.rotation, part.textures[0].Size() / 2, part.scale, SpriteEffects.None, 0f);
+                    spriteBatch.Reload(BlendState.AlphaBlend);
+                }, part =>
+                {
+                    part.ai[1] = Main.rand.NextFloat(0.05f, 0.1f);
+                    part.color = Main.hslToRgb(Main.rand.NextFloat(), 1, 0.5f);
+                    part.position = Main.rand.NextVector2FromRectangle(rect);
+                });
+            }
+            sys.UpdateParticles();
+            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Extras/Spotlight").Value;
+            Main.spriteBatch.Reload(BlendState.Additive);
+            Main.spriteBatch.Draw(tex, new Rectangle((int)(line.X - size.X / 2), (int)(line.Y - size.Y / 8), (int)size.X * 2, (int)(size.Y + size.Y / 4)), currentColor * 0.7f);
+            Main.spriteBatch.Reload(BlendState.AlphaBlend);
+            Utils.DrawBorderString(Main.spriteBatch, line.Text, new Vector2(line.X, line.Y), currentColor);
+            sys.DrawParticles(line);
+        }
+        public static void DrawDevNameLegacy(DrawableTooltipLine line)
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, Regressus.TextGradient2, Main.UIScaleMatrix);

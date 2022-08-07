@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
@@ -1287,5 +1287,5 @@ namespace Regressus.NPCs
 					npc.ai[1] = 3f;
 				}
 			}*/
-    }
-}
+//}
+//}

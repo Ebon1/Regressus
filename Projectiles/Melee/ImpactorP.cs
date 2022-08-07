@@ -30,6 +30,7 @@ namespace Regressus.Projectiles.Melee
             Projectile.ignoreWater = true;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.tileCollide = false;
+            stretch = Player.CompositeArmStretchAmount.Quarter;
         }
         Vector2 impactPos;
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

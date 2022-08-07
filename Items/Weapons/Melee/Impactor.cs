@@ -30,7 +30,7 @@ namespace Regressus.Items.Weapons.Melee
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.autoReuse = false;
-            Item.reuseDelay = 45;
+            //Item.reuseDelay = 45;
             Item.DamageType = DamageClass.Melee;
             Item.UseSound = SoundID.Item1;
             Item.useStyle = ItemUseStyleID.Swing;

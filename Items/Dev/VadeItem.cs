@@ -23,7 +23,7 @@ namespace Regressus.Items.Dev
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tyrfing");
-            Tooltip.SetDefault("\"Would you care to see my rgb lighting, i spent $3000\"\nDedicated to Vade in a river.");
+            Tooltip.SetDefault("\"Would you care to see my rgb lighting, i spent $3000\"\nDedicated to Vade.");
         }
         public override void SetDefaults()
         {
@@ -44,16 +44,17 @@ namespace Regressus.Items.Dev
             Item.shootSpeed = 1f;
             Item.shoot = ModContent.ProjectileType<VadeItemP>();
         }
+        ParticleSystem sys = new();
         public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
             if (line.Index == 0)
             {
-                MiscDrawingMethods.DrawDevName(line);
+                MiscDrawingMethods.DrawDevName(line, sys);
                 return false;
             }
-            if (line.Text == "Dedicated to Vade in a river.")
+            if (line.Text == "Dedicated to Vade.")
             {
-                MiscDrawingMethods.DrawDevName(line);
+                MiscDrawingMethods.DrawDevName(line, sys);
                 return false;
             }
             return true;

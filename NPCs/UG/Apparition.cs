@@ -118,6 +118,13 @@ namespace Regressus.NPCs.UG
                 RegreUtils.Reload(spriteBatch, BlendState.AlphaBlend);
             }
         }
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
+                new FlavorTextBestiaryInfoElement("A wandering apparition that hunts and kills living beings by shrieking behind them. While impervious to weapons, their form becomes unstable when watched."),
+            });
+        }
         private const int TP = 0;
         private const int Screech = 1;
         private const int RunAway = 2;
