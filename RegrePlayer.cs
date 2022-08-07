@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.GameInput;
 using Regressus.Dusts;
 using Terraria.ID;
-using Regressus.Systems;
+using Regressus.WorldGeneration;
 
 namespace Regressus
 {
