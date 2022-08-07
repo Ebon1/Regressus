@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 
-namespace Regressus.Systems
+namespace Regressus.WorldGeneration
 {
 	public class ShrineBiomeSystem : ModSystem
 	{
