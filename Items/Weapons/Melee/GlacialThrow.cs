@@ -16,7 +16,6 @@ namespace Regressus.Items.Weapons.Melee
             Item.width = 36;
             Item.height = 34;
             Item.rare = ItemRarityID.Blue;
-            Item.noMelee = true;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.useAnimation = 40;
             Item.useTime = 40;

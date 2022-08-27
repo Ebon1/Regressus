@@ -93,7 +93,7 @@ namespace Regressus.NPCs.Bosses.Oracle
             }
         }
         float minuteHandRot, hourHandRot, clockAlpha;
-        int theFinalCountdown = 3600 * 4;
+        int theFinalCountdown = (3600 * 4) + (60 * 20);
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 pos, Color lightColor)
         {
             if (arenaCenter != Vector2.Zero)
@@ -288,6 +288,7 @@ namespace Regressus.NPCs.Bosses.Oracle
         public static int _finalCountdown;
         public override void AI()
         {
+            #region "random stuff"
             Player player = Main.player[NPC.target];
             if (AIState != PreIntro && !phase2)
             {
@@ -347,6 +348,8 @@ namespace Regressus.NPCs.Bosses.Oracle
             }
             if (!phase2 && !NPC.AnyNPCs(ModContent.NPCType<OracleCrystal>()) && AIState != PreIntro && AIState != Transform)
                 crystal = Main.npc[NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OracleCrystal>(), ai0: NPC.whoAmI, Target: player.whoAmI)];
+
+            #endregion
             if (AIState == Intro)
             {
                 AITimer++;
@@ -365,7 +368,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 if (AITimer == 2)
                 {
                     RegreSystem.ChangeCameraPos(NPC.Center, 215, 1.5f);
-                    RegreUtils.SetBossTitle(215, "The Oracle", Color.DarkCyan, "--Eschaton of Time--", BossTitleStyleID.Oracle);
+                    RegreUtils.SetBossTitle(215, "The Oracle", Color.DarkCyan, "--Warden of Time--", BossTitleStyleID.Oracle);
                 }
                 if (AITimer >= 220)
                 {
@@ -374,19 +377,6 @@ namespace Regressus.NPCs.Bosses.Oracle
                         crystal.localAI[0] = 0;
                     AIState = MusicIntroSync;
                     NPC.dontTakeDamage = false;
-                }
-            }
-            else if (AIState == MusicIntroSync)
-            {
-                AITimer++;
-                NPC.Center = Vector2.Lerp(NPC.Center, player.Center + new Vector2(0, -300), AITimer / 235);
-                if (AITimer >= 400)
-                {
-                    AITimer = 0;
-                    AITimer2 = 0;
-                    if (crystal != null)
-                        crystal.localAI[0] = 0;
-                    AIState = OrbBlast;
                 }
             }
             else if (AIState == PreIntro)
@@ -599,43 +589,6 @@ namespace Regressus.NPCs.Bosses.Oracle
                 }
                 #endregion
             }
-            else if (AIState == Death)
-            {
-                deathTimer++;
-                if (deathTimer > 40)
-                {
-                    float progress = MathHelper.Lerp(0, 1, deathTimer / 500);
-                    AIValue = Math.Clamp(-progress * 7.5f, -10f, 0f);
-                    if (!Terraria.Graphics.Effects.Filters.Scene["Regressus:OracleVoid1"].IsActive())
-                    {
-                        Terraria.Graphics.Effects.Filters.Scene.Activate("Regressus:OracleVoid1", NPC.Center);
-                    }
-                    else
-                    {
-                        Terraria.Graphics.Effects.Filters.Scene["Regressus:OracleVoid1"].GetShader().UseProgress(AIValue);
-                    }
-                    Terraria.Graphics.Effects.Filters.Scene["Regressus:OracleVoid1"].GetShader().UseTargetPosition(NPC.Center);
-                }
-                if (deathTimer == 500)
-                {
-                    deathTimer2 = 1;
-                    CheckDead();
-                }
-                if (deathTimer == 1)
-                {
-                    AIValue = 0;
-                    Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/oracleVoid");
-                    NPC.Center = arenaCenter;
-                    RegreSystem.ChangeCameraPos(NPC.Center, 430, 1.45f);
-                    for (int i = 0; i < Main.maxProjectiles; i++)
-                    {
-                        if (Main.projectile[i].active && Main.projectile[i].hostile && Main.projectile[i].type != ModContent.ProjectileType<OracleOrbs>())
-                        {
-                            Main.projectile[i].timeLeft = 1;
-                        }
-                    }
-                }
-            }
             else if (AIState == Transform)
             {
                 #region "transform"
@@ -670,6 +623,10 @@ namespace Regressus.NPCs.Bosses.Oracle
                         projectile.timeLeft = 300;
                     }
                     Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/oracle2");
+                }
+                if (transformFrameCounter == 330)
+                {
+                    Projectile projectile = Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Ripple>(), 0, 0f, player.whoAmI, ai1: 0.01f)];
                 }
                 if (transformFrameCounter < 5)
                 {
@@ -799,6 +756,56 @@ namespace Regressus.NPCs.Bosses.Oracle
                     transformFrameCounter = 0;
                 }
                 #endregion
+            }
+            else if (AIState == MusicIntroSync)
+            {
+                AITimer++;
+                NPC.Center = Vector2.Lerp(NPC.Center, player.Center + new Vector2(0, -300), AITimer / 235);
+                if (AITimer >= 400)
+                {
+                    AITimer = 0;
+                    AITimer2 = 0;
+                    if (crystal != null)
+                        crystal.localAI[0] = 0;
+                    AIState = OrbBlast;
+                }
+            }
+            else if (AIState == Death)
+            {
+                deathTimer++;
+                if (deathTimer > 40)
+                {
+                    float progress = MathHelper.Lerp(0, 1, deathTimer / 500);
+                    AIValue = Math.Clamp(-progress * 7.5f, -10f, 0f);
+                    if (!Terraria.Graphics.Effects.Filters.Scene["Regressus:OracleVoid1"].IsActive())
+                    {
+                        Terraria.Graphics.Effects.Filters.Scene.Activate("Regressus:OracleVoid1", NPC.Center);
+                    }
+                    else
+                    {
+                        Terraria.Graphics.Effects.Filters.Scene["Regressus:OracleVoid1"].GetShader().UseProgress(AIValue);
+                    }
+                    Terraria.Graphics.Effects.Filters.Scene["Regressus:OracleVoid1"].GetShader().UseTargetPosition(NPC.Center);
+                }
+                if (deathTimer == 500)
+                {
+                    deathTimer2 = 1;
+                    CheckDead();
+                }
+                if (deathTimer == 1)
+                {
+                    AIValue = 0;
+                    Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/oracleVoid");
+                    NPC.Center = arenaCenter;
+                    RegreSystem.ChangeCameraPos(NPC.Center, 430, 1.45f);
+                    for (int i = 0; i < Main.maxProjectiles; i++)
+                    {
+                        if (Main.projectile[i].active && Main.projectile[i].hostile && Main.projectile[i].type != ModContent.ProjectileType<OracleOrbs>())
+                        {
+                            Main.projectile[i].timeLeft = 1;
+                        }
+                    }
+                }
             }
             else if (AIState == OrbBlast)
             {

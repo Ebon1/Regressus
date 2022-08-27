@@ -23,7 +23,8 @@ namespace Regressus.Projectiles.Minibosses.Vargant
 
         public override void PostDraw(Color lightColor)
         {
-            Utils.DrawLine(Main.spriteBatch, Projectile.position, Projectile.position + Projectile.velocity * 250, Color.White * 0f, Color.Red, 1);
+            if (Projectile.hostile)
+                Utils.DrawLine(Main.spriteBatch, Projectile.position, Projectile.position + Projectile.velocity * 250, Color.White * 0f, Color.Red, 1);
         }
         public override void SetDefaults()
         {
@@ -54,7 +55,8 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         }
         public override void PostDraw(Color lightColor)
         {
-            Utils.DrawLine(Main.spriteBatch, Projectile.position, Projectile.position + Projectile.velocity * 250, Color.White * 0f, Color.Red, 1);
+            if (Projectile.hostile)
+                Utils.DrawLine(Main.spriteBatch, Projectile.position, Projectile.position + Projectile.velocity * 250, Color.White * 0f, Color.Red, 1);
         }
         public override void SetDefaults()
         {
@@ -86,7 +88,8 @@ namespace Regressus.Projectiles.Minibosses.Vargant
 
         public override void PostDraw(Color lightColor)
         {
-            Utils.DrawLine(Main.spriteBatch, Projectile.position, Projectile.position + Projectile.velocity * 250, Color.White * 0f, Color.Red, 1);
+            if (Projectile.hostile)
+                Utils.DrawLine(Main.spriteBatch, Projectile.position, Projectile.position + Projectile.velocity * 250, Color.White * 0f, Color.Red, 1);
         }
         public override void SetDefaults()
         {

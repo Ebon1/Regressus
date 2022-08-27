@@ -13,12 +13,12 @@ using Terraria.ModLoader;
 namespace Regressus.Projectiles
 {
     class Ripple : ModProjectile
-    {
+    { //this one is for oracle
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
-        public override string Texture => "Regressus/Extras/Test2";
+        public override string Texture => "Regressus/Extras/test";
         public override void SetDefaults()
         {
             Projectile.width = 100;
@@ -38,6 +38,7 @@ namespace Regressus.Projectiles
             if (Projectile.ai[1] == 0)
                 Projectile.ai[1] = 0.05f;
             Projectile.ai[0] += Projectile.ai[1];
+            Projectile.ai[1] *= 1.1f;
         }
 
     }

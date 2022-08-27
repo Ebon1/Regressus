@@ -152,7 +152,9 @@ namespace Regressus.NPCs.Bosses.Vargant
         }
         private const int AISlot = 0;
         private const int TimerSlot = 1;
-        private const int Idle = 0;
+        private const int Idle = -1;
+        private const int Intro = -2;
+        private const int PreProvokation = 0;
         private const int Hail = 1;
         private const int Thunderbolts = 2;
         private const int Rain = 3;
@@ -188,6 +190,10 @@ namespace Regressus.NPCs.Bosses.Vargant
             }
         }
         int firstDir;
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            return spawnInfo.Player.ZoneOverworldHeight && spawnInfo.Player.ZonePurity && !NPC.AnyNPCs(ModContent.NPCType<VoltageVargant>()) ? 0.01f : 0;
+        }
         int nextAttack = Rain;
         public override void AI()
         {
@@ -229,6 +235,30 @@ namespace Regressus.NPCs.Bosses.Vargant
                     stunned = false;
                     NPC.frameCounter = 0;
                     NPC.velocity = Vector2.Zero;
+                }
+            }
+            if (AIState == PreProvokation)
+            {
+                NPC.Center = Vector2.Lerp(NPC.Center, player.Center, 0.0005f);
+                if (NPC.life < NPC.lifeMax)
+                {
+                    AIState = Intro;
+                }
+            }
+            if (AIState == Intro)
+            {
+                AITimer++;
+                if (AITimer == 1)
+                {
+                    RegreSystem.ScreenShakeAmount = 20f;
+                    RegreUtils.SetBossTitle(160, "Voltage Vagrant", Color.White, "Bringer of Storms", BossTitleStyleID.Vagrant);
+                    RegreSystem.ChangeCameraPos(NPC.Center, 160);
+                    Terraria.Audio.SoundEngine.PlaySound(SoundID.ForceRoar);
+                }
+                if (AITimer >= 160)
+                {
+                    AITimer = 0;
+                    AIState = Idle;
                 }
             }
             if (AIState == Idle)

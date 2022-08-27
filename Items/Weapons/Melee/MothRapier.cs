@@ -3,28 +3,22 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Projectiles.Melee;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.ObjectModel;
 
 namespace Regressus.Items.Weapons.Melee
 {
-    public class BloodRapier : ModItem
+    internal class MothRapier : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blood Rapier");
-            Tooltip.SetDefault("Shoots drops of blood");
+            DisplayName.SetDefault("Deluge");
+            Tooltip.SetDefault("Makes rain fall upon enemies on hit.");
         }
         public override void SetDefaults()
         {
             Item.knockBack = 10f;
             Item.width = Item.height = 82;
             Item.crit = 45;
-            Item.damage = 25;
+            Item.damage = 15;
             Item.useAnimation = 10;
             Item.useTime = 10;
             Item.noUseGraphic = true;
@@ -32,9 +26,9 @@ namespace Regressus.Items.Weapons.Melee
             Item.DamageType = DamageClass.Melee;
             Item.UseSound = SoundID.Item1;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.LightRed;
             Item.shootSpeed = 1f;
-            Item.shoot = ModContent.ProjectileType<BloodRapierP>();
+            Item.shoot = ModContent.ProjectileType<MothRapierP>();
         }
     }
 }

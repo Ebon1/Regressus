@@ -27,7 +27,6 @@ namespace Regressus.Items.Weapons.Melee
             Item.damage = 87;
             Item.useAnimation = 10;
             Item.useTime = 10;
-            Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.autoReuse = true;
             Item.DamageType = DamageClass.Melee;

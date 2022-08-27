@@ -45,7 +45,37 @@ namespace Regressus
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
             }
+            public static void DrawVagrantTitle()
+            {
+                var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
+                float progress = Utils.GetLerpValue(0, player.bossMaxProgress, player.bossTextProgress);
+                float alpha = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
+                Main.spriteBatch.Reload(BlendState.Additive);
+                Main.spriteBatch.Reload(BlendState.AlphaBlend);
+                if (player.bossTitle != null)
+                    DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.MouseText.Value, player.bossTitle, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(player.bossTitle).X / 2, Main.screenHeight * 0.225f), player.bossColor * alpha);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f), player.bossColor * alpha);
+            }
         }
+        public static readonly BlendState Subtractive = new BlendState
+        {
+            ColorSourceBlend = Blend.SourceAlpha,
+            ColorDestinationBlend = Blend.One,
+            ColorBlendFunction = BlendFunction.ReverseSubtract,
+            AlphaSourceBlend = Blend.SourceAlpha,
+            AlphaDestinationBlend = Blend.One,
+            AlphaBlendFunction = BlendFunction.ReverseSubtract
+        };
+        public readonly static BlendState AlphaSubtractive = new BlendState
+        {
+            ColorSourceBlend = Blend.SourceAlpha,
+            AlphaSourceBlend = Blend.SourceAlpha,
+            ColorDestinationBlend = Blend.One,
+            AlphaDestinationBlend = Blend.One,
+            ColorBlendFunction = BlendFunction.ReverseSubtract,
+            AlphaBlendFunction = BlendFunction.ReverseSubtract
+        };
+
         public static void DrawDevName(DrawableTooltipLine line, ParticleSystem sys)
         {
             Color currentColor = Main.hslToRgb((float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2 + 0.5f, 1f, 0.5f);

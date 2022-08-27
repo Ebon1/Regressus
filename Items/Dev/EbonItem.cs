@@ -73,7 +73,9 @@ namespace Regressus.Items.Dev
             {
                 case 0: //Exol
                     SoundStyle a = new("Regressus/Sounds/Custom/ExolIntro");
+                    SoundStyle b = new("Regressus/Sounds/Custom/ExolSummon");
                     SoundEngine.PlaySound(a);
+                    SoundEngine.PlaySound(b);
                     Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<EbonP1>(), damage, knockback, player.whoAmI);
                     break;
                 case 1: //Ebonfly

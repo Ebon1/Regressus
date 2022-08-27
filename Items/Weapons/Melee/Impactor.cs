@@ -27,7 +27,6 @@ namespace Regressus.Items.Weapons.Melee
             Item.damage = 34;
             Item.useAnimation = 2;
             Item.useTime = 2;
-            Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.autoReuse = false;
             //Item.reuseDelay = 45;
