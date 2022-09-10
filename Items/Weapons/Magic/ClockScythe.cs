@@ -1,14 +1,9 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Projectiles.Magic;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.ObjectModel;
 
 namespace Regressus.Items.Weapons.Magic
 {
@@ -19,6 +14,7 @@ namespace Regressus.Items.Weapons.Magic
             DisplayName.SetDefault("Chrono-sickle");
             Tooltip.SetDefault("Ancient weapon of a forgotten titan");
         }
+
         public override void SetDefaults()
         {
             Item.knockBack = 10f;
@@ -38,6 +34,7 @@ namespace Regressus.Items.Weapons.Magic
             Item.shootSpeed = 0f;
             Item.shoot = ModContent.ProjectileType<ClockScytheP>();
         }
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Projectile.NewProjectile(source, Main.MouseWorld, velocity, type, damage, knockback, player.whoAmI);

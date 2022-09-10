@@ -1,13 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Projectiles.Melee;
-using System.Collections.Generic;
-using ReLogic.Graphics;
-using Terraria.GameContent;
 
 namespace Regressus.Items.Weapons.Melee
 {

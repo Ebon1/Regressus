@@ -1,14 +1,9 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Projectiles.Magic;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.ObjectModel;
 
 namespace Regressus.Items.Weapons.Magic
 {
@@ -19,6 +14,7 @@ namespace Regressus.Items.Weapons.Magic
             Tooltip.SetDefault("The Witch's most beloved wand.");
             Item.staff[Item.type] = true;
         }
+
         public override void SetDefaults()
         {
             Item.width = 54;
@@ -37,6 +33,7 @@ namespace Regressus.Items.Weapons.Magic
             Item.shootSpeed = 12.5f;
             Item.shoot = ModContent.ProjectileType<StarshroomStar>();
         }
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             for (int i = -1; i < 2; i++)
@@ -47,6 +44,7 @@ namespace Regressus.Items.Weapons.Magic
             }
             return false;
         }
+
         public override void AddRecipes()
         {
             CreateRecipe()

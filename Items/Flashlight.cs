@@ -1,14 +1,7 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Projectiles;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.ObjectModel;
 
 namespace Regressus.Items
 {

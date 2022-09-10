@@ -5,17 +5,9 @@ using Terraria.ModLoader;
 using Regressus.Projectiles.Magic;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using System.Collections.Generic;
-using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.ObjectModel;
-using Terraria.UI.Chat;
-using System.Collections.Concurrent;
-using System.Text.RegularExpressions;
 using ReLogic.Graphics;
-using Terraria.Chat;
-using Terraria.GameContent.UI.Chat;
 
 namespace Regressus.Items.Weapons.Magic
 {

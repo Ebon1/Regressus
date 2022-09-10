@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Regressus.Dusts;
 using Regressus.Effects.Prims;
+using Terraria.ID;
 
 namespace Regressus
 {
@@ -34,6 +35,7 @@ namespace Regressus
                 }
             }
         }
+
         public override void Load()
         {
             /*Particle.Load();
@@ -69,6 +71,9 @@ namespace Regressus
             On.Terraria.Main.DrawProjectiles += DrawPrimitives;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
             CreateRender();
+
+            // Vanilla resprites go here
+            TextureAssets.Item[ItemID.BrokenHeroSword] = ModContent.Request<Texture2D>("Regressus/Extras/Sprites/BrokenHeroSword", AssetRequestMode.ImmediateLoad);
             base.Load();
         }
 
@@ -93,15 +98,18 @@ namespace Regressus
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
             base.Unload();
         }
+
         private void Main_OnResolutionChanged(Vector2 obj)
         {
             CreateRender();
         }
+
         private void Main_LoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
         {
             if (render != null)
                 CreateRender();
         }
+
         public void CreateRender()
         {
             Main.QueueMainThreadAction(() =>
@@ -111,6 +119,7 @@ namespace Regressus
                 render4 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
             });
         }
+
         //if (proj.active && proj.type == ModContent.ProjectileType<Projectiles.Melee.ForeshadowP>())
         //{
         //Projectiles.Melee.ForeshadowP foreshadowP = new Projectiles.Melee.ForeshadowP();
@@ -129,6 +138,7 @@ namespace Regressus
         RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
         foreshadowP.PostDraw(color);*/
         //}
+
         private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
         {
             GraphicsDevice gd = Main.instance.GraphicsDevice;

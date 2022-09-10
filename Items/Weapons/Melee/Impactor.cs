@@ -1,14 +1,9 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Projectiles.Melee;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.ObjectModel;
 
 namespace Regressus.Items.Weapons.Melee
 {
@@ -37,10 +32,12 @@ namespace Regressus.Items.Weapons.Melee
             Item.shootSpeed = 1f;
             Item.shoot = ModContent.ProjectileType<ImpactorP>();
         }
+
         public override bool AltFunctionUse(Player player)
         {
             return true;
         }
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (player.altFunctionUse == 2)
