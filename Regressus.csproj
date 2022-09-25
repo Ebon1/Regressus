@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Biomes\" />
-    <Folder Include="NPCs\Minibosses\" />
     <Folder Include="Particles\" />
   </ItemGroup>
 </Project>

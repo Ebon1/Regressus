@@ -162,8 +162,11 @@ namespace Regressus.Projectiles.Oracle
 
         public override void PostDraw(Color lightColor)
         {
-            DelegateMethods.v3_1 = new Color(20, 63, 128).ToVector3();
-            Terraria.Utils.PlotTileLine(Projectile.Center, Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/, Projectile.width * Projectile.scale, new Terraria.Utils.TileActionAttempt(DelegateMethods.CastLight));
+            if (Projectile.type == ModContent.ProjectileType<OracleBeamTarget>())
+            {
+                DelegateMethods.v3_1 = new Color(20, 63, 128).ToVector3();
+                Terraria.Utils.PlotTileLine(Projectile.Center, Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/, Projectile.width * Projectile.scale, new Terraria.Utils.TileActionAttempt(DelegateMethods.CastLight));
+            }
         }
     }
 

@@ -6,8 +6,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
-using Regressus.NPCs.Bosses.Vargant;
-namespace Regressus.Projectiles.Minibosses.Vargant
+using Regressus.NPCs.Bosses.Vagrant;
+namespace Regressus.Projectiles.Minibosses.Vagrant
 {
     public class HailExplosion : ModProjectile
     {
@@ -54,7 +54,7 @@ namespace Regressus.Projectiles.Minibosses.Vargant
     }
     public class OrbitingHailP : ModProjectile
     {
-        public override string Texture => "Regressus/Projectiles/Minibosses/Vargant/Hail1";
+        public override string Texture => "Regressus/Projectiles/Minibosses/Vagrant/Hail1";
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hail");
@@ -78,8 +78,8 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         public override bool PreDraw(ref Color lightColor)
         {
             Main.spriteBatch.Reload(BlendState.Additive);
-            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail1").Value;
-            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail1_Glow").Value;
+            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail1").Value;
+            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail1_Glow").Value;
             var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
             {
@@ -99,11 +99,18 @@ namespace Regressus.Projectiles.Minibosses.Vargant
 
             Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<HailExplosion>(), 15, 1);
         }
+        float balls;
+        bool maybe;
+        public override void OnSpawn(IEntitySource source)
+        {
+            maybe = Main.rand.NextBool();
+            balls = Main.rand.NextFloat(2f, 4f);
+        }
         Vector2 center;
         public override void AI()
         {
             Player p = Main.player[Projectile.owner];
-            Projectile.ai[1] += 2f * (float)Math.PI / 600f * 3f;
+            Projectile.ai[1] += 2f * (float)Math.PI / 600f * balls * (maybe ? -1 : 1);
             Projectile.ai[1] %= 2f * (float)Math.PI;
             if (++Projectile.ai[0] < 100)
                 center = p.Center;
@@ -137,8 +144,8 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         public override bool PreDraw(ref Color lightColor)
         {
             Main.spriteBatch.Reload(BlendState.Additive);
-            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail1").Value;
-            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail1_Glow").Value;
+            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail1").Value;
+            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail1_Glow").Value;
             var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
             {
@@ -179,8 +186,8 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         public override bool PreDraw(ref Color lightColor)
         {
             Main.spriteBatch.Reload(BlendState.Additive);
-            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail2").Value;
-            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail2_Glow").Value;
+            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail2").Value;
+            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail2_Glow").Value;
             var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
             {
@@ -239,8 +246,8 @@ namespace Regressus.Projectiles.Minibosses.Vargant
         public override bool PreDraw(ref Color lightColor)
         {
             Main.spriteBatch.Reload(BlendState.Additive);
-            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail3").Value;
-            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail3_Glow").Value;
+            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail3").Value;
+            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail3_Glow").Value;
             var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
             {

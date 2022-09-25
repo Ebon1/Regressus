@@ -22,18 +22,19 @@ namespace Regressus.NPCs.Overworld
         {
             NPC.width = 44;
             NPC.height = 68;
-            NPC.lifeMax = 350;
+            NPC.lifeMax = 400;
             NPC.defense = 10;
             NPC.damage = 35;
-            NPC.knockBackResist = 0.2f;
+            NPC.knockBackResist = 0f;
             NPC.HitSound = SoundID.NPCHit4;
             NPC.DeathSound = SoundID.NPCDeath14;
+            NPC.aiStyle = -1;
             NPC.lavaImmune = true;
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneOverworldHeight && !Main.dayTime && NPC.downedMechBoss3 && NPC.downedMechBoss2 && NPC.downedMechBoss1)
-                return 0.25f;
+            if (spawnInfo.Player.ZoneOverworldHeight)
+                return 0.015f;
             return 0;
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -50,7 +51,7 @@ namespace Regressus.NPCs.Overworld
             SpriteEffects effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Texture2D a = Terraria.GameContent.TextureAssets.Npc[Type].Value;
             Texture2D b = RegreUtils.GetExtraTexture("glow");
-            spriteBatch.Draw(a, NPC.Center - screenPos, NPC.frame, Color.White, NPC.rotation, NPC.Size / 2, NPC.scale, effects, 0f);
+            spriteBatch.Draw(a, NPC.Center - screenPos, NPC.frame, drawColor, NPC.rotation, NPC.Size / 2, NPC.scale, effects, 0f);
             /* RegreUtils.Reload(spriteBatch, BlendState.Additive);
             spriteBatch.Draw(b, NPC.Center - screenPos, null, new Color(0, 255, Main.DiscoB) * 0.75f, NPC.rotation, new Vector2(512, 512) / 2, NPC.scale / 3, effects, 0f);
             RegreUtils.Reload(spriteBatch, BlendState.AlphaBlend);*/
@@ -73,40 +74,111 @@ namespace Regressus.NPCs.Overworld
                     NPC.frame.Y += frameHeight;
             }
         }
+        public float AIState
+        {
+            get => NPC.ai[0];
+            set => NPC.ai[0] = value;
+        }
+        public float AITimer
+        {
+            get => NPC.ai[1];
+            set => NPC.ai[1] = value;
+        }
+        public float AITimer2
+        {
+            get => NPC.ai[2];
+            set => NPC.ai[2] = value;
+        }
+        public float AITimer3
+        {
+            get => NPC.ai[3];
+            set => NPC.ai[3] = value;
+        }
+        const int Walk = 0;
+        const int Slash = 1;
+        const int Dash = 2;
         public override void AI()
         {
-            NPC.ai[1]--;
-            NPC.aiStyle = -1;
-            NPC.direction = Main.player[NPC.target].Center.X > NPC.Center.X ? 1 : -1;
+            NPC.TargetClosest();
+            Player player = Main.player[NPC.target];
+            NPC.direction = player.Center.X > NPC.Center.X ? 1 : -1;
             NPC.spriteDirection = NPC.direction;
-            if (NPC.Center.Distance(Main.player[NPC.target].Center) > 90f)
+            if (AIState == Walk)
             {
-                if (NPC.collideY)
-                    NPC.velocity.X += 0.01f * NPC.direction;
-                else
-                    NPC.velocity.X += 0.0025f * NPC.direction;
-            }
-            if (Math.Sign(NPC.velocity.X) != NPC.direction || NPC.Center.Distance(Main.player[NPC.target].Center) < 90f)
-            {
-                NPC.frame.Y = 3 * height;
-                NPC.frameCounter = 0;
-                NPC.velocity.X *= 0.92f;
-            }
-            if (NPC.collideX && NPC.ai[2] != 1 && NPC.ai[1] <= 0)
-            {
-                NPC.ai[1] = 30;
-                NPC.ai[2] = 1;
-            }
-            if (NPC.ai[2] == 1)
-            {
-                NPC.ai[2] = 0;
-                NPC.velocity.Y -= 6.7f;
-            }
+                AITimer++;
+                AITimer3--;
+                if (NPC.Center.Distance(player.Center) > 20f)
+                {
+                    if (NPC.collideY)
+                        NPC.velocity.X += 0.01f * NPC.direction;
+                    else
+                        NPC.velocity.X += 0.0025f * NPC.direction;
+                }
+                if (Math.Sign(NPC.velocity.X) != NPC.direction || NPC.Center.Distance(player.Center) < 90f)
+                {
+                    NPC.frame.Y = 3 * height;
+                    NPC.frameCounter = 0;
+                    NPC.velocity.X *= 0.92f;
+                }
+                if (NPC.collideX && AITimer2 != 1 && AITimer3 <= 0)
+                {
+                    AITimer3 = 30;
+                    AITimer2 = 1;
+                }
+                if (AITimer2 == 1)
+                {
+                    AITimer2 = 0;
+                    NPC.velocity.Y -= 6.7f;
+                }
 
-            if (NPC.Center.Distance(Main.player[NPC.target].Center) < 750f && NPC.ai[0] == 0)
+                if (AITimer >= 180)
+                {
+                    AITimer = 0;
+                    AITimer2 = 0;
+                    AITimer3 = 0;
+                    NPC.velocity = Vector2.Zero;
+                    AIState = Slash;
+                }
+            }
+            else if (AIState == Slash)
             {
-                NPC.ai[0] = 1;
-                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center - Vector2.UnitY * 70, Vector2.Zero, ModContent.ProjectileType<TerraKnightSword>(), NPC.damage / 2, 1f, Main.player[NPC.target].whoAmI, NPC.whoAmI);
+                AITimer++;
+                AITimer2++;
+                if (AITimer2 == 20)
+                {
+                    AITimer2 = 0;
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, RegreUtils.FromAToB(NPC.Center, player.Center, true) * 7f, ModContent.ProjectileType<TerraKnightSlash>(), 20, 1);
+                }
+                if (AITimer >= 60)
+                {
+                    AITimer = 0;
+                    AITimer2 = 0;
+                    AITimer3 = 0;
+                    NPC.velocity = Vector2.Zero;
+                    AIState = Dash;
+                }
+            }
+            else if (AIState == Dash)
+            {
+                AITimer++;
+                if (AITimer == 100)
+                {
+                    NPC.velocity.X *= 0.98f;
+                    Vector2 vector9 = new Vector2(NPC.position.X + (NPC.width * 0.5f), NPC.position.Y + (NPC.height * 0.5f));
+
+                    float rotation2 = (float)Math.Atan2((vector9.Y) - (player.Center.Y), (vector9.X) - (player.Center.X));
+                    NPC.velocity.X = (float)(Math.Cos(rotation2) * 20) * -1;
+                }
+                if (AITimer > 115)
+                    NPC.velocity.X *= 0.9f;
+                if (AITimer == 130)
+                {
+                    AITimer = 0;
+                    AITimer2 = 0;
+                    AITimer3 = 0;
+                    NPC.velocity = Vector2.Zero;
+                    AIState = Walk;
+                }
             }
         }
     }

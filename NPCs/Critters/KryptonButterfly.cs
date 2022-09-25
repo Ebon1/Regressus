@@ -27,6 +27,19 @@ namespace Regressus.NPCs.Critters
                 new Terraria.GameContent.Bestiary.FlavorTextBestiaryInfoElement("Placeholder!!"),
             });
         }
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frameCounter++;
+            if (NPC.frameCounter >= 5)
+            {
+                NPC.frameCounter = 0;
+                NPC.frame.Y += frameHeight;
+                if (NPC.frame.Y >= 3 * frameHeight)
+                {
+                    NPC.frame.Y = 0;
+                }
+            }
+        }
 
         public override void SetDefaults()
         {
@@ -40,14 +53,14 @@ namespace Regressus.NPCs.Critters
             NPC.lavaImmune = true;
             //NPC.friendly = true; // We have to add this and CanBeHitByItem/CanBeHitByProjectile because of reasons.
             AIType = NPCID.Butterfly;
-            AnimationType = NPCID.Butterfly;
+
             NPC.lifeMax = 5;
             NPC.value = 0;
         }
 
         public override void AI()
         {
-            NPC.spriteDirection = -NPC.direction;
+            NPC.spriteDirection = NPC.direction;
             NPC.TargetClosest(false);
         }
 

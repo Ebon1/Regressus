@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Items.Weapons.Melee;
 using Terraria.GameContent;
-using Regressus.Projectiles.Minibosses.Vargant;
+using Regressus.Projectiles.Minibosses.Vagrant;
 namespace Regressus.Projectiles.Melee
 {
     public class MothRapierP : ModProjectile

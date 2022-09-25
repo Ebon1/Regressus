@@ -46,9 +46,9 @@ namespace Regressus.Items.Weapons.Ranged.Guns
             for (int i = 0; i < numberProjectiles; i++)
             {
                 if (Main.rand.NextBool(2))
-                    type = ModContent.ProjectileType<Projectiles.Minibosses.Vargant.Hail2>();
+                    type = ModContent.ProjectileType<Projectiles.Minibosses.Vagrant.Hail2>();
                 else
-                    type = ModContent.ProjectileType<Projectiles.Minibosses.Vargant.Hail3>();
+                    type = ModContent.ProjectileType<Projectiles.Minibosses.Vagrant.Hail3>();
                 Vector2 perturbedSpeed = velocity.RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f;
                 Projectile p = Projectile.NewProjectileDirect(source, position, perturbedSpeed, type, damage, knockback, player.whoAmI);
                 p.aiStyle = 2;

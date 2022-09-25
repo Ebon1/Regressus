@@ -10,6 +10,7 @@ using Regressus.Projectiles;
 using ReLogic.Content;
 using Regressus.Buffs.Debuffs;
 using ReLogic.Graphics;
+using Terraria.GameContent.Bestiary;
 
 namespace Regressus.NPCs.Bosses.Oracle
 {
@@ -20,6 +21,13 @@ namespace Regressus.NPCs.Bosses.Oracle
             Main.npcFrameCount[NPC.type] = 2;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             NPCID.Sets.MustAlwaysDraw[NPC.type] = true;
+        }
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                //BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
+                new FlavorTextBestiaryInfoElement("One of the most powerful creatures in the universe, the Oracle wants to purge your presence from every possibile universe."),
+            });
         }
         public override void SetDefaults()
         {

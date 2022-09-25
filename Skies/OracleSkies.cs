@@ -118,13 +118,13 @@ namespace Regressus.Skies
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D vignette1 = ModContent.Request<Texture2D>("Regressus/Extras/Vignette_big").Value;
             spriteBatch.Draw(vignette1, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.DarkViolet * intensity);
-            Texture2D a = ModContent.Request<Texture2D>("Regressus/Extras/starSky2").Value;
+            Texture2D a = ModContent.Request<Texture2D>("Regressus/Extras/Empty").Value;
             Effect effect = Regressus.ScreenDistort;
             effect.Parameters["screenPosition"].SetValue(Main.screenPosition);
             effect.Parameters["noiseTex"].SetValue(ModContent.Request<Texture2D>("Regressus/Extras/seamlessNoise").Value);
             effect.Parameters["distortionMultiplier"].SetValue(0.75f * intensity);
             effect.Parameters["screenSize"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) * -15f);
-            effect.Parameters["alpha"].SetValue(intensity * 0.625f);
+            effect.Parameters["alpha"].SetValue(intensity);
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
             effect.CurrentTechnique.Passes[0].Apply();
             Main.spriteBatch.Draw(a, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White * intensity);

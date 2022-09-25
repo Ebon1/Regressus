@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 
-namespace Regressus.Projectiles.Minibosses.Vargant
+namespace Regressus.Projectiles.Minibosses.Vagrant
 {
     public class Rain1 : ModProjectile
     {

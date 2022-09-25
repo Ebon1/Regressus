@@ -5,16 +5,16 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
-using Regressus.Projectiles.Minibosses.Vargant;
+using Regressus.Projectiles.Minibosses.Vagrant;
 using Terraria.DataStructures;
-using Regressus.NPCs.Bosses.Vargant;
+using Regressus.NPCs.Bosses.Vagrant;
 using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
-namespace Regressus.NPCs.Bosses.Vargant
+namespace Regressus.NPCs.Bosses.Vagrant
 {
     public class OrbitingHail : ModNPC
     {
-        public override string Texture => "Regressus/Projectiles/Minibosses/Vargant/Hail1";
+        public override string Texture => "Regressus/Projectiles/Minibosses/Vagrant/Hail1";
         public override void SetStaticDefaults()
         {
 
@@ -25,7 +25,7 @@ namespace Regressus.NPCs.Bosses.Vargant
         {
             NPC.Size = Vector2.One * 30;
             NPC.aiStyle = -1;
-            NPC.lifeMax = 200;
+            NPC.lifeMax = 50;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.noTileCollide = true;
@@ -35,8 +35,8 @@ namespace Regressus.NPCs.Bosses.Vargant
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPosition, Color drawColor)
         {
             spriteBatch.Reload(BlendState.Additive);
-            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail1").Value;
-            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail1_Glow").Value;
+            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail1").Value;
+            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail1_Glow").Value;
             var fadeMult = 1f / NPCID.Sets.TrailCacheLength[NPC.type];
             for (int i = 0; i < NPCID.Sets.TrailCacheLength[NPC.type]; i++)
             {

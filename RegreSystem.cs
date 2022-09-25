@@ -26,6 +26,7 @@ using Terraria.WorldBuilding;
 using Regressus.Tiles.Desert;
 using Terraria.IO;
 using static Terraria.ModLoader.ModContent;
+using Regressus.NPCs.Minibosses;
 
 namespace Regressus
 {
@@ -77,13 +78,14 @@ namespace Regressus
             layers.Insert(textIndex, new LegacyGameInterfaceLayer("Regressus: BossText", () =>
             {
                 RegreUtils.DrawBossTitle();
+
                 return true;
             }, InterfaceScaleType.UI));
             layers.Insert(textIndex, new LegacyGameInterfaceLayer("Regressus: OracleTimer", () =>
             {
                 DynamicSpriteFont a = Mod.Assets.Request<DynamicSpriteFont>("Extras/OracleFont").Value;
                 if (NPC.AnyNPCs(ModContent.NPCType<NPCs.Bosses.Oracle.TheOracle>()) && NPCs.Bosses.Oracle.TheOracle._phase2)
-                    DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, a, "Time Left: " + NPCs.Bosses.Oracle.TheOracle._finalCountdown / 60, new Vector2(Main.screenWidth / 2 - a.MeasureString("Time Left: " + NPCs.Bosses.Oracle.TheOracle._finalCountdown / 60).X, Main.screenHeight * 0.05f), Color.Black, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
+                    DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, a, "" + NPCs.Bosses.Oracle.TheOracle._finalCountdown / 60, new Vector2(Main.screenWidth / 2 - a.MeasureString("" + NPCs.Bosses.Oracle.TheOracle._finalCountdown / 60).X, Main.screenHeight * 0.05f), Color.DarkViolet, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
                 return true;
             }, InterfaceScaleType.UI));
             layers.Insert(textIndex2, new LegacyGameInterfaceLayer("Regressus: BiomeText", () =>

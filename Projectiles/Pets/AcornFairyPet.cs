@@ -35,7 +35,7 @@ namespace Regressus.Projectiles.Pets
             if (player.dead)
                 Projectile.timeLeft = 0;
 
-            if (!modPlayer.AcornFairyPet&& !modPlayer.AcornFairyPet)
+            if (!modPlayer.AcornFairyPet && !modPlayer.AcornFairyPet)
                 Projectile.timeLeft = 0;
 
             if (modPlayer.AcornFairyPet || modPlayer.AcornFairyPet)

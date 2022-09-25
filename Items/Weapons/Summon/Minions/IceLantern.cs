@@ -58,7 +58,7 @@ namespace Regressus.Items.Weapons.Summon.Minions
     {
 
 
-        public override string Texture => "Regressus/Projectiles/Minibosses/Vargant/Hail1";
+        public override string Texture => "Regressus/Projectiles/Minibosses/Vagrant/Hail1";
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Hhail");
@@ -99,8 +99,8 @@ namespace Regressus.Items.Weapons.Summon.Minions
         public override bool PreDraw(ref Color lightColor)
         {
             Main.spriteBatch.Reload(BlendState.Additive);
-            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail1").Value;
-            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vargant/Hail1_Glow").Value;
+            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail1").Value;
+            Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail1_Glow").Value;
             var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
             {

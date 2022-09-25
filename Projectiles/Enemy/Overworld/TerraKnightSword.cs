@@ -38,13 +38,15 @@ namespace Regressus.Projectiles.Enemy.Overworld
         }
         int SwingTime = 37;
         int a, b;
-        public override void OnSpawn(IEntitySource source)
+        /*public override void OnSpawn(IEntitySource source)
         {
             NPC npc = Main.npc[(int)Projectile.ai[0]];
             Projectile.Center = npc.Center - Vector2.UnitY * 70;
-        }
+        }*/
         public override void AI()
         {
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
+            /*
             NPC npc = Main.npc[(int)Projectile.ai[0]];
             Projectile.timeLeft = 2;
             Projectile.spriteDirection = a;
@@ -57,11 +59,11 @@ namespace Regressus.Projectiles.Enemy.Overworld
             }
             if (npc.Center.Distance(Main.player[npc.target].Center) < 750f)
             {
-                    if (++a < 80)
+                if (++a < 80)
                 {
                     Projectile.velocity *= 0.96f;
                     Projectile.rotation += MathHelper.ToRadians(10f);
-                }    
+                }
                 else if (a == 80)
                 {
                     Projectile.rotation = (Main.player[npc.target].Center - Projectile.Center).ToRotation() + MathHelper.PiOver4;
@@ -69,7 +71,7 @@ namespace Regressus.Projectiles.Enemy.Overworld
                     c.Normalize();
                     Projectile.velocity = c * 15f;
                 }
-                    else if (a >= 100)
+                else if (a >= 100)
                 {
                     a = 0;
                 }
@@ -85,7 +87,7 @@ namespace Regressus.Projectiles.Enemy.Overworld
                     float rot = a == 1 ? start.AngleLerp(end, progress) : start.AngleLerp(end, 1f - progress);
                     Vector2 pos = Projectile.Center;
                     pos += rot.ToRotationVector2();
-                    Projectile.rotation = (pos - moveTo).ToRotation() + MathHelper.PiOver4;*/
+                    Projectile.rotation = (pos - moveTo).ToRotation() + MathHelper.PiOver4;
             }
             else
             {
@@ -94,7 +96,7 @@ namespace Regressus.Projectiles.Enemy.Overworld
                 Projectile.ai[1] = SwingTime;
                 Projectile.velocity = moveTo * factor;
                 a = 0;
-            }
+            }*/
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -104,13 +106,13 @@ namespace Regressus.Projectiles.Enemy.Overworld
                 Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Melee/EarthDivider_Glow").Value;
                 Player player = Main.player[Projectile.owner];
                 RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
-                    var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
-                    for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
-                    {
-                        if (i == Projectile.localAI[0])
-                            continue;
-                        Main.spriteBatch.Draw(glow, Projectile.oldPos[i] - Main.screenPosition + new Vector2(Projectile.width / 2f, Projectile.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), new Color(0, 255, Main.DiscoB) * (1f - fadeMult * i) * 0.75f, Projectile.oldRot[i] + (a == 1 ? 0 : MathHelper.PiOver2 * 3), glow.Size() / 2, Projectile.scale * (ProjectileID.Sets.TrailCacheLength[Projectile.type] - i) / ProjectileID.Sets.TrailCacheLength[Projectile.type], a == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
-                    }
+                var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
+                for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
+                {
+                    if (i == Projectile.localAI[0])
+                        continue;
+                    Main.spriteBatch.Draw(glow, Projectile.oldPos[i] - Main.screenPosition + new Vector2(Projectile.width / 2f, Projectile.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), new Color(0, 255, Main.DiscoB) * (1f - fadeMult * i) * 0.75f, Projectile.oldRot[i] + (a == 1 ? 0 : MathHelper.PiOver2 * 3), glow.Size() / 2, Projectile.scale * (ProjectileID.Sets.TrailCacheLength[Projectile.type] - i) / ProjectileID.Sets.TrailCacheLength[Projectile.type], a == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+                }
 
                 RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
                 Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;

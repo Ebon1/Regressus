@@ -235,10 +235,7 @@ namespace Regressus.Projectiles.Dev
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             float num186 = 0f;
-            DrawData value58 = new DrawData(ModContent.Request<Texture2D>("Regressus/Extras/Empty", (AssetRequestMode)1).Value, vector56, new Rectangle(0, 0, Projectile.height * 3, Projectile.height * 2), Color.Purple * (Projectile.scale == 1 ? Projectile.scale - c : (player.HasBuff(ModContent.BuffType<Buffs.Debuffs.DecryptCooldown>()) ? 0 : Projectile.scale)), 0, new Vector2(Projectile.height * 1.5f, Projectile.height), Projectile.scale * 0.9f, SpriteEffects.None, 0);
-            GameShaders.Misc["ForceField"].UseColor(new Vector3(1f + num186 * 0.5f));
-            GameShaders.Misc["ForceField"].Apply(value58);
-            value58.Draw(Main.spriteBatch);
+
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
         }

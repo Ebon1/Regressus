@@ -7,7 +7,7 @@ using ReLogic.Content;
 using Regressus.Effects.Prims;
 using Regressus.Projectiles.Oracle;
 
-namespace Regressus.Projectiles.Minibosses.Vargant
+namespace Regressus.Projectiles.Minibosses.Vagrant
 {
     public class VoltBolt : ModProjectile
     {

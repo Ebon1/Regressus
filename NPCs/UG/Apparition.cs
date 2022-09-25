@@ -92,15 +92,13 @@ namespace Regressus.NPCs.UG
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            if (AIState != RunAway)
+            Texture2D tex = Terraria.GameContent.TextureAssets.Npc[Type].Value;
+            var fadeMult = 1f / NPCID.Sets.TrailCacheLength[Type];
+            for (int i = 0; i < NPC.oldPos.Length; i++)
             {
-                Texture2D tex = Terraria.GameContent.TextureAssets.Npc[Type].Value;
-                var fadeMult = 1f / NPCID.Sets.TrailCacheLength[Type];
-                for (int i = 0; i < NPC.oldPos.Length; i++)
-                {
-                    Main.spriteBatch.Draw(tex, NPC.oldPos[i] - Main.screenPosition + NPC.Size / 2, NPC.frame, Color.White * (1f - fadeMult * i), NPC.oldRot[i], NPC.Size / 2, NPC.scale * (NPCID.Sets.TrailCacheLength[Type] - i) / NPCID.Sets.TrailCacheLength[Type], NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
-                }
+                Main.spriteBatch.Draw(tex, NPC.oldPos[i] - Main.screenPosition + NPC.Size / 2, NPC.frame, Color.White * (1f - fadeMult * i) * (AIState == RunAway ? NPC.ai[2] : 1), NPC.oldRot[i], NPC.Size / 2, NPC.scale, NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
             }
+
             return true;
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -180,7 +178,7 @@ namespace Regressus.NPCs.UG
                 }
                 if (AITimer == 30)
                 {
-                    player.Hurt(Terraria.DataStructures.PlayerDeathReason.ByCustomReason(player.name + " was consumed by the apparition!"), 20, 0);
+                    player.Hurt(Terraria.DataStructures.PlayerDeathReason.ByCustomReason(player.name + " was consumed by the banshee!"), 20, 0);
                 }
                 if (AITimer >= 60)
                 {

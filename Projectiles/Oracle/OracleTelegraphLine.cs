@@ -47,7 +47,7 @@ namespace Regressus.Projectiles.Oracle
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/laser").Value;
+            Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/laser3").Value;
             Vector2 startPosition = Projectile.Center;
             Vector2 endPosition = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/;
             float width = Projectile.width * Projectile.scale;
@@ -56,7 +56,7 @@ namespace Regressus.Projectiles.Oracle
             Vector2 offset = (startPosition - endPosition).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * Projectile.width;
 
             float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
-            Color BeamColor = Color.White /*new Color(20, 63, 128)*/;
+            Color BeamColor = Color.White * 0.5f /*new Color(20, 63, 128)*/;
             BeamPacket.SetTexture(0, texture);
             float off = -Main.GlobalTimeWrappedHourly % 1;
             // draw the flame part of the beam

@@ -59,7 +59,7 @@ namespace Regressus
             TrailShader = ModContent.Request<Effect>("Regressus/Effects/TrailShader", (AssetRequestMode)1).Value;
             Filters.Scene["Regressus:Oracle"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.16f, .42f, .87f).UseOpacity(0f), EffectPriority.Medium);
             SkyManager.Instance["Regressus:Oracle"] = new OracleSkyP1();
-            Filters.Scene["Regressus:Oracle2"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.78f, .33f, 1.11f).UseOpacity(.9f), EffectPriority.Medium);
+            Filters.Scene["Regressus:Oracle2"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.78f, .33f, 1.11f).UseOpacity(1f), EffectPriority.Medium);
             Filters.Scene["Regressus:Oracle2Menu"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.78f, .33f, 1.11f).UseOpacity(.9f), EffectPriority.Medium);
             SkyManager.Instance["Regressus:Oracle2"] = new OracleSkyP2();
             Filters.Scene["Regressus:OracleSummon"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);

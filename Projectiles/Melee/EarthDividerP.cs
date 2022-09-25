@@ -16,14 +16,14 @@ namespace Regressus.Projectiles.Melee
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("The Earth Divider");
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 50;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
         int maxTime = 25;
         public override void SetDefaults()
         {
             if (Projectile.ai[1] == 4)
-                maxTime = 230;
+                maxTime = 250;
             else
                 maxTime = 25;
             Projectile.timeLeft = maxTime; ;
@@ -39,7 +39,7 @@ namespace Regressus.Projectiles.Melee
         }
         bool runOnce;
         float _rot;
-        bool canFlash, collided;
+        bool canFlash;
         public Vector2 flashPos, firstPos, playerPos;
         NPC npc;
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -54,16 +54,16 @@ namespace Regressus.Projectiles.Melee
                 flashPos = Projectile.Center;
             }
         }
-        public override bool OnTileCollide(Vector2 oldVelocity)
+        /*public override bool OnTileCollide(Vector2 oldVelocity)
         {
             _rot = Projectile.rotation;
             Projectile.timeLeft = 50;
             collided = true;
             canFlash = true;
-            Projectile.velocity *= 0.75f;
+            Projectile.velocity *= 0.5f;
             flashPos = Projectile.Center;
             return false;
-        }
+        }*/
         public float Lerp(float x)
         {
             return x < 0.5f ? 8 * x * x * x * x : 1 - (float)Math.Pow(-2 * x + 2, 4) / 2;
@@ -103,12 +103,12 @@ namespace Regressus.Projectiles.Melee
                 scale = Projectile.scale;
                 offset = 70;
                 Projectile.aiStyle = 0;
-                Projectile.tileCollide = Projectile.position.Y >= playerPos.Y;
+                //Projectile.tileCollide = Projectile.position.Y >= playerPos.Y;
                 if (!canFlash)
                 {
                     Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
                     if (Projectile.position.Y <= playerPos.Y)
-                        Projectile.velocity *= 1.1f;
+                        Projectile.velocity *= 1.075f;
                 }
                 else
                 {
@@ -154,7 +154,7 @@ namespace Regressus.Projectiles.Melee
         }
         public override void PostDraw(Color lightColor)
         {
-            if (canFlash && !collided)
+            if (canFlash)
             {
                 RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
                 float progress = Utils.GetLerpValue(0f, 50, Projectile.timeLeft);
@@ -198,7 +198,7 @@ namespace Regressus.Projectiles.Melee
                     {
                         if (i == Projectile.localAI[0])
                             continue;
-                        Main.spriteBatch.Draw(glow, Projectile.oldPos[i] - Main.screenPosition + new Vector2(Projectile.width / 2f, Projectile.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), new Color(0, 255, Main.DiscoB) * (1f - fadeMult * i), Projectile.oldRot[i] + (Projectile.ai[0] == -1 ? 0 : MathHelper.PiOver2 * 3), glow.Size() / 2, Projectile.scale * (ProjectileID.Sets.TrailCacheLength[Projectile.type] - i) / ProjectileID.Sets.TrailCacheLength[Projectile.type], Projectile.ai[0] == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+                        Main.spriteBatch.Draw(glow, Projectile.oldPos[i] - Main.screenPosition + new Vector2(Projectile.width / 2f, Projectile.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), new Color(0, 255, Main.DiscoB) * (1f - fadeMult * i), Projectile.oldRot[i] + (Projectile.ai[0] == -1 ? 0 : MathHelper.PiOver2 * 3), glow.Size() / 2, Projectile.scale * 0.75f/* * (ProjectileID.Sets.TrailCacheLength[Projectile.type] - i) / ProjectileID.Sets.TrailCacheLength[Projectile.type]*/, Projectile.ai[0] == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
                     }
                 }
 
