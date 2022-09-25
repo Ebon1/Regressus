@@ -104,7 +104,7 @@ namespace Regressus.Projectiles.Minibosses.Vagrant
         public override void OnSpawn(IEntitySource source)
         {
             maybe = Main.rand.NextBool();
-            balls = Main.rand.NextFloat(2f, 4f);
+            balls = Main.rand.NextFloat(1f, 3f);
         }
         Vector2 center;
         public override void AI()

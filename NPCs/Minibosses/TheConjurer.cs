@@ -82,7 +82,7 @@ namespace Regressus.NPCs.Minibosses
             {
                 if (AIState == Intro)
                 {
-                    if (NPC.frame.Y == 0)
+                    if (NPC.frame.Y == 0 && !NPC.IsABestiaryIconDummy)
                     {
                         RegreSystem.ChangeCameraPos(NPC.Center, 75, 1.9f);
                     }

@@ -17,10 +17,11 @@ public class Lightning : ModProjectile
     public override void SetDefaults()
     {
         Projectile.tileCollide = false;
-        Projectile.timeLeft = 60;
+        Projectile.timeLeft = 30;
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.penetrate = -1;
+        Projectile.aiStyle = -1;
     }
     public override bool ShouldUpdatePosition() => false;
 
@@ -34,7 +35,7 @@ public class Lightning : ModProjectile
             SoundStyle style = new SoundStyle("Regressus/Sounds/Custom/thunder");
             style.PitchVariance = 1;
             style.MaxInstances = 0;
-            style.Volume = 2f;
+            style.Volume = 2f - Projectile.ai[1];
             SoundEngine.PlaySound(style, Projectile.Center);
             /*}
             else
@@ -42,6 +43,7 @@ public class Lightning : ModProjectile
                 Main.NewText($"Lighting length too small ({Projectile.ai[0]} is under threshold of {Threshold * 2})");
                 Projectile.Kill();
             }*/
+            RegreUtils.Log(Projectile);
             Projectile.localAI[0] = 1;
         }
     }
@@ -53,11 +55,7 @@ public class Lightning : ModProjectile
     private List<float> Points = new List<float>();
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
-        if (LightningPoints.Count > 2)
-        {
-            return Collision.CheckAABBvAABBCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - Vector2.UnitY * 500, Projectile.Center + Vector2.UnitY * 500);
-        }
-        return false;
+        return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - Vector2.UnitY * 500, Projectile.Center + Vector2.UnitY * 500);
     }
     public void GenerateLightning(Vector2 start, Vector2 end)
     {
@@ -97,7 +95,7 @@ public class Lightning : ModProjectile
                 Vector2 v2 = pos1 - dir1; // top left
                 Vector2 v3 = pos2 + dir2; // bottom right
                 Vector2 v4 = pos2 - dir2; // top right
-                Color color = Color.LightBlue * ((float)Projectile.timeLeft / 60);
+                Color color = Color.LightBlue * ((float)Projectile.timeLeft / 30);
                 vertices[i * 6] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
                 vertices[i * 6 + 1] = RegreUtils.AsVertex(v3, color, new Vector2(prog2, 0));
                 vertices[i * 6 + 2] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));

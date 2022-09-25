@@ -199,6 +199,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
         bool yes;
         int nextAttack = Rain;
         Vector2[] random = new Vector2[4];
+        Vector2 arena;
         public override void AI()
         {
             if (AIState != Rain)
@@ -343,7 +344,18 @@ namespace Regressus.NPCs.Bosses.Vagrant
                     AITimer = 239;
                 if (AITimer == 1)
                 {
+                    arena = new Vector2(Main.screenPosition.X, player.Center.Y);
                     NPC.ai[3] = 1;
+                }
+                if (AITimer > 1)
+                {
+                    if (AITimer % 5 == 0)
+                    {
+                        Vector2 arena2 = arena + new Vector2(Main.screenWidth, 0);
+                        Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), arena2, Vector2.Zero, ModContent.ProjectileType<Lightning>(), 1000, 0);
+                        Projectile b = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), arena, Vector2.Zero, ModContent.ProjectileType<Lightning>(), 1000, 0);
+                        a.ai[1] = b.ai[1] = 1.75f;
+                    }
                 }
                 else if (AITimer == 101)
                 {
@@ -414,15 +426,18 @@ namespace Regressus.NPCs.Bosses.Vagrant
                     AITimer2++;
                     if (AITimer2 == 10)
                     {
-                        random[3] = new Vector2(player.Center.X, Main.screenPosition.Y + Main.screenHeight + 200);
+                        random[3] = player.Center;
                         for (int i = 0; i < 3; i++)
                         {
-                            random[i] = new Vector2(Main.screenPosition.X + Main.screenWidth * Main.rand.NextFloat(), Main.screenPosition.Y + Main.screenHeight + 200);
+                            random[i] = new Vector2(Main.screenPosition.X + Main.screenWidth * Main.rand.NextFloat(), player.Center.Y);
                             int projectilea = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[i], -Vector2.UnitY, ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI);
-                            Main.projectile[projectilea].timeLeft = 36;
+                            int projectil2e = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[i], Vector2.UnitY, ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI);
+                            Main.projectile[projectilea].timeLeft = Main.projectile[projectil2e].timeLeft = 36;
                         }
                         int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[3], -Vector2.UnitY, ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI);
+                        int projectile3 = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[3], Vector2.UnitY, ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI);
                         Main.projectile[projectile].timeLeft = 36;
+                        Main.projectile[projectile3].timeLeft = 36;
                     }
                     if (AITimer2 == 60)
                     {
@@ -430,9 +445,9 @@ namespace Regressus.NPCs.Bosses.Vagrant
                         AITimer2 = 0;
                         for (int i = 0; i < 3; i++)
                         {
-                            int projectilea = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[i], -Vector2.UnitY, ModContent.ProjectileType<Lightning>(), 15, 0, player.whoAmI);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), random[i], Vector2.Zero, ModContent.ProjectileType<Lightning>(), 15, 0);
                         }
-                        int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[3], -Vector2.UnitY, ModContent.ProjectileType<Lightning>(), 15, 0, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), random[3], Vector2.Zero, ModContent.ProjectileType<Lightning>(), 15, 0);
                     }
                 }
                 if (AITimer >= 290)
