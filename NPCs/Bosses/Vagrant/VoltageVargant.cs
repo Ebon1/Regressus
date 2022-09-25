@@ -430,9 +430,9 @@ namespace Regressus.NPCs.Bosses.Vagrant
                         AITimer2 = 0;
                         for (int i = 0; i < 3; i++)
                         {
-                            int projectilea = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[i], -Vector2.UnitY, ModContent.ProjectileType<Lightning>(), 15, 0, player.whoAmI, 0, 1.875f);
+                            int projectilea = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[i], -Vector2.UnitY, ModContent.ProjectileType<Lightning>(), 15, 0, player.whoAmI);
                         }
-                        int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[3], -Vector2.UnitY, ModContent.ProjectileType<Lightning>(), 15, 0, player.whoAmI, 0, 1.875f);
+                        int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[3], -Vector2.UnitY, ModContent.ProjectileType<Lightning>(), 15, 0, player.whoAmI);
                     }
                 }
                 if (AITimer >= 290)
