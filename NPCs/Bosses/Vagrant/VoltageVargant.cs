@@ -197,11 +197,12 @@ namespace Regressus.NPCs.Bosses.Vagrant
             return spawnInfo.Player.ZoneOverworldHeight && spawnInfo.Player.ZonePurity && !NPC.AnyNPCs(ModContent.NPCType<VoltageVargant>()) ? 0.01f : 0;
         }
         bool yes;
-        float rot;
         int nextAttack = Rain;
         Vector2[] random = new Vector2[4];
         public override void AI()
         {
+            if (AIState != Rain)
+                NPC.damage = 0;
             Player player = Main.player[NPC.target];
             if (Main.dayTime)
             {
@@ -342,20 +343,17 @@ namespace Regressus.NPCs.Bosses.Vagrant
                     AITimer = 239;
                 if (AITimer == 1)
                 {
-                    rot = Main.rand.NextFloat(MathHelper.ToRadians(360));
                     NPC.ai[3] = 1;
                 }
                 else if (AITimer == 101)
                 {
-                    rot = Main.rand.NextFloat(MathHelper.ToRadians(360));
                     NPC.ai[3] = -1;
                 }
                 if (AITimer < 100 || (AITimer > 150 && AITimer < 200))
                 {
-                    NPC.rotation = rot;
                     NPC.damage = 0;
                     NPC.velocity = Vector2.Zero;
-                    NPC.Center = Vector2.Lerp(NPC.Center, (player.Center + (Vector2.UnitX * 550).RotatedBy(rot) * NPC.ai[3]), 0.035f);
+                    NPC.Center = Vector2.Lerp(NPC.Center, (player.Center + (Vector2.UnitX * 550) * NPC.ai[3]), 0.035f);
                 }
                 //NPC.Center = new Vector2(NPC.Center.X, Vector2.Lerp(NPC.Center, player.Center, 0.035f).Y);
                 if (AITimer >= 35)

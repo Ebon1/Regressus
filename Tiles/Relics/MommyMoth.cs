@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+﻿/*using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -164,5 +164,17 @@ namespace Regressus.Tiles.Relics //this only exits for mommy moth cause im not c
                 spriteBatch.Draw(texture, drawPos + (TwoPi * num5).ToRotationVector2() * (6f + offset * 50f), frame, effectColor, 0f, origin, 1f, effects, 0f);
             }
         }
+    }
+}
+*/using Terraria.ModLoader;
+using Regressus.Items.Tiles.Relics;
+using System;
+
+namespace Regressus.Tiles.Relics
+{
+    public class MommyMoth : RelicBase
+    {
+        public override float Offset => -4;
+        protected override int ItemType => ModContent.ItemType<MommyMothRelicItem>();
     }
 }
