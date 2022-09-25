@@ -1,14 +1,10 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Projectiles.Melee;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.ObjectModel;
 
 namespace Regressus.Items.Weapons.Melee
 {
@@ -36,12 +32,14 @@ namespace Regressus.Items.Weapons.Melee
             Item.shootSpeed = 1f;
             Item.shoot = ModContent.ProjectileType<EarthDividerP>();
         }
+
         public int dir = 1, attacks = -1;
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             TooltipLine tooltipLine = tooltips.Find((TooltipLine x) => x.Name == "ItemName");
             tooltipLine.OverrideColor = new Color(0, 255, Main.DiscoB);
         }
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (++attacks >= 5)
@@ -58,6 +56,7 @@ namespace Regressus.Items.Weapons.Melee
             }
             return false;
         }
+
         public override void AddRecipes()
         {
             CreateRecipe().AddIngredient(ItemID.ChlorophyteBar, 30).AddIngredient(ItemID.BrokenHeroSword, 1).AddIngredient(ItemID.Terragrim, 1).AddTile(TileID.MythrilAnvil).Register();
