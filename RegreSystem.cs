@@ -26,7 +26,7 @@ using Terraria.WorldBuilding;
 using Regressus.Tiles.Desert;
 using Terraria.IO;
 using static Terraria.ModLoader.ModContent;
-using Regressus.NPCs.Minibosses;
+//using Regressus.NPCs.Minibosses;
 
 namespace Regressus
 {

@@ -4,7 +4,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Projectiles.Melee;
-using Regressus.Projectiles.Minions;
+//using Regressus.Projectiles.Minions;
 
 namespace Regressus.Items.Weapons.Melee
 {
@@ -26,7 +26,7 @@ namespace Regressus.Items.Weapons.Melee
             Item.noUseGraphic = true;
             Item.channel = true;
         }
-        public override bool AltFunctionUse(Player player) => true;
+        /*public override bool AltFunctionUse(Player player) => true;
         public override void UpdateInventory(Player player)
         {
             if (mode == 1)
@@ -38,8 +38,8 @@ namespace Regressus.Items.Weapons.Melee
                     Projectile.NewProjectile(default, player.Center, Vector2.Zero, type, Item.damage * 3, Item.knockBack, player.whoAmI);
                 }
             }
-        }
-        public override bool? UseItem(Player player)
+        }*/
+        /*public override bool? UseItem(Player player)
         {
             if (player.altFunctionUse == 0)
             {
@@ -59,6 +59,11 @@ namespace Regressus.Items.Weapons.Melee
                 mode = (mode + 1) % 2;
             }
             return base.UseItem(player);
+        }*/
+        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        {
+            if (Main.rand.NextBool(3))
+                Item.NewItem(player.GetSource_FromThis(), target.getRect(), ModContent.ItemType<Items.Consumables.LivingBladePickup>());
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {

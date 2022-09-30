@@ -14,8 +14,8 @@ namespace Regressus.Projectiles.Melee
     {
         public override string Texture => "Regressus/Items/Weapons/Melee/LivingBlade";
         // pitch is XY roll is YZ yaw is XZ
-        int swingTime = 20;
-        float holdOffset = 50f;
+        int swingTime = 35;
+        float holdOffset = 80f;
         public override void SetDefaults()
         {
             Projectile.timeLeft = swingTime;
@@ -27,6 +27,7 @@ namespace Regressus.Projectiles.Melee
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
             Projectile.width = Projectile.height = 64;
+            Projectile.scale = 2f;
         }
         public float Ease(float f)
         {
@@ -63,13 +64,18 @@ namespace Regressus.Projectiles.Melee
             player.itemAnimation = 2;
 
             Vector2 off = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2();
-            vert.Add(Projectile.Center - off * 25 * ScaleFunction(swingProgress));
-            vert.Add(Projectile.Center + off * 40 * ScaleFunction(swingProgress));
+            vert.Add(Projectile.Center - off * 25 * 2 * ScaleFunction(swingProgress));
+            vert.Add(Projectile.Center + off * 40 * 2 * ScaleFunction(swingProgress));
             if (vert.Count > 10)
             {
                 vert.RemoveAt(0);
                 vert.RemoveAt(0);
             }
+        }
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            if (Main.rand.NextBool(3))
+                Item.NewItem(Projectile.GetSource_FromThis(), target.getRect(), ModContent.ItemType<Items.Consumables.LivingBladePickup>());
         }
         public override void Kill(int timeLeft)
         {
@@ -91,7 +97,7 @@ namespace Regressus.Projectiles.Melee
             float swingProgress = Ease(Utils.GetLerpValue(0f, swingTime, Projectile.timeLeft));
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
             Vector2 orig = texture.Size() / 2;
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, Projectile.rotation, orig, ScaleFunction(swingProgress), SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, texture.Width, texture.Height), Color.White, Projectile.rotation, orig, 2 * ScaleFunction(swingProgress), SpriteEffects.None, 0);
             return false;
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -129,7 +135,7 @@ namespace Regressus.Projectiles.Melee
                     vertices.Add(PrimitiveHelper.AsVertex(tr, Color.Yellow, new Vector2(p2, 0)));
                     vertices.Add(PrimitiveHelper.AsVertex(br, Color.Yellow, new Vector2(p2, 1)));
                 }
-                Texture2D tex = ModContent.Request<Texture2D>("Regressus/Extras/Extra_201").Value;
+                Texture2D tex = ModContent.Request<Texture2D>("Regressus/Extras/Extra_209").Value;
                 PrimitivePacket packet = new PrimitivePacket(vertices, PrimitiveType.TriangleStrip, vertices.Count, tex);
                 packet.Send();
                 dev.RasterizerState = prev;

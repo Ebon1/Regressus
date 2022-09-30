@@ -346,7 +346,9 @@ namespace Regressus.NPCs.Bosses.Oracle
             {
                 if (player.Center.Distance(arenaCenter) >= (1322 / 2) * (2.5f))
                 {
-                    RegreUtils.TPNoDust(arenaCenter, player);
+                    player.velocity = Vector2.Zero;
+                    player.position = player.oldPosition;
+                    //RegreUtils.TPNoDust(arenaCenter + (Vector2.UnitX * ((1322 / 2) * (2.5f))).RotatedBy(RegreUtils.FromAToB(arenaCenter, player.Center).ToRotation() * -1), player);
                     //player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " left the boundaries."), 999999999, 0);
                 }
             }

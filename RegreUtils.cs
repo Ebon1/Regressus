@@ -21,6 +21,8 @@ using System.Text;
 using Regressus.Items.Dev;
 using static Regressus.MiscDrawingMethods;
 using static Terraria.ModLoader.ModContent;
+using Regressus.Projectiles.Oracle;
+
 namespace Regressus
 {
     public class BossTitleStyleID
@@ -488,6 +490,12 @@ namespace Regressus
             _ = vector - player.position;
             TPNoDust(vector, player);
             NetMessage.SendData(MessageID.Teleport, -1, -1, null, 0, player.whoAmI, vector.X, vector.Y, 0);
+        }
+        public static void SpawnTelegraphLine(Vector2 position, IEntitySource source, int timeleft = 30, float rot = 0)
+        {
+            Projectile a = Projectile.NewProjectileDirect(source, position, -Vector2.UnitY.RotatedBy(rot), ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0);
+            Projectile b = Projectile.NewProjectileDirect(source, position, Vector2.UnitY.RotatedBy(rot), ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0);
+            a.timeLeft = b.timeLeft = timeleft;
         }
         public static void TPNoDust(Vector2 newPos, Player player)
         {

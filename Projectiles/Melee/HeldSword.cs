@@ -65,5 +65,8 @@ namespace Regressus.Projectiles.Melee
             player.itemAnimation = 2;
         }
     }
+    //public abstract class HeldSwordNPC : ModProjectile
+    //{
+    //}
 }
 
