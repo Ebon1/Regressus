@@ -17,7 +17,7 @@ namespace Regressus.Items.Dev
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Otamatone");
-            Tooltip.SetDefault("Thank You\nShoots Phantom otamatones and makes funny noises :)\nDedicated to Yuri O.");
+            Tooltip.SetDefault("Shoots Phantom otamatones and makes funny noises :)\nDedicated to Yuri O.");
         }
 
         public override void SetDefaults()

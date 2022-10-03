@@ -12,7 +12,6 @@ using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
 using Regressus.Projectiles.Oracle;
 using Terraria.Audio;
-using static Humanizer.In;
 
 namespace Regressus.NPCs.Bosses.Vagrant
 {
@@ -32,6 +31,10 @@ namespace Regressus.NPCs.Bosses.Vagrant
             NPC.width = 116;
             NPC.height = 114;
             NPC.lifeMax = 2000;
+            if (Main.expertMode)
+                NPC.lifeMax = 3000;
+            if (Main.masterMode)
+                NPC.lifeMax = 4500;
             NPC.defense = 5;
             NPC.aiStyle = 0;
             NPC.damage = 10;

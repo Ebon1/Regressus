@@ -5,11 +5,10 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
-using Regressus.NPCs;
 using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
 
-namespace Regressus.NPCs.Starshroom
+namespace Regressus.NPCs.Overworld
 {
     public class Starlad : ModNPC
     {
@@ -54,9 +53,9 @@ namespace Regressus.NPCs.Starshroom
                 RegreUtils.Reload(sb, BlendState.AlphaBlend);
             }*/
             SpriteEffects effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 origin = new Vector2(ModContent.Request<Texture2D>("Regressus/NPCs/Starshroom/Starlad").Value.Width / 2, NPC.height / 2);
-            sb.Draw(ModContent.Request<Texture2D>("Regressus/NPCs/Starshroom/Starlad").Value, NPC.Center - screenPos, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
-            //sb.Draw(ModContent.Request<Texture2D>("Regressus/NPCs/Starshroom/Starlad_Glow").Value, NPC.Center - screenPos, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
+            Vector2 origin = new Vector2(ModContent.Request<Texture2D>("Regressus/NPCs/Overworld/Starlad").Value.Width / 2, NPC.height / 2);
+            sb.Draw(ModContent.Request<Texture2D>("Regressus/NPCs/Overworld/Starlad").Value, NPC.Center - screenPos, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
+            //sb.Draw(ModContent.Request<Texture2D>("Regressus/NPCs/Overworld/Starlad_Glow").Value, NPC.Center - screenPos, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, effects, 0f);
             return false;
         }
         public override void FindFrame(int frameHeight)
@@ -223,7 +222,7 @@ namespace Regressus.NPCs.Starshroom
             Color newColor7 = Color.CornflowerBlue;
             for (int num613 = 0; num613 < 7; num613++)
             {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, 58, NPC.velocity.X * 0.1f, NPC.velocity.Y * 0.1f, 150, default(Color), 0.8f);
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, 58, NPC.velocity.X * 0.1f, NPC.velocity.Y * 0.1f, 150, default, 0.8f);
             }
             for (float num614 = 0f; num614 < 1f; num614 += 0.125f)
             {
@@ -238,7 +237,7 @@ namespace Regressus.NPCs.Starshroom
             {
                 for (int num616 = 0; num616 < 7; num616++)
                 {
-                    Gore.NewGore(NPC.GetSource_FromThis(), NPC.position, Main.rand.NextVector2CircularEdge(0.5f, 0.5f) * NPC.velocity.Length(), Utils.SelectRandom<int>(Main.rand, 16, 17, 17, 17, 17, 17, 17, 17));
+                    Gore.NewGore(NPC.GetSource_FromThis(), NPC.position, Main.rand.NextVector2CircularEdge(0.5f, 0.5f) * NPC.velocity.Length(), Utils.SelectRandom(Main.rand, 16, 17, 17, 17, 17, 17, 17, 17));
                 }
             }
             return true;
@@ -247,6 +246,7 @@ namespace Regressus.NPCs.Starshroom
         {
             Player player = Main.player[NPC.target];
             NPC.TargetClosest(true);
+            Lighting.AddLight(NPC.Center, TorchID.UltraBright);
             if (NPC.life != NPC.lifeMax && !hasAggrod)
             {
                 NPC.frameCounter = 0;
@@ -301,7 +301,7 @@ namespace Regressus.NPCs.Starshroom
                 {
                     for (int num622 = 0; num622 < 4; num622++)
                     {
-                        Dust d = Main.dust[Dust.NewDust(NPC.Center, NPC.width / 3, NPC.height / 3, 57, NPC.velocity.X * 0.1f, NPC.velocity.Y * 0.1f, 150, default(Color), 1.2f)];
+                        Dust d = Main.dust[Dust.NewDust(NPC.Center, NPC.width / 3, NPC.height / 3, 57, NPC.velocity.X * 0.1f, NPC.velocity.Y * 0.1f, 150, default, 1.2f)];
                         d.noGravity = true;
                     }
                 }
@@ -309,9 +309,9 @@ namespace Regressus.NPCs.Starshroom
                 {
                     Terraria.Audio.SoundEngine.PlaySound(SoundID.Item9, NPC.Center);
                     NPC.velocity.X *= 0.98f;
-                    Vector2 vector9 = new Vector2(NPC.position.X + (NPC.width * 0.5f), NPC.position.Y + (NPC.height * 0.5f));
+                    Vector2 vector9 = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + NPC.height * 0.5f);
                     {
-                        float rotation2 = (float)Math.Atan2((vector9.Y) - (player.Center.Y), (vector9.X) - (player.Center.X));
+                        float rotation2 = (float)Math.Atan2(vector9.Y - player.Center.Y, vector9.X - player.Center.X);
                         NPC.velocity.X = (float)(Math.Cos(rotation2) * 28) * -1;
                     }
                 }

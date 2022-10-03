@@ -15,7 +15,7 @@ namespace Regressus.Items.Weapons.Melee
         public override void SetDefaults()
         {
             Item.width = Item.height = 64;
-            Item.damage = 60;
+            Item.damage = 100;
             Item.useTime = 60;
             Item.useAnimation = 60;
             Item.shoot = ModContent.ProjectileType<LivingBladeHeld>();
@@ -24,6 +24,7 @@ namespace Regressus.Items.Weapons.Melee
             Item.DamageType = DamageClass.Melee;
             Item.reuseDelay = 10;
             Item.noUseGraphic = true;
+            Item.rare = ItemRarityID.Yellow;
             Item.channel = true;
         }
         /*public override bool AltFunctionUse(Player player) => true;

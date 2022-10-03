@@ -342,7 +342,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                     return;
                 }
             }
-            if (phase2 && AIState != Transform)
+            if (phase2)
             {
                 if (player.Center.Distance(arenaCenter) >= (1322 / 2) * (2.5f))
                 {
@@ -354,7 +354,7 @@ namespace Regressus.NPCs.Bosses.Oracle
             }
             if (player.chaosState && player.ownedProjectileCounts[ModContent.ProjectileType<OracleRoDRift>()] < 1)
             {
-                Projectile.NewProjectile(NPC.GetSource_FromThis(), (Main.MouseWorld.Distance(arenaCenter) < (1322 / 2) * 2.5f ? Main.MouseWorld : arenaCenter), Vector2.Zero, ModContent.ProjectileType<OracleRoDRift>(), 0, 0, player.whoAmI);
+                Projectile.NewProjectile(NPC.GetSource_FromThis(), /*(Main.MouseWorld.Distance(arenaCenter) < (1322 / 2) * 2.5f ? Main.MouseWorld : */(arenaCenter), Vector2.Zero, ModContent.ProjectileType<OracleRoDRift>(), 0, 0, player.whoAmI);
             }
             if (!phase2 && !NPC.AnyNPCs(ModContent.NPCType<OracleCrystal>()) && AIState != PreIntro && AIState != Transform)
                 crystal = Main.npc[NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OracleCrystal>(), ai0: NPC.whoAmI, Target: player.whoAmI)];
@@ -378,7 +378,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 if (AITimer == 2)
                 {
                     RegreSystem.ChangeCameraPos(NPC.Center, 215, 1.5f);
-                    RegreUtils.SetBossTitle(215, "The Oracle", Color.DarkCyan, "--Warden of Time--", BossTitleStyleID.Oracle);
+                    RegreUtils.SetBossTitle(215, "The Oracle", Color.DarkCyan, "Warden of Time", BossTitleStyleID.Oracle);
                 }
                 if (AITimer >= 220)
                 {
@@ -407,7 +407,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                     Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/oldOracle");
                     NPC.Center = new Vector2(player.position.X, player.position.Y - 200);
                     RegreSystem.ChangeCameraPos(NPC.Center, 50, 1);
-                    RegreUtils.SetBossTitle(120, "The Oracle", Color.LightSkyBlue, "--Construct of Insight--");
+                    RegreUtils.SetBossTitle(120, "The Oracle", Color.LightSkyBlue, "Construct of Insight");
                 }
                 if (savantFrameCounter < 5)
                 {

@@ -81,7 +81,7 @@ namespace Regressus.Projectiles.Magic
                 RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
                 Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clock").Value, clockCenter - Main.screenPosition, null, Color.DeepSkyBlue * clockProg, 0, ModContent.Request<Texture2D>("Regressus/Extras/clock").Value.Size() / 2, .25f * clockProg, SpriteEffects.None, 0);
                 Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clockHand2").Value, clockCenter - Main.screenPosition, null, Color.DeepSkyBlue * clockProg, (mousePos - clockCenter).ToRotation() + MathHelper.PiOver2, ModContent.Request<Texture2D>("Regressus/Extras/clockHand2").Value.Size() / 2, .25f * clockProg, SpriteEffects.None, 0);
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clockHand1").Value, clockCenter - Main.screenPosition, null, Color.DeepSkyBlue * clockProg, MathHelper.ToRadians(rot), ModContent.Request<Texture2D>("Regressus/Extras/clockHand1").Value.Size() / 2, .25f * clockProg, SpriteEffects.None, 0);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clockHand1_notRotated").Value, clockCenter - Main.screenPosition, null, Color.DeepSkyBlue * clockProg, MathHelper.ToRadians(rot), ModContent.Request<Texture2D>("Regressus/Extras/clockHand1").Value.Size() / 2, .25f * clockProg, SpriteEffects.None, 0);
                 RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
             }
             Projectile.localAI[0]++;

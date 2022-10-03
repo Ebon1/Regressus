@@ -28,6 +28,16 @@ namespace Regressus
     {
         public class BossTitles
         {
+            public static string GetBossText()
+            {
+                var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
+                float progress = Utils.GetLerpValue(0, player.bossMaxProgress, player.bossTextProgress);
+                float realProg = ((MathHelper.Clamp((1f - progress) * 3, 0, 1)));
+                string text = player.bossTitle;
+                int count = (int)(text.Length * realProg);
+                string something = $"{text.Substring(0, count)}";
+                return something;
+            }
             public static void DrawOracleTitle()
             {
                 var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
@@ -55,6 +65,27 @@ namespace Regressus
                 if (player.bossTitle != null)
                     DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.MouseText.Value, player.bossTitle, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(player.bossTitle).X / 2, Main.screenHeight * 0.225f), player.bossColor * alpha);
                 DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f), player.bossColor * alpha);
+            }
+            public static void DrawSSWTitle()
+            {
+                var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
+                float progress = Utils.GetLerpValue(0, player.bossMaxProgress, player.bossTextProgress);
+                float alpha = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
+                string something = GetBossText();
+
+                //float alpha2 = MathHelper.Clamp((1f - progress) - 1 / 3, 0, 1);
+                Main.spriteBatch.Reload(BlendState.Additive);
+                Main.spriteBatch.Reload(BlendState.AlphaBlend);
+                if (player.bossTitle != null)
+                    DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.MouseText.Value, something, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(something).X / 2, Main.screenHeight * 0.225f), player.bossColor * alpha);
+
+                const float TwoPi = (float)Math.PI * 2f;
+                float scale = (float)Math.Sin(Main.GlobalTimeWrappedHourly * TwoPi / 2f) * 0.3f + 0.7f;
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f), player.bossColor * alpha);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f) + (Vector2.UnitX * 10 * scale), player.bossColor * alpha * 0.5f * scale);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f) + (Vector2.UnitX * -10 * scale), player.bossColor * alpha * 0.5f * scale);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f) + (Vector2.UnitY * 10 * scale), player.bossColor * alpha * 0.5f * scale);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f) + (Vector2.UnitY * -10 * scale), player.bossColor * alpha * 0.5f * scale);
             }
         }
         public static readonly BlendState Subtractive = new BlendState

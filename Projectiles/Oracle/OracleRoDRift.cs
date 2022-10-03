@@ -44,8 +44,8 @@ namespace Regressus.Projectiles.Oracle
             float progress = Utils.GetLerpValue(0, MAX_TIME, Projectile.timeLeft);
             Projectile.scale = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 6, 0, 1);
             Player player = Main.player[Projectile.owner];
-            if (player.dead)
-                Projectile.Kill();
+            if (player.dead && Projectile.timeLeft > 100)
+                Projectile.timeLeft = 100;
             if (!player.dead && player.active && Projectile.scale == 1)
             {
                 if (player.Center.Distance(Projectile.Center) < Projectile.width)

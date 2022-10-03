@@ -27,7 +27,7 @@ namespace Regressus.NPCs.UG
         }
         public override Color? GetAlpha(Color drawColor)
         {
-            return Color.White * (AIState == RunAway ? NPC.ai[2] : 1f);
+            return drawColor * (AIState == RunAway ? NPC.ai[2] : 1f);
         }
         public override void SetDefaults()
         {
@@ -96,7 +96,7 @@ namespace Regressus.NPCs.UG
             var fadeMult = 1f / NPCID.Sets.TrailCacheLength[Type];
             for (int i = 0; i < NPC.oldPos.Length; i++)
             {
-                Main.spriteBatch.Draw(tex, NPC.oldPos[i] - Main.screenPosition + NPC.Size / 2, NPC.frame, Color.White * (1f - fadeMult * i) * (AIState == RunAway ? NPC.ai[2] : 1), NPC.oldRot[i], NPC.Size / 2, NPC.scale, NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
+                Main.spriteBatch.Draw(tex, NPC.oldPos[i] - Main.screenPosition + NPC.Size / 2, NPC.frame, drawColor * (1f - fadeMult * i) * (AIState == RunAway ? NPC.ai[2] : 1), NPC.oldRot[i], NPC.Size / 2, NPC.scale, NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
             }
 
             return true;

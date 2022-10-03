@@ -30,14 +30,40 @@ namespace Regressus.Projectiles.Enemy.UG
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.timeLeft = 500;
-            Projectile.tileCollide = false;
+            Projectile.tileCollide = true;
+        }
+        public override void Kill(int timeLeft)
+        {
+            for (int num901 = 0; num901 < 10; num901++)
+            {
+                int num902 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 15, 0f, 0f, 200, default(Color), 2.7f);
+                Main.dust[num902].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * Projectile.width / 2f;
+                Main.dust[num902].noGravity = true;
+                Dust dust2 = Main.dust[num902];
+                dust2.velocity *= 3f;
+                num902 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 15, 0f, 0f, 100, default(Color), 1.5f);
+                Main.dust[num902].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * Projectile.width / 2f;
+                dust2 = Main.dust[num902];
+                dust2.velocity *= 2f;
+                Main.dust[num902].noGravity = true;
+                Main.dust[num902].fadeIn = 2.5f;
+            }
+            for (int num903 = 0; num903 < 5; num903++)
+            {
+                int num904 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 15, 0f, 0f, 0, default(Color), 2.7f);
+                Main.dust[num904].position = Projectile.Center + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(Projectile.velocity.ToRotation()) * Projectile.width / 2f;
+                Main.dust[num904].noGravity = true;
+                Dust dust2 = Main.dust[num904];
+                dust2.velocity *= 3f;
+            }
+            Terraria.Audio.SoundEngine.PlaySound(SoundID.Item9, Projectile.Center);
         }
 
         public override void AI()
         {
             if (Projectile.ai[0] == 1)
             {
-                Projectile.velocity *= 1.05f;
+                Projectile.velocity *= 1.02f;
             }
             if (++Projectile.frameCounter >= 5)
             {

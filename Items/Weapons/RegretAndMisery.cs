@@ -24,14 +24,16 @@ namespace Regressus.Items.Weapons
             Item.damage = 135;
             Item.useTime = 10;
             Item.useAnimation = 10;
+            Item.reuseDelay = 100;
             Item.noMelee = true;
-            Item.autoReuse = true;
+            Item.autoReuse = false;
+            Item.channel = true;
             Item.noUseGraphic = false;
             Item.DamageType = DamageClass.Generic;
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.rare = ItemRarityID.Purple;
             Item.shootSpeed = 15f;
-            Item.shoot = ModContent.ProjectileType<RegretAndMiseryP>();
+            Item.shoot = ModContent.ProjectileType<RegretAndMiseryP2>();
         }
 
         public static readonly SoundStyle sussySound = new("Regressus/Sounds/Custom/Sussy", SoundType.Sound)
@@ -50,17 +52,18 @@ namespace Regressus.Items.Weapons
         int attacks;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (++attacks >= 15)
-                attacks = 0;
+            //if (++attacks >= 15)
+            //    attacks = 0;
+
             // What the fuck is this cringe
             SoundEngine.PlaySound(sussySound, player.position);
             Projectile proj = Main.projectile[Projectile.NewProjectile(source, new Vector2(Main.MouseWorld.X, Main.screenPosition.Y), new Vector2(Main.rand.NextFloat(-2.5f, 2.5f), Item.shootSpeed), type, damage, knockback, player.whoAmI)];
-            if (attacks == 14)
+            /*if (attacks == 14)
             {
                 Terraria.Audio.SoundEngine.PlaySound(sussySound2);
                 proj.scale = 5f;
                 proj.damage = damage * 2;
-            }
+            }*/
             return false;
         }
 

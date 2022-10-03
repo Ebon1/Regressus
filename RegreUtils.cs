@@ -30,6 +30,7 @@ namespace Regressus
         public static readonly int Generic = -1;
         public static readonly int Oracle = 0;
         public static readonly int Vagrant = 1;
+        public static readonly int SSW = 2;
     }
     public struct Text
     {
@@ -94,6 +95,27 @@ namespace Regressus
 
             return true;
         }
+
+        public static void QuickDustLine(Vector2 start, Vector2 end, float splits, Color color)
+        {
+            Dust.QuickDust(start, color).scale = 1f;
+            Dust.QuickDust(end, color).scale = 1f;
+            float num = 1f / splits;
+            for (float amount = 0.0f; (double)amount < 1.0; amount += num)
+                Dust.QuickDustSmall(Vector2.Lerp(start, end, amount), color).scale = 1f;
+        }
+        public static void QuickDustLine(Vector2 start, Vector2 end, float splits, Color color1, Color color2)
+        {
+            Dust.QuickDust(start, color1).scale = 1f;
+            Dust.QuickDust(end, color2).scale = 1f;
+            float num = 1f / splits;
+            for (float amount = 0.0f; (double)amount < 1.0; amount += num)
+            {
+                Color color = Color.Lerp(color1, color2, amount);
+                Dust.QuickDustSmall(Vector2.Lerp(start, end, amount), color).scale = 1f;
+            }
+        }
+
         public static Matrix GetMatrix()
         {
             if (CheckGraphicsChanged())
@@ -418,6 +440,9 @@ namespace Regressus
                         break;
                     case 1:
                         BossTitles.DrawVagrantTitle();
+                        break;
+                    case 2:
+                        BossTitles.DrawSSWTitle();
                         break;
                 }
             }

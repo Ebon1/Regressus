@@ -9,6 +9,7 @@ using Regressus.NPCs;
 using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
 using Regressus.Projectiles.Enemy.Overworld;
+using Regressus.Extras.Gore;
 
 namespace Regressus.NPCs.Overworld
 {
@@ -17,6 +18,7 @@ namespace Regressus.NPCs.Overworld
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 25;
+            DisplayName.SetDefault("Terraknight");
         }
         public override void SetDefaults()
         {
@@ -86,6 +88,13 @@ namespace Regressus.NPCs.Overworld
         }
         int height;
         Vector2 flash;
+        public override void OnKill()
+        {
+            Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY.RotatedByRandom(MathHelper.ToRadians(360)), ModContent.GoreType<TerraknightGore1>());
+            Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY.RotatedByRandom(MathHelper.ToRadians(360)), ModContent.GoreType<TerraknightGore2>());
+            Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY.RotatedByRandom(MathHelper.ToRadians(360)), ModContent.GoreType<TerraknightGore3>());
+            Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY.RotatedByRandom(MathHelper.ToRadians(360)), ModContent.GoreType<TerraknightGore4>());
+        }
         public override void FindFrame(int frameHeight)
         {
             height = frameHeight;

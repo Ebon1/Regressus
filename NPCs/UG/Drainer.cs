@@ -29,7 +29,7 @@ namespace Regressus.NPCs.UG
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.ZoneRockLayerHeight && spawnInfo.Player.ZonePurity)
-                return 0.1f;
+                return 0.05f;
             return 0;
         }
         public override void FindFrame(int frameHeight)
@@ -77,10 +77,12 @@ namespace Regressus.NPCs.UG
                     NPC.life++;
                     CombatText.NewText(NPC.getRect(), CombatText.HealLife, 1);
                 }
+                RegreUtils.QuickDustLine(NPC.Center - Vector2.UnitY * 15, player.Center, 100f, Color.Red);
+                /*
                 Vector2 vel = RegreUtils.FromAToB(player.Center, NPC.Center - Vector2.UnitY * 15, true) * 8;
                 Dust d = Dust.NewDustPerfect(player.Center, DustID.LifeDrain, vel);
                 d.noGravity = true;
-                d.scale = 2;
+                d.scale = 2;*/
             }
             for (int i = 0; i < 32; i++)
             {
