@@ -277,7 +277,7 @@ namespace Regressus.NPCs.UG
                 /*if (NPC.frameCounter == 20)
                 {
                     center = player.Center;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPos, RegreUtils.FromAToB(NPC.Center, player.Center), ModContent.ProjectileType<Projectiles.Oracle.OracleTelegraphLine>(), 0, 1.5f, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), mouthPos, RegreUtils.FromAToB(NPC.Center, player.Center), ModContent.ProjectileType<Projectiles.Oracle.TelegraphLine>(), 0, 1.5f, player.whoAmI);
                 }*/
                 if (NPC.frameCounter == 37)
                 {

@@ -15,6 +15,7 @@ using ReLogic.Content;
 using Terraria.Initializers;
 using Terraria.Graphics;
 using Regressus.Projectiles.Oracle;
+using Regressus.Projectiles;
 
 namespace Regressus.NPCs.Bosses.Oracle
 {
@@ -177,7 +178,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                     for (int i = (projectileNum - projectileNum - projectileNum); i <= projectileNum; i++)
                     {
                         Vector2 vel = Utils.RotatedBy(Vector2.UnitY, (double)(MathHelper.ToRadians(21f) * (float)i));
-                        Projectile projectile = Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, 1.5f * vel, ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI, 1)];
+                        Projectile projectile = Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, 1.5f * vel, ModContent.ProjectileType<TelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI, 1)];
                         projectile.timeLeft = 26;
                     }
                 }
@@ -243,7 +244,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                             Projectile projectile = Main.projectile[Projectile.NewProjectile(NPC.GetSpawnSource_ForProjectile(), NPC.Center, 1.15f * Utils.RotatedBy(NPC.DirectionTo(player.Center), 0), ModContent.ProjectileType<OracleBeam>(), 45, 0, player.whoAmI, 2)];
                             projectile.localAI[1] = 15;
                             projectile.timeLeft = 20;
-                            Projectile projectile2 = Main.projectile[Projectile.NewProjectile(NPC.GetSpawnSource_ForProjectile(), NPC.Center, 1.15f * Utils.RotatedBy(NPC.DirectionTo(player.Center), 0), ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0)];
+                            Projectile projectile2 = Main.projectile[Projectile.NewProjectile(NPC.GetSpawnSource_ForProjectile(), NPC.Center, 1.15f * Utils.RotatedBy(NPC.DirectionTo(player.Center), 0), ModContent.ProjectileType<TelegraphLine>(), 0, 0)];
                             projectile2.timeLeft = 20;
                             thing[1] = 0;
                         }

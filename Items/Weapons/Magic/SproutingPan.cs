@@ -28,6 +28,7 @@ namespace Regressus.Items.Weapons.Magic
         {
             Item.DefaultToMagicWeapon(ModContent.ProjectileType<PvZ>(), 40, 0);
             Item.damage = 75;
+            Item.DamageType = DamageClass.Summon;
             Item.noUseGraphic = true;
             Item.mana = 20;
             Item.reuseDelay = 50;

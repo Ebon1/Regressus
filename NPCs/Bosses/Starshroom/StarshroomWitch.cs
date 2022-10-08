@@ -12,6 +12,8 @@ using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
 using Regressus.Projectiles.Oracle;
 using Terraria.Audio;
+using Regressus.Projectiles.SSW;
+using static Terraria.ModLoader.ModContent;
 
 namespace Regressus.NPCs.Bosses.Starshroom
 {
@@ -48,6 +50,10 @@ namespace Regressus.NPCs.Bosses.Starshroom
             NPC.noTileCollide = true;
             NPC.boss = true;
         }
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return false;
+        }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
@@ -77,12 +83,74 @@ namespace Regressus.NPCs.Bosses.Starshroom
             get => NPC.ai[2];
             set => NPC.ai[2] = value;
         }
+        Vector2 center;
         public override void AI()
         {
-            if (AITimer == 0)
+            Player player = Main.player[NPC.target];
+            if (Main.dayTime)
             {
-                AITimer = 1;
-                RegreUtils.SetBossTitle(160, "The Starshroom Witch", Color.Gold, "Spacefaring Nomad", BossTitleStyleID.SSW);
+                AIState = -69420;
+                NPC.velocity = new Vector2(0, -20f);
+                if (NPC.timeLeft > 10)
+                {
+                    NPC.timeLeft = 10;
+                }
+            }
+            if (AIState == Intro)
+            {
+                AITimer++;
+                if (AITimer == 1)
+                {
+                    RegreUtils.SetBossTitle(160, "The Starshroom Witch", Color.Gold, "Spacefaring Nomad", BossTitleStyleID.SSW);
+                }
+                if (AITimer >= 180)
+                {
+                    AIState = Helix;
+                    AITimer = 0;
+                }
+            }
+            //do idle shit later
+            else if (AIState == Helix)
+            {
+                AITimer++;
+                switch (AITimer)
+                {
+                    case 30:
+                        RegreUtils.SpawnTelegraphLine(NPC.Center, NPC.GetSource_FromAI(), RegreUtils.FromAToB(NPC.Center, player.Center));
+                        AITimer2 = -10;
+                        center = player.Center;
+                        break;
+                    case 100:
+                        RegreUtils.SpawnTelegraphLine(NPC.Center, NPC.GetSource_FromAI(), RegreUtils.FromAToB(NPC.Center, player.Center));
+                        AITimer2 = -10;
+                        center = player.Center;
+                        break;
+                    case 170:
+                        RegreUtils.SpawnTelegraphLine(NPC.Center, NPC.GetSource_FromAI(), RegreUtils.FromAToB(NPC.Center, player.Center));
+                        AITimer2 = -10;
+                        center = player.Center;
+                        break;
+                    case 250:
+                        RegreUtils.SpawnTelegraphLine(NPC.Center, NPC.GetSource_FromAI(), RegreUtils.FromAToB(NPC.Center, player.Center));
+                        AITimer2 = -10;
+                        center = player.Center;
+                        break;
+                }
+                if (++AITimer2 >= 5 && AITimer >= 30)
+                {
+                    AITimer2 = 0;
+                    for (int i = -1; i < 2; i++)
+                    {
+                        if (i == 0)
+                            continue;
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, RegreUtils.FromAToB(NPC.Center, center) * 19f, ProjectileType<SSWStar>(), 15, 0, player.whoAmI, i);
+                    }
+                }
+                if (AITimer >= 330)
+                {
+                    AIState = Intro;
+                    AITimer = 0;
+                }
             }
         }
     }

@@ -21,7 +21,7 @@ using System.Text;
 using Regressus.Items.Dev;
 using static Regressus.MiscDrawingMethods;
 using static Terraria.ModLoader.ModContent;
-using Regressus.Projectiles.Oracle;
+using Regressus.Projectiles;
 
 namespace Regressus
 {
@@ -518,9 +518,14 @@ namespace Regressus
         }
         public static void SpawnTelegraphLine(Vector2 position, IEntitySource source, int timeleft = 30, float rot = 0)
         {
-            Projectile a = Projectile.NewProjectileDirect(source, position, -Vector2.UnitY.RotatedBy(rot), ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0);
-            Projectile b = Projectile.NewProjectileDirect(source, position, Vector2.UnitY.RotatedBy(rot), ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0);
+            Projectile a = Projectile.NewProjectileDirect(source, position, -Vector2.UnitY.RotatedBy(rot), ModContent.ProjectileType<TelegraphLine>(), 0, 0);
+            Projectile b = Projectile.NewProjectileDirect(source, position, Vector2.UnitY.RotatedBy(rot), ModContent.ProjectileType<TelegraphLine>(), 0, 0);
             a.timeLeft = b.timeLeft = timeleft;
+        }
+        public static void SpawnTelegraphLine(Vector2 position, IEntitySource source, Vector2 velocity, int timeleft = 30)
+        {
+            Projectile a = Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<TelegraphLine>(), 0, 0);
+            a.timeLeft = timeleft;
         }
         public static void TPNoDust(Vector2 newPos, Player player)
         {

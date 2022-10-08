@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
+using Regressus.Items.Ammo;
 
 namespace Regressus.NPCs.Overworld
 {
@@ -21,6 +23,11 @@ namespace Regressus.NPCs.Overworld
             if (spawnInfo.Player.ZoneOverworldHeight && !Main.dayTime)
                 return 0.35f;
             return 0;
+        }
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            IItemDropRule a = ItemDropRule.Common(ModContent.ItemType<Starspore>(), 3, 5, 35);
+            npcLoot.Add(a);
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {

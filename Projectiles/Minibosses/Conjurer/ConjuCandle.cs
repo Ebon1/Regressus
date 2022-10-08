@@ -59,7 +59,7 @@ namespace Regressus.Projectiles.Minibosses.Conjurer
             }
             if (Projectile.ai[0] == 30)
             {
-                Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.UnitX.RotatedBy(Projectile.rotation), ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0);
+                Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.UnitX.RotatedBy(Projectile.rotation), ModContent.ProjectileType<TelegraphLine>(), 0, 0);
             }
             if (Projectile.ai[0] == 60)
             {

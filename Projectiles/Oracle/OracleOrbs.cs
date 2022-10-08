@@ -402,12 +402,12 @@ namespace Regressus.Projectiles.Oracle
                         attacks++;
                         AITimer = 0;
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, 1.5f * Utils.RotatedBy(Projectile.DirectionTo(player.Center), 0), ModContent.ProjectileType<OracleBlast>(), 45, 0, player.whoAmI, 1);
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, 1.5f * Utils.RotatedBy(Projectile.DirectionTo(player.Center), 0), ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0, player.whoAmI);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, 1.5f * Utils.RotatedBy(Projectile.DirectionTo(player.Center), 0), ModContent.ProjectileType<TelegraphLine>(), 0, 0, player.whoAmI);
                     }
                     else
                     {
                         lastPos = player.Center;
-                        Projectile proj = Main.projectile[Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, 1.5f * Utils.RotatedBy(Projectile.DirectionTo(player.Center), 0), ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0, player.whoAmI)];
+                        Projectile proj = Main.projectile[Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, 1.5f * Utils.RotatedBy(Projectile.DirectionTo(player.Center), 0), ModContent.ProjectileType<TelegraphLine>(), 0, 0, player.whoAmI)];
                         proj.timeLeft = 25;
                     }
                 }

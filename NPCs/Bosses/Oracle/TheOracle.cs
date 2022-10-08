@@ -843,7 +843,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                     {
                         float angle = 2f * (float)Math.PI / 5f * k;
                         Vector2 velocity = new Vector2(15, 15).RotatedBy(angle);
-                        int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI, 1);
+                        int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<TelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI, 1);
                         Main.projectile[projectile].tileCollide = false;
                     }
                 }
@@ -900,10 +900,10 @@ namespace Regressus.NPCs.Bosses.Oracle
                     for (int i = 0; i < 6; i++)
                     {
                         random[i] = new Vector2(Main.screenPosition.X + Main.screenWidth * Main.rand.NextFloat(), Main.screenPosition.Y + Main.screenHeight + 200);
-                        int projectilea = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[i], -Vector2.UnitY, ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI);
+                        int projectilea = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[i], -Vector2.UnitY, ModContent.ProjectileType<TelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI);
                         Main.projectile[projectilea].timeLeft = 36;
                     }
-                    int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[6], -Vector2.UnitY, ModContent.ProjectileType<OracleTelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI);
+                    int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[6], -Vector2.UnitY, ModContent.ProjectileType<TelegraphLine>(), 0, 0, player.whoAmI, NPC.whoAmI);
                     Main.projectile[projectile].timeLeft = 36;
                 }
                 if (AITimer2 == 45)

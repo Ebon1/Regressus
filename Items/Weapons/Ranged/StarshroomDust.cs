@@ -37,6 +37,10 @@ namespace Regressus.Items.Weapons.Ranged
             Item.shootSpeed = 12.5f;
             Item.shoot = ModContent.ProjectileType<StarshroomDustP>();
         }
+        public override bool CanConsumeAmmo(Item ammo, Player player)
+        {
+            return Main.rand.NextFloat() >= .5f;
+        }
         public override void AddRecipes()
         {
             CreateRecipe().AddIngredient<Items.Ammo.Starspore>(25).AddIngredient(ItemID.Mushroom, 35).AddTile(TileID.Anvils).Register();

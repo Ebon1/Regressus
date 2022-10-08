@@ -31,7 +31,7 @@ namespace Regressus.Projectiles.Sentry
             Projectile.Size = new Vector2(32, 28);
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.DamageType = DamageClass.Magic;
+            Projectile.DamageType = DamageClass.Summon;
             Projectile.aiStyle = 1;
             Projectile.timeLeft = 20 * 60;
         }
@@ -127,7 +127,7 @@ namespace Regressus.Projectiles.Sentry
             Projectile.Size = new Vector2(5, 5);
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.DamageType = DamageClass.Magic;
+            Projectile.DamageType = DamageClass.Summon;
             Projectile.aiStyle = 1;
             Projectile.timeLeft = 500;
             Projectile.tileCollide = true;

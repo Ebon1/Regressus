@@ -19,7 +19,7 @@ namespace Regressus
         public RenderTarget2D render, render3, render4;
         public int a;
         public static Regressus Instance;
-        public static Effect BeamShader, Lens, Test1, Test2, LavaRT, Galaxy, CrystalShine, TrailShader;
+        public static Effect BeamShader, Lens, Test1, Test2, LavaRT, Galaxy, CrystalShine, TrailShader, RTAlpha;
         public static Effect Tentacle, TentacleBlack, TentacleRT, ScreenDistort, TextGradient, TextGradient2, TextGradientY;
         public DrawableTooltipLine[] lines = new DrawableTooltipLine[Main.maxItems];
         public DrawableTooltipLine activeLine;
@@ -45,6 +45,7 @@ namespace Regressus
             }*/
             Instance = this;
             Test1 = ModContent.Request<Effect>("Regressus/Effects/Test1", (AssetRequestMode)1).Value;
+            RTAlpha = ModContent.Request<Effect>("Regressus/Effects/RTAlpha", (AssetRequestMode)1).Value;
             CrystalShine = ModContent.Request<Effect>("Regressus/Effects/CrystalShine", (AssetRequestMode)1).Value;
             TextGradient = ModContent.Request<Effect>("Regressus/Effects/TextGradient", (AssetRequestMode)1).Value;
             TextGradient2 = ModContent.Request<Effect>("Regressus/Effects/TextGradient2", (AssetRequestMode)1).Value;
@@ -181,6 +182,84 @@ namespace Regressus
             sb.End();
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             sb.End();
+
+
+
+            gd.SetRenderTarget(Main.screenTargetSwap);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+            sb.End();
+
+            gd.SetRenderTarget(render);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            foreach (Projectile proj in Main.projectile)
+            {
+                if (proj.active && proj.timeLeft > 1 && proj.type == ModContent.ProjectileType<Items.Accessories.GinnungagapP>())
+                {
+                    Color color = Color.White;
+                    proj.ModProjectile.PreDraw(ref color);
+                }
+            }
+            sb.End();
+
+            gd.SetRenderTarget(Main.screenTarget);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+            sb.End();
+            sb.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+            gd.Textures[1] = ModContent.Request<Texture2D>("Regressus/Extras/starSky", (AssetRequestMode)1).Value;
+            Effect effect = Regressus.RTAlpha;
+            effect.Parameters["m"].SetValue(1f);
+            effect.Parameters["screenPosition"].SetValue(Main.screenPosition);
+            effect.Parameters["noiseTex"].SetValue(ModContent.Request<Texture2D>("Regressus/Extras/seamlessNoise").Value);
+            effect.Parameters["distortionMultiplier"].SetValue(1.5f);
+            effect.Parameters["screenSize"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) * -25f);
+            effect.Parameters["alpha"].SetValue(0.5f);
+            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
+            effect.CurrentTechnique.Passes[0].Apply();
+            sb.Draw(render, Vector2.Zero, Color.White);
+            sb.End();
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.End();
+
+
+
+
+            gd.SetRenderTarget(Main.screenTargetSwap);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+            sb.End();
+
+            gd.SetRenderTarget(render);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            GinnungagapDust.DrawAll(sb);
+            sb.End();
+
+            gd.SetRenderTarget(Main.screenTarget);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+            sb.End();
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            gd.Textures[1] = ModContent.Request<Texture2D>("Regressus/Extras/starSky", (AssetRequestMode)1).Value;
+            effect.Parameters["m"].SetValue(1f);
+            effect.Parameters["screenPosition"].SetValue(Main.screenPosition);
+            effect.Parameters["noiseTex"].SetValue(ModContent.Request<Texture2D>("Regressus/Extras/seamlessNoise").Value);
+            effect.Parameters["distortionMultiplier"].SetValue(1.5f);
+            effect.Parameters["screenSize"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) * -25f);
+            effect.Parameters["alpha"].SetValue(0.5f);
+            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
+            effect.CurrentTechnique.Passes[0].Apply();
+            sb.Draw(render, Vector2.Zero, Color.White);
+            sb.End();
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.End();
+
 
             gd.SetRenderTarget(Main.screenTargetSwap);
             gd.Clear(Color.Transparent);

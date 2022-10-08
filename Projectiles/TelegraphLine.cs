@@ -4,10 +4,12 @@ using Terraria;
 using Regressus.Effects.Prims;
 using System;
 using Terraria.ModLoader;
+using Regressus.Projectiles.Oracle;
+using System.Collections.Generic;
 
-namespace Regressus.Projectiles.Oracle
+namespace Regressus.Projectiles
 {
-    public class OracleTelegraphLine : OracleBeamTarget
+    public class TelegraphLine : OracleBeamTarget
     {
         public override void SetStaticDefaults()
         {
@@ -21,11 +23,16 @@ namespace Regressus.Projectiles.Oracle
             Projectile.aiStyle = -1;
             Projectile.friendly = false;
             Projectile.tileCollide = false;
+            Projectile.hide = true;
             Projectile.penetrate = -1;
             Projectile.hostile = true;
             Projectile.timeLeft = 30;
         }
         int MAX_TIME;
+        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+        {
+            behindNPCs.Add(Projectile.whoAmI);
+        }
         public override void AI()
         {
             if (Projectile.ai[1] == 1)
@@ -52,10 +59,10 @@ namespace Regressus.Projectiles.Oracle
             Vector2 endPosition = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/;
             float width = Projectile.width * Projectile.scale;
             // offset so i can make the triangles
-            RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
+            Main.spriteBatch.Reload(BlendState.Additive);
             Vector2 offset = (startPosition - endPosition).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * Projectile.width;
 
-            float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
+            float mult = 0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f;
             Color BeamColor = Color.White * 0.5f /*new Color(20, 63, 128)*/;
             BeamPacket.SetTexture(0, texture);
             float off = -Main.GlobalTimeWrappedHourly % 1;
@@ -71,7 +78,7 @@ namespace Regressus.Projectiles.Oracle
             packet.Add(endPosition + offset * 3 * mult, BeamColor, new Vector2(1 + off, 0));
             packet.Send();
             //DrawBeam(Main.spriteBatch, texture, startPosition, endPosition, drawScale, (Projectile.timeLeft % 10 == 0) ? Color.White * 0.5f : new Color(20, 63, 128) * 0.5f);
-            RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
+            Main.spriteBatch.Reload(BlendState.AlphaBlend);
             return false;
         }
         /*private void DrawBeam(SpriteBatch spriteBatch, Texture2D texture, Vector2 startPosition, Vector2 endPosition, Vector2 drawScale, Color beamColor)

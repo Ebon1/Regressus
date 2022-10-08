@@ -167,6 +167,7 @@ namespace Regressus.Items.Weapons.Magic
             Projectile.height = 18;
             Projectile.aiStyle = 0;
             Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Magic;
             Projectile.hostile = false;
             Projectile.scale = 0;
             Projectile.timeLeft = 45 / 2;

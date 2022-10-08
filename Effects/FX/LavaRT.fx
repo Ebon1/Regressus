@@ -12,8 +12,8 @@ float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
 		return c1;
 	}
 	else if(abs(a-m)<n)
-		return float4(2.55,2.48,.59,1); //set the color here, its currently orange here but you can probably like make a variable to make custom colors (this is for the edges)
-	else
+        return float4(2.55,2.48,.59,1); //set the color here, its currently orange here but you can probably like make a variable to make custom colors (this is for the edges)
+    else
 		return c*a;
 }
 

@@ -8,6 +8,7 @@ using Terraria.GameInput;
 using Regressus.Dusts;
 using Terraria.ID;
 using Regressus.WorldGeneration;
+using Regressus.Items.Accessories;
 
 namespace Regressus
 {
@@ -26,6 +27,7 @@ namespace Regressus
         public bool reverseTime;
         public bool starshroomed;
         public bool bladeSummon;
+        public bool ginnungagap, ginnungagapHide;
         int thing;
         public bool CantEatBaguette;
 
@@ -41,7 +43,6 @@ namespace Regressus
         public int[] AerialBudItemStack = new int[3];
 
         public bool ShrineBiome = false;
-
         public override void UpdateBadLifeRegen()
         {
             if (starshroomed)
@@ -57,7 +58,9 @@ namespace Regressus
         {
             starshroomed = false;
             reverseTime = false;
+            ginnungagap = false;
             AcornFairyPet = false;
+            ginnungagapHide = false;
             bladeSummon = false;
         }
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
@@ -441,9 +444,31 @@ namespace Regressus
                 }
             }
         }
+        float voidDelay;
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+        {
+            if (ginnungagap && voidDelay <= 0)
+                if (proj.DamageType == DamageClass.Magic && Player.ownedProjectileCounts[ModContent.ProjectileType<GinnungagapP>()] == 0)
+                {
+                    if (Main.rand.NextBool(10))
+                    {
+                        foreach (NPC npc in Main.npc)
+                        {
+                            if (npc.active && npc.knockBackResist != 0f && npc.Center.Distance(Player.Center) < 1020)
+                                npc.velocity.Y -= 5f;
+                        }
+                        voidDelay = 350;
+                        Projectile.NewProjectile(proj.GetSource_FromThis(), Player.Center - Vector2.UnitY * 250, Vector2.Zero, ModContent.ProjectileType<GinnungagapP>(), 50, 0, Player.whoAmI);
+                    }
+                }
+        }
         public override void PostUpdate()
         {
             BiomeCheck();
+            if (voidDelay >= 1)
+            {
+                voidDelay--;
+            }
             if (bossTextProgress > 0)
                 bossTextProgress--;
             if (bossTextProgress == 0)
