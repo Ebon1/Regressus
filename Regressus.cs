@@ -35,7 +35,6 @@ namespace Regressus
                 }
             }
         }
-
         public override void Load()
         {
             /*Particle.Load();
@@ -66,6 +65,7 @@ namespace Regressus
             Filters.Scene["Regressus:Oracle2Menu"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.78f, .33f, 1.11f).UseOpacity(.9f), EffectPriority.Medium);
             SkyManager.Instance["Regressus:Oracle2"] = new OracleSkyP2();
             Filters.Scene["Regressus:OracleSummon"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
+            Filters.Scene["Regressus:Blindness"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:OracleVoid1"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:OracleVoid2"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
@@ -285,36 +285,46 @@ namespace Regressus
             Test1.Parameters["n"].SetValue(0.01f);
             sb.Draw(render, Vector2.Zero, Color.White);
             sb.End();
-
-            gd.SetRenderTarget(Main.screenTargetSwap);
-            gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-            sb.End();
-
-            gd.SetRenderTarget(render);
-            gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            LavaDust.DrawAll(sb);
-            sb.End();
-
-            gd.SetRenderTarget(Main.screenTarget);
-            gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-            sb.End();
-            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            gd.Textures[1] = ModContent.Request<Texture2D>("Regressus/Extras/Lava", (AssetRequestMode)1).Value;
-            LavaRT.CurrentTechnique.Passes[0].Apply();
-            LavaRT.Parameters["m"].SetValue(0.62f);
-            LavaRT.Parameters["n"].SetValue(0.01f);
-            sb.Draw(render, Vector2.Zero, Color.White);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            FireDust.DrawAll(sb);
+            CursedFireDust.DrawAll(sb);
             sb.End();
             #endregion
             #region "dev names"
             #endregion
             #region "lens"
             RenderTarget2D render2 = Main.screenTargetSwap;
+            foreach (Projectile proj in Main.projectile)
+            {
+                if (proj.active && proj.type == ModContent.ProjectileType<Projectiles.Lens2>())
+                {
+                    gd.SetRenderTarget(render2);
+                    gd.Clear(Color.Transparent);
+                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+                    Lens.CurrentTechnique.Passes[0].Apply();
+                    Vector2 screenResolution = new Vector2(Main.screenWidth, Main.screenHeight);//·Ö±æÂÊ
+                    Lens.Parameters["uScreenResolution"].SetValue(screenResolution);
+                    Lens.Parameters["pos"].SetValue((proj.Center - Main.screenPosition) / screenResolution);
+                    Lens.Parameters["intensity"].SetValue(5);
+                    Lens.Parameters["range"].SetValue(proj.scale);
+                    Main.spriteBatch.Draw(render2 == Main.screenTarget ? Main.screenTargetSwap : Main.screenTarget, Vector2.Zero, Color.White);
+                    Main.spriteBatch.End();
+
+                    Texture2D a = RegreUtils.GetExtraTexture("Extras2/scorch_0" + proj.ai[1]);
+                    Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+                    Main.spriteBatch.Draw(a, proj.Center - Main.screenPosition, null, new Color(12, 100, 25) * proj.scale * 8f, Main.GameUpdateCount * (0.004f * proj.ai[0]), a.Size() / 2, proj.scale * 9.5f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.End();
+                    render2 = render2 == Main.screenTarget ? Main.screenTargetSwap : Main.screenTarget;
+                }
+            }
+            if (render2 == Main.screenTarget)
+            {
+                gd.SetRenderTarget(render2);
+                gd.Clear(Color.Transparent);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+                Main.spriteBatch.End();
+            }
             foreach (Projectile proj in Main.projectile)
             {
                 if (proj.active && proj.type == ModContent.ProjectileType<Projectiles.Lens>())

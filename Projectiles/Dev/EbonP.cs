@@ -125,8 +125,4 @@ namespace Regressus.Projectiles.Dev
     {
         public override string Texture => "Regressus/Extras/Sprites/Exol";
     }
-    public class EbonP6 : ModProjectile
-    {
-        public override string Texture => "Regressus/Extras/Sprites/Exol";
-    }
 }

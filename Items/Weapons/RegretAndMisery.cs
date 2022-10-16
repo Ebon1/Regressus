@@ -6,6 +6,8 @@ using Terraria.DataStructures;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Regressus.Items.Weapons
 {
@@ -19,7 +21,7 @@ namespace Regressus.Items.Weapons
         public override void SetDefaults()
         {
             Item.width = 20;
-            Item.height = 22;
+            Item.height = 20;
             Item.crit = 50;
             Item.damage = 135;
             Item.useTime = 10;
@@ -48,6 +50,72 @@ namespace Regressus.Items.Weapons
             Pitch = 0,
             PitchVariance = 0.2f
         };
+        ParticleSystem2 sys = new();
+        ParticleSystem2 sys2 = new();
+        public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            sys.CreateParticle((part) =>
+            {
+                if (part.ai[0] < 0)
+                {
+                    part.dead = true;
+                }
+                part.ai[0]--;
+                part.scale = 0.3f * (part.ai[0] / 10);
+                part.alpha = (part.ai[0] / 10);
+            }, new[]
+            {
+                    ModContent.Request<Texture2D>("Regressus/Extras/Extras2/fire_02").Value
+            }, (part, spriteBatch, position) =>
+            {
+                Color c = Main.hslToRgb((float)Math.Sin(Main.GlobalTimeWrappedHourly + part.ai[0] / 60 * Math.PI) / 2 + 0.5f, 1f, 0.5f);
+                spriteBatch.Reload(BlendState.Additive);
+                spriteBatch.Draw(part.textures[0], position + Item.Size / 2, null, Color.White * part.alpha, part.rotation, part.textures[0].Size() / 2, part.scale * 0.85f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(part.textures[0], position + Item.Size / 2, null, Color.Green * part.alpha, part.rotation, part.textures[0].Size() / 2, part.scale, SpriteEffects.None, 0f);
+                spriteBatch.Reload(BlendState.AlphaBlend);
+            },
+            new Vector2(Main.rand.NextFloat(-2f, 2f), -.5f),
+            part =>
+            {
+                part.ai[1] = Main.rand.NextFloat(0.05f, 0.1f);
+                part.position = position;
+                part.ai[0] = 10;
+            });
+
+
+            sys2.CreateParticle((part) =>
+            {
+                if (part.ai[0] < 0)
+                {
+                    part.dead = true;
+                }
+                part.ai[0]--;
+                part.scale = 0.3f * (part.ai[0] / 10);
+                part.alpha = (part.ai[0] / 10);
+            }, new[]
+            {
+                    ModContent.Request<Texture2D>("Regressus/Extras/Extras2/fire_01").Value
+            }, (part, spriteBatch, position) =>
+            {
+                Color c = Main.hslToRgb((float)Math.Sin(Main.GlobalTimeWrappedHourly + part.ai[0] / 60 * Math.PI) / 2 + 0.5f, 1f, 0.5f);
+                spriteBatch.Reload(BlendState.Additive);
+                spriteBatch.Draw(part.textures[0], position + Item.Size / 2, null, Color.White * part.alpha, part.rotation, part.textures[0].Size() / 2, part.scale * 0.85f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(part.textures[0], position + Item.Size / 2, null, Color.Green * part.alpha, part.rotation, part.textures[0].Size() / 2, part.scale, SpriteEffects.None, 0f);
+                spriteBatch.Reload(BlendState.AlphaBlend);
+            },
+            new Vector2(Main.rand.NextFloat(-2f, 2f), -.5f),
+            part =>
+            {
+                part.ai[1] = Main.rand.NextFloat(0.05f, 0.1f);
+                part.position = position;
+                part.ai[0] = 10;
+            });
+            sys.UpdateParticles();
+            sys.DrawParticles();
+            sys2.UpdateParticles();
+            sys2.DrawParticles();
+            return true;
+        }
 
         int attacks;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

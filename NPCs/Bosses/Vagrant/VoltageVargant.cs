@@ -607,8 +607,6 @@ namespace Regressus.NPCs.Bosses.Vagrant
                 if (AITimer > 50)
                 {
                     AITimer2++;
-                    if (angery)
-                        AITimer2++;
                     if (AITimer2 == 10)
                     {
                         random[3] = player.Center;
@@ -619,7 +617,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
                         }
                         RegreUtils.SpawnTelegraphLine(random[3], NPC.GetSource_FromAI());
                     }
-                    if (AITimer2 == 60)
+                    if (AITimer2 == (angery ? 45 : 60))
                     {
                         RegreSystem.ScreenShakeAmount = 5f;
                         AITimer2 = 0;

@@ -110,7 +110,7 @@ namespace Regressus.Items.Accessories
             {
                 if (npc.active && !npc.boss && npc.knockBackResist != 0f && npc.Center.Distance(Projectile.Center) < 1020)
                 {
-                    npc.velocity = RegreUtils.FromAToB(Projectile.Center, npc.Center, reverse: true) * 7.5f;
+                    npc.velocity = RegreUtils.FromAToB(Projectile.Center, npc.Center, false, reverse: true) * (0.05f * npc.knockBackResist);
                 }
             }
 

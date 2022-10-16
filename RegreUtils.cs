@@ -181,7 +181,6 @@ namespace Regressus
         }
         public static void DrawTexturedPrimitives(VertexPositionColorTexture[] vertices, PrimitiveType type, Texture2D texture, bool drawBacksides = true)
         {
-            if (vertices.Length < 6) return;
             GraphicsDevice device = Main.graphics.GraphicsDevice;
             Effect effect = Regressus.TrailShader;
             effect.Parameters["WorldViewProjection"].SetValue(GetMatrix());
@@ -329,6 +328,39 @@ namespace Regressus
         public static Player GetRandomPlayer()
         {
             return Main.player[Main.rand.Next(activePlayers.Length)];
+        }
+        public static SpriteSortMode previousSortMode;
+        public static BlendState previousBlendState;
+        public static SamplerState previousSamplerState;
+        public static DepthStencilState previousDepthStencilState;
+        public static RasterizerState previousRasterizerState;
+        public static Effect previousEffect;
+        public static Matrix previousMatrix;
+
+        public static void SaveCurrent(this SpriteBatch spriteBatch)
+        {
+            previousSortMode = SpriteSortMode.Deferred;
+            previousBlendState = (BlendState)spriteBatch.GetType().GetField("blendState", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+            previousSamplerState = (SamplerState)spriteBatch.GetType().GetField("samplerState", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+            previousDepthStencilState = (DepthStencilState)spriteBatch.GetType().GetField("depthStencilState", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+            previousRasterizerState = (RasterizerState)spriteBatch.GetType().GetField("rasterizerState", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+            previousEffect = (Effect)spriteBatch.GetType().GetField("customEffect", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+            previousMatrix = (Matrix)spriteBatch.GetType().GetField("transformMatrix", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch);
+        }
+
+        public static void ApplySaved(this SpriteBatch spriteBatch)
+        {
+            if ((bool)spriteBatch.GetType().GetField("beginCalled", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(spriteBatch))
+            {
+                spriteBatch.End();
+            }
+            SpriteSortMode sortMode = previousSortMode;
+            BlendState blendState = previousBlendState;
+            SamplerState samplerState = previousSamplerState;
+            DepthStencilState depthStencilState = previousDepthStencilState;
+            RasterizerState rasterizerState = previousRasterizerState;
+            Effect effect = previousEffect;
+            spriteBatch.Begin(sortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, previousMatrix);
         }
         public static void Reload(this SpriteBatch spriteBatch, SpriteSortMode sortMode = SpriteSortMode.Deferred)
         {

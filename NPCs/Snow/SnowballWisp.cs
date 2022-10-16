@@ -29,7 +29,7 @@ namespace Regressus.NPCs.Snow
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Snow,
-                new FlavorTextBestiaryInfoElement(""),
+                new FlavorTextBestiaryInfoElement("This is an angry snowball, it is very angry."),
             });
         }
         public override void SetDefaults()

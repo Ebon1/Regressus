@@ -6,11 +6,20 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-namespace Regressus.Extras.Gore
+namespace Regressus
 {
     public class GhastrootGore : ModGore
     {
+        public override string Texture => "Regressus/Gore/" + this.Name;
+        public override void SetStaticDefaults()
+        {
+            GoreID.Sets.SpecialAI[Type] = 0;
+        }
 
+    }
+    public class AngelGore : ModGore
+    {
+        public override string Texture => "Regressus/Gore/" + this.Name;
         public override void SetStaticDefaults()
         {
             GoreID.Sets.SpecialAI[Type] = 0;
@@ -19,7 +28,7 @@ namespace Regressus.Extras.Gore
     }
     public class TerraknightGore1 : ModGore
     {
-
+        public override string Texture => "Regressus/Gore/" + this.Name;
         public override void SetStaticDefaults()
         {
             GoreID.Sets.SpecialAI[Type] = 0;
@@ -29,7 +38,7 @@ namespace Regressus.Extras.Gore
     }
     public class TerraknightGore2 : ModGore
     {
-
+        public override string Texture => "Regressus/Gore/" + this.Name;
         public override void SetStaticDefaults()
         {
             GoreID.Sets.SpecialAI[Type] = 0;
@@ -39,6 +48,7 @@ namespace Regressus.Extras.Gore
     public class TerraknightGore3 : ModGore
     {
 
+        public override string Texture => "Regressus/Gore/" + this.Name;
         public override void SetStaticDefaults()
         {
             GoreID.Sets.SpecialAI[Type] = 0;
@@ -48,6 +58,7 @@ namespace Regressus.Extras.Gore
     }
     public class TerraknightGore4 : ModGore
     {
+        public override string Texture => "Regressus/Gore/" + this.Name;
 
         public override void SetStaticDefaults()
         {

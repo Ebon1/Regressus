@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Items.Weapons.Melee;
 using Terraria.GameContent;
+using Terraria.DataStructures;
 
 namespace Regressus.Projectiles.Melee
 {
@@ -43,6 +44,13 @@ namespace Regressus.Projectiles.Melee
         public override float Lerp(float x)
         {
             return (float)(x == 0 ? 0 : x == 1 ? 1 : x < 0.5 ? Math.Pow(2, 20 * x - 10) / 2 : (2 - Math.Pow(2, -20 * x + 10)) / 2);
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (Main.WaveQuality == 0)
+            {
+                Main.NewText("Turn on waves for the effect to render.", Main.errorColor);
+            }
         }
         public override void PostDraw(Color lightColor)
         {

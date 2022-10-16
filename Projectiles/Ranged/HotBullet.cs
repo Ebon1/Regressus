@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Items.Weapons.Magic;
 using Terraria.GameContent;
+using Terraria.Audio;
 
 namespace Regressus.Projectiles.Ranged
 {
@@ -43,9 +44,23 @@ namespace Regressus.Projectiles.Ranged
         }
         public override void Kill(int timeLeft)
         {
+            SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
             for (float num614 = 0f; num614 < 1f; num614 += 0.125f)
             {
-                Dust.NewDustPerfect(Projectile.Center, ModContent.DustType<Dusts.LavaDust>(), Vector2.UnitY.RotatedBy(num614 * ((float)Math.PI * 2f) + Main.rand.NextFloat() * 0.5f) * (4f + Main.rand.NextFloat() * 4f), 150, Color.White, Main.rand.NextFloat(1, 1.75f)).noGravity = true;
+                Dust.NewDustPerfect(Projectile.Center, ModContent.DustType<Dusts.FireDust>(), Vector2.UnitY.RotatedBy(num614 * ((float)Math.PI * 2f) + Main.rand.NextFloat() * 0.5f) * (4f + Main.rand.NextFloat() * 4f), 150, Color.White, Main.rand.NextFloat(1, 1.75f)).noGravity = true;
+            }
+            for (int num905 = 0; num905 < 10; num905++)
+            {
+                int num906 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 31, 0f, 0f, 0, default(Color), 2.5f);
+                Main.dust[num906].position = Projectile.Center + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(Projectile.velocity.ToRotation()) * Projectile.width / 2f;
+                Main.dust[num906].noGravity = true;
+                Dust dust2 = Main.dust[num906];
+                dust2.velocity *= 3f;
+            }
+            for (int num899 = 0; num899 < 4; num899++)
+            {
+                int num900 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+                Main.dust[num900].position = Projectile.Center + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * Projectile.width / 2f;
             }
         }
         public override bool PreDraw(ref Color lightColor)

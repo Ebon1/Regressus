@@ -9,6 +9,8 @@ using Regressus.Dusts;
 using Terraria.ID;
 using Regressus.WorldGeneration;
 using Regressus.Items.Accessories;
+using Regressus.NPCs.Bosses.Oracle;
+using Regressus.Buffs.Debuffs;
 
 namespace Regressus
 {
@@ -464,6 +466,9 @@ namespace Regressus
         }
         public override void PostUpdate()
         {
+            if (!Player.HasBuff(ModContent.BuffType<PilgrimBlindness>()))
+                if (Terraria.Graphics.Effects.Filters.Scene["Regressus:Blindness"].IsActive())
+                    Terraria.Graphics.Effects.Filters.Scene["Regressus:Blindness"].Deactivate();
             BiomeCheck();
             if (voidDelay >= 1)
             {

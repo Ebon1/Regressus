@@ -4,7 +4,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Projectiles.Melee;
-using Regressus.Extras.Gore;
+
 
 namespace Regressus.Items.Weapons.Melee
 {

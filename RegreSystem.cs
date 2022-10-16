@@ -109,6 +109,19 @@ namespace Regressus
         }
         public static int ShakeTimer = 0;
         public static float ScreenShakeAmount = 0;
+        public override void UpdateUI(GameTime gameTime)
+        {
+            if (Main.WaveQuality == 0)
+            {
+                Main.NewText("Regressus doesn't work properly when the Wave Quality is set to Off.", Main.errorColor);
+                Main.WaveQuality = 1;
+            }
+            if (Lighting.Mode == Terraria.Graphics.Light.LightMode.Trippy || Lighting.Mode == Terraria.Graphics.Light.LightMode.Retro)
+            {
+                Main.NewText("Regressus doesn't work properly with Trippy or Retro lights.", Main.errorColor);
+                Lighting.Mode = Terraria.Graphics.Light.LightMode.Color;
+            }
+        }
         public override void ModifyScreenPosition()
         {
             Player player = Main.LocalPlayer;

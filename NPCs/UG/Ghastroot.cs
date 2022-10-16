@@ -7,8 +7,6 @@ using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
-using rail;
-using Regressus.Extras.Gore;
 using Regressus.Projectiles.Minibosses.Vagrant;
 
 namespace Regressus.NPCs.UG

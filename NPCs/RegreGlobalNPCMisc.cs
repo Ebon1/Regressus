@@ -12,6 +12,9 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Graphics;
 using Regressus.NPCs.Bosses.Oracle;
+using Regressus.Items.Ammo;
+using Regressus.Projectiles.Ranged;
+using Regressus.Items.Weapons.Ranged;
 
 namespace Regressus.NPCs
 {
@@ -57,6 +60,14 @@ namespace Regressus.NPCs
             if (npc.type == NPCID.Bunny && Main.LocalPlayer.RollLuck(10) == 0)
             {
                 Item.NewItem(npc.GetSource_DropAsItem(), npc.getRect(), ModContent.ItemType<Items.Consumables.Food.Carrot>(), 1, noBroadcast: false);
+            }
+        }
+        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
+        {
+            if (npc.type == NPCID.WallofFlesh)
+            {
+                IItemDropRule a = ItemDropRule.Common(ModContent.ItemType<Firestorm>(), 4, 100, 500);
+                npcLoot.Add(a);
             }
         }
         public override void UpdateLifeRegen(NPC npc, ref int damage)

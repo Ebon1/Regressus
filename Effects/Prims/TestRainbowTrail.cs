@@ -4,6 +4,9 @@ using Terraria.Graphics.Shaders;
 using Terraria;
 using Terraria.ID;
 using Terraria.Graphics;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using Terraria.ModLoader;
 
 namespace Regressus.Effects.Prims
 {

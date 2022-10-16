@@ -44,8 +44,7 @@ namespace Regressus.Items.Dev
                 && player.ownedProjectileCounts[ModContent.ProjectileType<EbonP2>()] == 0
                 && player.ownedProjectileCounts[ModContent.ProjectileType<EbonP3>()] == 0
                 && player.ownedProjectileCounts[ModContent.ProjectileType<EbonP4>()] == 0
-                && player.ownedProjectileCounts[ModContent.ProjectileType<EbonP5>()] == 0
-                && player.ownedProjectileCounts[ModContent.ProjectileType<EbonP6>()] == 0;
+                && player.ownedProjectileCounts[ModContent.ProjectileType<EbonP5>()] == 0;
         }
         public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
@@ -82,11 +81,9 @@ namespace Regressus.Items.Dev
                     break;
                 case 2: //Duke rainbow
                     break;
-                case 3: //amogi sussy haha
+                case 3: //djungelskog
                     break;
-                case 4: //djungelskog
-                    break;
-                case 5: //bossling
+                case 4: //bossling
                     break;
             }
             return false;

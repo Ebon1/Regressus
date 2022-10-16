@@ -9,7 +9,6 @@ using Regressus.NPCs;
 using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
 using Regressus.Projectiles.Enemy.Overworld;
-using Regressus.Extras.Gore;
 
 namespace Regressus.NPCs.Overworld
 {
@@ -45,7 +44,7 @@ namespace Regressus.NPCs.Overworld
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Visuals.Moon,
-                new FlavorTextBestiaryInfoElement(""),
+                new FlavorTextBestiaryInfoElement("This green hulk of armor spends all of his time near the Silva Shrine, protecting and killing anything unholy that comes across it. It is unknown what they truly are, as whenever killed only the scraps of armor remain."),
             });
         }
         float swordRot = 0;
