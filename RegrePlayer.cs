@@ -105,7 +105,7 @@ namespace Regressus
         public void BiomeCheck()
         {
 
-            ShrineBiome = ShrineBiomeSystem.IsInOrNearShrine(Player);
+            //ShrineBiome = ShrineBiomeSystem.IsInOrNearShrine(Player);
 
             //RegreUtils.SetBiomeTitle("The Chronolands", Color.SlateGray, "End of Time", 0);
             if (!inBiome[0])

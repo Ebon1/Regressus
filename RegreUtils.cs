@@ -118,6 +118,11 @@ namespace Regressus
                 return (end - start).Length();
             }
         }
+        public static void NewText(string message)
+        {
+            if (Main.netMode != NetmodeID.Server)
+                Main.NewText(message);
+        }
         public static List<int> devItems = new List<int>
         {
             ModContent.ItemType<DecryptItem>(),
