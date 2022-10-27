@@ -26,6 +26,7 @@ using Terraria.WorldBuilding;
 using Regressus.Tiles.Desert;
 using Terraria.IO;
 using static Terraria.ModLoader.ModContent;
+using Regressus.NPCs.Town;
 //using Regressus.NPCs.Minibosses;
 
 namespace Regressus
@@ -36,6 +37,7 @@ namespace Regressus
         public static int KryptonMoss;
         public static int ArgonMoss;
         public static int XenonMoss;
+        public static bool SamaelShopOpen;
         public static int CloudTiles;
         public static int TempleBricks;
         public override void PostUpdatePlayers()
@@ -91,6 +93,8 @@ namespace Regressus
             layers.Insert(textIndex2, new LegacyGameInterfaceLayer("Regressus: BiomeText", () =>
             {
                 RegreUtils.DrawBiomeTitle();
+                if (SamaelShopOpen)
+                    Samael.DrawDialogue();
                 return true;
             }, InterfaceScaleType.UI));
             layers.Insert(textIndex2, new LegacyGameInterfaceLayer("Regressus: Page", () =>
@@ -205,9 +209,15 @@ namespace Regressus
             CloudTiles = tileCounts[TileID.Cloud];
             TempleBricks = tileCounts[TileID.LihzahrdBrick];
         }
-        public static int AerialBudsCooldown;
+        public static int AerialBudsCooldown, SamaelDay;
         public override void PostUpdateEverything()
         {
+            if (Main.npcShop < 1 || !Main.playerInventory)
+            {
+                Samael.SamaelAlpha = 1f;
+                Samael.SamaelDialogue = "";
+                SamaelShopOpen = false;
+            }
             RegrePlayer regrePlayer = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
             if (!Main.dayTime)
             {
@@ -219,6 +229,10 @@ namespace Regressus
                     {
                         AerialBudsCooldown--;
                     }
+                    if (SamaelDay < 3)
+                        SamaelDay++;
+                    else
+                        SamaelDay = 0;
                     for (int i = 0; i < 3; i++)
                     {
                         if (regrePlayer.AerialBudItem[i] != 0)

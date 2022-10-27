@@ -29,7 +29,7 @@ namespace Regressus
         public bool reverseTime;
         public bool starshroomed;
         public bool bladeSummon;
-        public bool ginnungagap, ginnungagapHide;
+        public bool ginnungagap, ginnungagapHide, infectedIdol;
         int thing;
         public bool CantEatBaguette;
 
@@ -58,6 +58,7 @@ namespace Regressus
         }
         public override void ResetEffects()
         {
+            infectedIdol = false;
             starshroomed = false;
             reverseTime = false;
             ginnungagap = false;

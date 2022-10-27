@@ -361,10 +361,10 @@ namespace Regressus
             sb.End();
             gd.SetRenderTarget(Main.screenTargetSwap);
             gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.Additive);
             foreach (Projectile projectile in Main.projectile)
             {
-                if (projectile.active && projectile.type == ModContent.ProjectileType<Projectiles.Ripple>())
+                if (projectile.active && (projectile.type == ModContent.ProjectileType<Projectiles.Ripple>() || projectile.type == ModContent.ProjectileType<Projectiles.RippleSmol>()))
                 {
                     Texture2D a = TextureAssets.Projectile[projectile.type].Value;
                     Main.spriteBatch.Draw(a, projectile.Center - Main.screenPosition, null, Color.White, 0, a.Size() / 2, projectile.ai[0], SpriteEffects.None, 0f);

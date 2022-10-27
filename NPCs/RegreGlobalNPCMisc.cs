@@ -15,6 +15,7 @@ using Regressus.NPCs.Bosses.Oracle;
 using Regressus.Items.Ammo;
 using Regressus.Projectiles.Ranged;
 using Regressus.Items.Weapons.Ranged;
+using Regressus.Items.Accessories;
 
 namespace Regressus.NPCs
 {
@@ -60,6 +61,17 @@ namespace Regressus.NPCs
             if (npc.type == NPCID.Bunny && Main.LocalPlayer.RollLuck(10) == 0)
             {
                 Item.NewItem(npc.GetSource_DropAsItem(), npc.getRect(), ModContent.ItemType<Items.Consumables.Food.Carrot>(), 1, noBroadcast: false);
+            }
+            if (Main.LocalPlayer.GetModPlayer<RegrePlayer>().infectedIdol)
+            {
+                for (int i = 0; i < Main.rand.Next(3, 5); i++)
+                {
+                    Projectile.NewProjectile(npc.GetSource_Death(), npc.Center, Main.rand.NextVector2Unit() * 5f, ModContent.ProjectileType<InfectedMaggot>(), 15, 0, npc.target);
+                }
+                for (int i = 0; i < Main.rand.Next(5, 7); i++)
+                {
+                    Projectile.NewProjectile(npc.GetSource_Death(), npc.Center, Main.rand.NextVector2Unit(), ProjectileID.SporeCloud, 15, 0, npc.target);
+                }
             }
         }
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)

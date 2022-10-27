@@ -121,7 +121,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 float scale = 2 * mult;
                 spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clock").Value, arenaCenter - pos, null, Color.White * clockAlpha, 0, ModContent.Request<Texture2D>("Regressus/Extras/clock").Value.Size() / 2, 2.5f, SpriteEffects.None, 0);
                 spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clock").Value, arenaCenter - pos, null, Color.White * clockAlpha, 0, ModContent.Request<Texture2D>("Regressus/Extras/clock").Value.Size() / 2, .25f, SpriteEffects.None, 0);
-                spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/PulseCircle").Value, arenaCenter - pos, null, Color.White * clockAlpha, 0, ModContent.Request<Texture2D>("Regressus/Extras/PulseCircle").Value.Size() / 2, 2f * 3.5f, SpriteEffects.None, 0);
+                spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/PulseCircle2").Value, arenaCenter - pos, null, Color.White * clockAlpha, 0, ModContent.Request<Texture2D>("Regressus/Extras/PulseCircle2").Value.Size() / 2, 3.5f, SpriteEffects.None, 0);
                 spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clockHand1").Value, arenaCenter - pos, null, Color.White * clockAlpha, MathHelper.ToRadians(hourHandRot), ModContent.Request<Texture2D>("Regressus/Extras/clockHand1").Value.Size() / 2, 2.5f, SpriteEffects.None, 0);
                 spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clockHand2").Value, arenaCenter - pos, null, Color.White * clockAlpha, MathHelper.ToRadians(minuteHandRot), ModContent.Request<Texture2D>("Regressus/Extras/clockHand2").Value.Size() / 2, 2.5f, SpriteEffects.None, 0);
                 for (int i = 0; i < 3; i++)
@@ -346,10 +346,16 @@ namespace Regressus.NPCs.Bosses.Oracle
             {
                 if (player.Center.Distance(arenaCenter) >= (1322 / 2) * (2.5f))
                 {
-                    player.velocity = Vector2.Zero;
-                    player.position = player.oldPosition;
+                    player.velocity = RegreUtils.FromAToB(player.Center, arenaCenter) * 10f;
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<RippleSmol>(), 0, 0f);
+                    player.wingTime = player.wingTimeMax;
+                    //player.position = player.oldPosition;
                     //RegreUtils.TPNoDust(arenaCenter + (Vector2.UnitX * ((1322 / 2) * (2.5f))).RotatedBy(RegreUtils.FromAToB(arenaCenter, player.Center).ToRotation() * -1), player);
                     //player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " left the boundaries."), 999999999, 0);
+                }
+                if (player.Center.Distance(arenaCenter) >= (1322 / 2) * (2.75f))
+                {
+                    RegreUtils.TPNoDust(arenaCenter, player);
                 }
             }
             if (player.chaosState && player.ownedProjectileCounts[ModContent.ProjectileType<OracleRoDRift>()] < 1)
