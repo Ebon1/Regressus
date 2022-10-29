@@ -77,7 +77,7 @@ namespace Regressus.NPCs.UG
                     NPC.life++;
                     CombatText.NewText(NPC.getRect(), CombatText.HealLife, 1);
                 }
-                RegreUtils.QuickDustLine(NPC.Center - Vector2.UnitY * 15, player.Center, 100f, Color.Red);
+                Dust.QuickDustLine(NPC.Center - Vector2.UnitY * 15, player.Center, 100f, Color.Red);
                 /*
                 Vector2 vel = RegreUtils.FromAToB(player.Center, NPC.Center - Vector2.UnitY * 15, true) * 8;
                 Dust d = Dust.NewDustPerfect(player.Center, DustID.LifeDrain, vel);

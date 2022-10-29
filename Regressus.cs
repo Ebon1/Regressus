@@ -66,6 +66,7 @@ namespace Regressus
             SkyManager.Instance["Regressus:Oracle2"] = new OracleSkyP2();
             Filters.Scene["Regressus:OracleSummon"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:Blindness"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
+            Filters.Scene["Regressus:ScreenFlash"] = new Filter(new ScreenShaderData(new Ref<Effect>(ModContent.Request<Effect>("Regressus/Effects/ScreenFlash", (AssetRequestMode)1).Value), "Flash"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:OracleVoid1"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:OracleVoid2"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
@@ -287,7 +288,7 @@ namespace Regressus
             sb.End();
             sb.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             FireDust.DrawAll(sb);
-            CursedFireDust.DrawAll(sb);
+            ColoredFireDust.DrawAll(sb);
             sb.End();
             #endregion
             #region "dev names"

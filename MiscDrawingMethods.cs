@@ -55,6 +55,19 @@ namespace Regressus
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
             }
+            public static void DrawLuminaryTitle()
+            {
+                var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
+                float progress = Utils.GetLerpValue(0, player.bossMaxProgress, player.bossTextProgress);
+                float alpha = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
+                Main.spriteBatch.Reload(BlendState.Additive);
+                Main.spriteBatch.Reload(BlendState.AlphaBlend);
+                Texture2D aa = RegreUtils.GetExtraTexture("Sprites/LuminaryTitle");
+                Main.spriteBatch.Draw(aa, new Vector2(Main.screenWidth / 2, Main.screenHeight * 0.225f), null, player.bossColor * alpha, 0, aa.Size() / 2, 1, SpriteEffects.None, 0);
+                /*if (player.bossTitle != null)
+                    DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.MouseText.Value, player.bossTitle, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(player.bossTitle).X / 2, Main.screenHeight * 0.225f), player.bossColor * alpha);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f), player.bossColor * alpha);*/
+            }
             public static void DrawVagrantTitle()
             {
                 var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();

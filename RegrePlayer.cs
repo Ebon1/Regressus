@@ -11,6 +11,8 @@ using Regressus.WorldGeneration;
 using Regressus.Items.Accessories;
 using Regressus.NPCs.Bosses.Oracle;
 using Regressus.Buffs.Debuffs;
+using Terraria.Graphics.Effects;
+using System;
 
 namespace Regressus
 {
@@ -465,11 +467,35 @@ namespace Regressus
                     }
                 }
         }
+
+        public int flashTime;
+        public int flashMaxTime;
+        public Vector2 flashPosition;
+        public void FlashScreen(Vector2 pos, int time)
+        {
+            flashMaxTime = time;
+            flashTime = time;
+            flashPosition = pos;
+        }
         public override void PostUpdate()
         {
+            // since the effect was working before
+            if (flashTime > 0)
+            {
+                flashTime--;
+                if (!Filters.Scene["Regressus:ScreenFlash"].IsActive())
+                    Filters.Scene.Activate("Regressus:ScreenFlash", flashPosition);
+                Filters.Scene["Regressus:ScreenFlash"].GetShader().UseProgress((float)Math.Sin((float)flashTime / flashMaxTime * Math.PI) * 2f);
+                Filters.Scene["Regressus:ScreenFlash"].GetShader().UseTargetPosition(flashPosition); // already added it to luminary but gotta test alr a
+            }
+            else
+            {
+                if (Filters.Scene["Regressus:ScreenFlash"].IsActive())
+                    Filters.Scene["Regressus:ScreenFlash"].Deactivate();
+            }
             if (!Player.HasBuff(ModContent.BuffType<PilgrimBlindness>()))
-                if (Terraria.Graphics.Effects.Filters.Scene["Regressus:Blindness"].IsActive())
-                    Terraria.Graphics.Effects.Filters.Scene["Regressus:Blindness"].Deactivate();
+                if (Filters.Scene["Regressus:Blindness"].IsActive())
+                    Filters.Scene["Regressus:Blindness"].Deactivate();
             BiomeCheck();
             if (voidDelay >= 1)
             {

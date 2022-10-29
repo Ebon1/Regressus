@@ -64,7 +64,7 @@ namespace Regressus.Dusts
             }
         }
     }
-    public class CursedFireDust : ModDust
+    public class ColoredFireDust : ModDust
     {
         public override string Texture => "Regressus/Extras/Empty";
         public override void OnSpawn(Dust dust)
@@ -91,11 +91,11 @@ namespace Regressus.Dusts
         {
             foreach (Dust d in Main.dust)
             {
-                if (d.type == ModContent.DustType<CursedFireDust>() && d.active)
+                if (d.type == ModContent.DustType<ColoredFireDust>() && d.active)
                 {
                     Texture2D tex = ModContent.Request<Texture2D>("Regressus/Extras/Extras2/fire_0" + d.customData).Value;
                     sb.Draw(tex, d.position - Main.screenPosition, null, Color.White, 0, tex.Size() / 2, d.scale * 0.85f, SpriteEffects.None, 0);
-                    sb.Draw(tex, d.position - Main.screenPosition, null, Color.DarkGreen, 0, tex.Size() / 2, d.scale, SpriteEffects.None, 0); ;
+                    sb.Draw(tex, d.position - Main.screenPosition, null, d.color, 0, tex.Size() / 2, d.scale, SpriteEffects.None, 0); ;
                 }
             }
         }

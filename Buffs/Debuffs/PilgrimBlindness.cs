@@ -37,7 +37,7 @@ namespace Regressus.Buffs.Debuffs
                 float scale = MathHelper.Clamp((float)Math.Sin(progress * MathHelper.Pi) * 3, 0, 1);
                 Terraria.Graphics.Effects.Filters.Scene["Regressus:Blindness"].GetShader().UseProgress((scale) * 8);
             }
-            Terraria.Graphics.Effects.Filters.Scene["Regressus:Blindness"].GetShader().UseTargetPosition(player.Center);
+            Terraria.Graphics.Effects.Filters.Scene["Regressus:Blindness"].GetShader().UseTargetPosition(Main.screenPosition + Main.ScreenSize.ToVector2() / 2);
         }
     }
 }

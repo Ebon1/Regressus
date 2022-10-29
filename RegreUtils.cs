@@ -31,6 +31,7 @@ namespace Regressus
         public static readonly int Oracle = 0;
         public static readonly int Vagrant = 1;
         public static readonly int SSW = 2;
+        public static readonly int Luminary = 3;
     }
     public struct Text
     {
@@ -96,7 +97,7 @@ namespace Regressus
             return true;
         }
 
-        public static void QuickDustLine(Vector2 start, Vector2 end, float splits, Color color)
+        public static void QuickDustLine(this Dust dust, Vector2 start, Vector2 end, float splits, Color color)
         {
             Dust.QuickDust(start, color).scale = 1f;
             Dust.QuickDust(end, color).scale = 1f;
@@ -104,7 +105,7 @@ namespace Regressus
             for (float amount = 0.0f; (double)amount < 1.0; amount += num)
                 Dust.QuickDustSmall(Vector2.Lerp(start, end, amount), color).scale = 1f;
         }
-        public static void QuickDustLine(Vector2 start, Vector2 end, float splits, Color color1, Color color2)
+        public static void QuickDustLine(this Dust dust, Vector2 start, Vector2 end, float splits, Color color1, Color color2)
         {
             Dust.QuickDust(start, color1).scale = 1f;
             Dust.QuickDust(end, color2).scale = 1f;
@@ -115,7 +116,10 @@ namespace Regressus
                 Dust.QuickDustSmall(Vector2.Lerp(start, end, amount), color).scale = 1f;
             }
         }
-
+        public static float CircleDividedEqually(float i, float max)
+        {
+            return 2f * (float)Math.PI / max * i;
+        }
         public static Matrix GetMatrix()
         {
             if (CheckGraphicsChanged())
@@ -268,6 +272,7 @@ namespace Regressus
             return sb.ToString();
         }
         public static string BuffPlaceholder = "Regressus/Buffs/Debuffs/DecryptCooldown";
+        public static string Empty = "Regressus/Extras/Empty";
         public static class TRay
         {
             public static Vector2 Cast(Vector2 start, Vector2 direction, float length)
@@ -293,14 +298,6 @@ namespace Regressus
                 return (end - start).Length();
             }
         }
-        public static List<int> devItems = new List<int>
-        {
-            ModContent.ItemType<DecryptItem>(),
-            ModContent.ItemType<VadeItem>(),
-            ModContent.ItemType<PokerfaceItem>(),
-            ModContent.ItemType<Items.Tiles.EbonianModReal>(),
-            ModContent.ItemType<CorruptedTriangle>(),
-        };
         public static Texture2D GetExtraTexture(string tex, bool uh = false)
         {
             if (uh)
@@ -491,7 +488,33 @@ namespace Regressus
                     case 2:
                         BossTitles.DrawSSWTitle();
                         break;
+                    case 3:
+                        BossTitles.DrawLuminaryTitle();
+                        break;
                 }
+            }
+        }
+        public static void DustExplosion(Vector2 pos, Vector2 size = default, bool colored = false, Color color = default, bool sound = true)
+        {
+            int dustType = colored ? ModContent.DustType<Dusts.ColoredFireDust>() : ModContent.DustType<Dusts.FireDust>();
+            if (sound)
+                Terraria.Audio.SoundEngine.PlaySound(SoundID.Item14, pos);
+            for (float num614 = 0f; num614 < 1f; num614 += 0.125f)
+            {
+                Dust.NewDustPerfect(pos, dustType, Vector2.UnitY.RotatedBy(num614 * ((float)Math.PI * 2f) + Main.rand.NextFloat() * 0.5f) * (4f + Main.rand.NextFloat() * 4f), 150, color, Main.rand.NextFloat(1, 1.75f)).noGravity = true;
+            }
+            for (int num905 = 0; num905 < 10; num905++)
+            {
+                int num906 = Dust.NewDust(new Vector2(pos.X, pos.Y), (int)size.X, (int)size.Y, 31, 0f, 0f, 0, default(Color), 2.5f);
+                Main.dust[num906].position = pos + Vector2.UnitX.RotatedByRandom(3.1415927410125732) * size.X / 2f;
+                Main.dust[num906].noGravity = true;
+                Dust dust2 = Main.dust[num906];
+                dust2.velocity *= 3f;
+            }
+            for (int num899 = 0; num899 < 4; num899++)
+            {
+                int num900 = Dust.NewDust(new Vector2(pos.X, pos.Y), (int)size.X, (int)size.Y, 31, 0f, 0f, 100, default(Color), 1.5f);
+                Main.dust[num900].position = pos + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * size.X / 2f;
             }
         }
         public static void DrawBiomeTitle()
@@ -524,7 +547,7 @@ namespace Regressus
                 }
             }
         }
-        public static void Log(Projectile obj)
+        public static void Log(this Projectile obj)
         {
             Main.NewText("Friendly?" + obj.friendly);
             Main.NewText("Hostile?" + obj.hostile);
@@ -537,7 +560,7 @@ namespace Regressus
             Main.NewText("Velocity:" + obj.velocity);
             Main.NewText("Owner:" + obj.owner);
         }
-        public static void Log(NPC obj)
+        public static void Log(this NPC obj)
         {
             Main.NewText("Friendly?" + obj.friendly);
             Main.NewText("Object:" + obj.TypeName);
