@@ -36,9 +36,14 @@ namespace Regressus.NPCs.Minibosses
         public override void SetDefaults()
         {
             NPC.Size = new(118, 84);
-            NPC.lifeMax = 1000;
-            NPC.defense = 10;
+            NPC.lifeMax = 2000;
+            NPC.defense = 14;
             NPC.damage = 0;
+            NPC.HitSound = SoundID.NPCHit42;
+            SoundStyle style = SoundID.NPCDeath7;
+            style.Pitch = -.6f;
+            style.Volume = 0;
+            NPC.DeathSound = style;
             NPC.noTileCollide = true;
             NPC.noGravity = true;
             NPC.lavaImmune = true;
@@ -46,6 +51,7 @@ namespace Regressus.NPCs.Minibosses
         }
         public override void OnSpawn(IEntitySource source)
         {
+            Main.windSpeedTarget = 0;
             Main.NewText("Something divine approaches...", new Color(118, 50, 173));
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -136,6 +142,7 @@ namespace Regressus.NPCs.Minibosses
                 AITimer = AITimer2 = 0;
                 NPC.velocity = Vector2.Zero;
                 NPC.life = 1;
+                SoundEngine.PlaySound(SoundID.NPCDeath56);
                 return false;
             }
             return true;
@@ -160,10 +167,33 @@ namespace Regressus.NPCs.Minibosses
         }
         bool toTheSide;
         Vector2 Beamposition;
+        bool phase2;
         public override void AI()
         {
             Player player = Main.player[NPC.target];
             NPC.TargetClosest();
+            if (NPC.life < NPC.lifeMax / 2 && !phase2)
+            {
+                RegreUtils.DustExplosion(NPC.Center, NPC.Size, true, Color.DeepPink);
+                Main.NewText("The wind is blowing...", new Color(118, 50, 173));
+                phase2 = true;
+                AIState = Boomerang;
+                AITimer = 0;
+                AITimer2 = 0;
+                AITimer3 = 0;
+                Main.windSpeedTarget = 4f * Main.rand.Next(new int[] { 1, -1 });
+                RegreSystem.ScreenShakeAmount = 20f;
+            }
+            if (phase2)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    Dust dust;
+                    Vector2 position = NPC.Center;
+                    dust = Terraria.Dust.NewDustDirect(position, 0, 0, 71, 0, 0, 0, new Color(255, 255, 255), 1f);
+                    dust.noGravity = true;
+                }
+            }
             if (AIState == Spawn)
             {
                 NPC.Center = player.Center - Vector2.UnitY * (2200 - (AITimer * 10));
@@ -190,11 +220,14 @@ namespace Regressus.NPCs.Minibosses
             else if (AIState == Death)
             {
                 AITimer++;
+                NPC.rotation += MathHelper.ToRadians(Main.rand.NextFloat(-10, 10f));
                 NPC.rotation = MathHelper.Lerp(NPC.rotation, 0, AITimer / 500);
                 if (AITimer == 1)
                     Main.NewLightning();
                 if (AITimer < 75)
                     NPC.frameCounter += 2;
+                else
+                    NPC.frameCounter++;
                 if (AITimer == 75)
                     for (int i = 0; i < 6; i++)
                     {
@@ -221,12 +254,16 @@ namespace Regressus.NPCs.Minibosses
                 if (AITimer == 450)
                 {
                     // what if both
+                    SoundStyle style = SoundID.NPCDeath7;
+                    style.Pitch = -.6f;
+                    SoundEngine.PlaySound(style);
                     player.GetModPlayer<RegrePlayer>().FlashScreen(NPC.Center, 50);
                     player.AddBuff(ModContent.BuffType<PilgrimBlindness>(), 100);
                 }
 
                 if (AITimer >= 500)
                 {
+                    Main.windSpeedTarget = 0;
                     Main.NewText("The divine creature has been defeated.", new Color(118, 50, 173));
                     //player.DelBuff(player.FindBuffIndex(ModContent.BuffType<PilgrimBlindness>()));
                     NPC.immortal = false;
@@ -236,8 +273,8 @@ namespace Regressus.NPCs.Minibosses
             else if (AIState == Idle)
             {
                 AITimer++;
-                NPC.rotation = NPC.velocity.X * 0.05f;
-                NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center - Vector2.UnitY * 200f, false) * 0.01f;
+                NPC.rotation = MathHelper.Lerp(NPC.rotation, NPC.velocity.X * 0.05f, AITimer / 250);
+                NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center - Vector2.UnitY * 200f, false) * 0.02f;
                 if (AITimer >= 250)
                 {
                     AITimer = 0;
@@ -254,20 +291,20 @@ namespace Regressus.NPCs.Minibosses
                 if (AITimer >= 30)
                 {
                     AITimer2++;
-                    if (AITimer2 >= 30)
+                    if (AITimer2 >= 40)
                     {
-                        Vector2 vel = Main.rand.NextVector2Unit();
+                        Vector2 vel2 = Main.rand.NextVector2Unit();
                         for (int i = 0; i < 15; i++)
                         {
                             Dust dust;
                             Vector2 position = NPC.Center;
-                            dust = Terraria.Dust.NewDustDirect(position, 0, 0, 71, vel.X, vel.Y, 0, new Color(255, 255, 255), 1f);
+                            dust = Terraria.Dust.NewDustDirect(position, 0, 0, 71, vel2.X, vel2.Y, 0, new Color(255, 255, 255), 1f);
                         }
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Main.rand.NextVector2CircularEdge(100, 100), vel * 4, ModContent.ProjectileType<HomingScythe>(), 15, 0);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Main.rand.NextVector2CircularEdge(100, 100), vel2 * 4, ModContent.ProjectileType<HomingScythe>(), 15, 0);
                         AITimer2 = 0;
                     }
                 }
-                if (AITimer >= 300)
+                if (AITimer >= 400)
                 {
                     AITimer = 0;
                     nextAttack = Beam;
@@ -315,14 +352,14 @@ namespace Regressus.NPCs.Minibosses
                 AITimer++;
                 NPC.rotation = NPC.velocity.X * 0.05f;
                 NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center - Vector2.UnitY * 200f, false) * 0.007f;
-                if (AITimer < 25)
-                    for (int i = 0; i < 10; i++)
+                if (AITimer < 45)
+                    for (int i = 0; i < 15; i++)
                     {
                         Dust dust;
                         Vector2 position = NPC.Center;
-                        dust = Terraria.Dust.NewDustDirect(position, 30, 30, 71, 0, 0, 0, new Color(255, 255, 255), 1f);
+                        dust = Terraria.Dust.NewDustDirect(position, 0, 0, 71, 0, 0, 0, new Color(255, 255, 255), 1f);
                     }
-                if (AITimer == 35)
+                if (AITimer == 55)
                 {
                     for (int i = 0; i < 2; i++)
                     {
@@ -331,7 +368,7 @@ namespace Regressus.NPCs.Minibosses
                         a.ai[1] = RegreUtils.CircleDividedEqually(i, 2);
                     }
                 }
-                if (AITimer >= 400)
+                if (AITimer >= 420) //funny number lmao :rofl:
                 {
                     AITimer = 0;
                     nextAttack = NoMovement;
@@ -345,7 +382,7 @@ namespace Regressus.NPCs.Minibosses
                 AITimer2++;
                 NPC.rotation = MathHelper.Lerp(NPC.rotation, 0, AITimer / 400);
                 NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center - Vector2.UnitY * 200f, false) * 0.007f;
-                if (AITimer2 == 20)
+                if (AITimer2 == 30)
                 {
                     toTheSide = Main.rand.NextBool();
                     Vector2 vell = new(toTheSide ? 1 : 0, toTheSide ? 0 : 1);
@@ -356,7 +393,7 @@ namespace Regressus.NPCs.Minibosses
                     else
                         RegreUtils.SpawnTelegraphLine(Beamposition, NPC.GetSource_FromThis(), vell);
                 }
-                if (AITimer2 == 40)
+                if (AITimer2 == 60)
                 {
                     AITimer2 = 0;
                     Vector2 vell = new(toTheSide ? 1 : 0, toTheSide ? 0 : 1);
@@ -366,7 +403,7 @@ namespace Regressus.NPCs.Minibosses
                     else
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), Beamposition, vell, ModContent.ProjectileType<LuminaryBeam3>(), 15, 0);
                 }
-                if (AITimer >= 40 * 7)
+                if (AITimer >= 60 * 5)
                 {
                     AITimer = 0;
                     nextAttack = Scythe;
@@ -595,6 +632,10 @@ namespace Regressus.NPCs.Minibosses
         protected bool RunOnce = true;
         public int MAX_TIME = 400;
         public override string Texture => "Regressus/Extras/Empty";
+        public override void OnSpawn(IEntitySource source)
+        {
+            SoundEngine.PlaySound(SoundID.NPCDeath44);
+        }
         public override void SetDefaults()
         {
             Projectile.width = 25;
