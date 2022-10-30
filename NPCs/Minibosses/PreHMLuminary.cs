@@ -29,7 +29,7 @@ namespace Regressus.NPCs.Minibosses
         {
             DisplayName.SetDefault("Luminary");
             Main.npcFrameCount[Type] = 9;
-            NPCID.Sets.TrailCacheLength[Type] = 10;
+            NPCID.Sets.TrailCacheLength[Type] = 5;
             NPCID.Sets.TrailingMode[Type] = 0;
             NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
         }
