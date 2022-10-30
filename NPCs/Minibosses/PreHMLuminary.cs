@@ -20,6 +20,8 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using Terraria.Utilities;
 using Regressus.Buffs.Debuffs;
+using static System.Formats.Asn1.AsnWriter;
+using IL.Terraria.GameContent.Events;
 
 namespace Regressus.NPCs.Minibosses
 {
@@ -116,7 +118,7 @@ namespace Regressus.NPCs.Minibosses
                 }
             }
         }
-        const int Death = -1, Spawn = 0, Idle = 1, Scythe = 2, Beam = 3, Boomerang = 4, NoMovement = 5;
+        const int Death = -1, Spawn = -2, PreSpawn = 0, Idle = 1, Scythe = 2, Beam = 3, Boomerang = 4, NoMovement = 5;
         float alpha = 1f;
         int nextAttack = Scythe;
         Vector2 vel;
@@ -153,6 +155,7 @@ namespace Regressus.NPCs.Minibosses
         {
             spriteBatch.Reload(BlendState.Additive);
             Texture2D cone = RegreUtils.GetExtraTexture("cone4");
+            Texture2D cone2 = RegreUtils.GetExtraTexture("cone2");
             UnifiedRandom rand = new UnifiedRandom(912301);
             for (int i = 0; i < 8; i++)
             {
@@ -163,11 +166,15 @@ namespace Regressus.NPCs.Minibosses
                 // texture is current problem
                 spriteBatch.Draw(cone, NPC.Center - screenPos, null, Color.White * alpha, MathHelper.TwoPi / 8 * i + rot, new(0, cone.Height / 2), scale, SpriteEffects.None, 0);
             }
+            spriteBatch.Draw(cone2, new(Main.screenWidth / 2, -200), null, Color.Pink * spawnAlpha, MathHelper.ToRadians(90), new Vector2(0, cone2.Height / 2), 1.1f, SpriteEffects.None, 0);
+            spriteBatch.Draw(cone2, new(Main.screenWidth / 2, -200), null, Color.White * spawnAlpha, MathHelper.ToRadians(90), new Vector2(0, cone2.Height / 2), 1f, SpriteEffects.None, 0);
             spriteBatch.Reload(BlendState.AlphaBlend);
         }
         bool toTheSide;
         Vector2 Beamposition;
         bool phase2;
+        float spawnAlpha;
+        bool hasDoneIntro;
         public override void AI()
         {
             Player player = Main.player[NPC.target];
@@ -194,13 +201,31 @@ namespace Regressus.NPCs.Minibosses
                     dust.noGravity = true;
                 }
             }
-            if (AIState == Spawn)
+            if (!hasDoneIntro)
             {
-                NPC.Center = player.Center - Vector2.UnitY * (2200 - (AITimer * 10));
+                float progress = Utils.GetLerpValue(0, 303, AITimer2);
+                spawnAlpha = Math.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
+            }
+            else
+                spawnAlpha = 0;
+            if (AIState == PreSpawn)
+            {
                 AITimer++;
+                AITimer2++;
+                NPC.Center = player.Center - Vector2.UnitY * (Main.screenHeight);
+                if (AITimer >= 100)
+                {
+                    AIState = Spawn;
+                }
+            }
+            else if (AIState == Spawn)
+            {
+                NPC.Center = player.Center - Vector2.UnitY * (Main.screenHeight - ((AITimer - 100) * 15));
+                AITimer++;
+                AITimer2++;
                 //if (AITimer >= 190)
                 //    alpha += 0.1f;
-                if (AITimer >= 200)
+                if (AITimer >= 153)
                 {
                     RegreUtils.SetBossTitle(150, "lol this doesnt even matter", Color.DeepPink, "sex penis", BossTitleStyleID.Luminary);
                     for (int i = 0; i < 15; i++)
@@ -273,6 +298,9 @@ namespace Regressus.NPCs.Minibosses
             else if (AIState == Idle)
             {
                 AITimer++;
+                AITimer2++;
+                if (AITimer == 150)
+                    hasDoneIntro = true;
                 NPC.rotation = MathHelper.Lerp(NPC.rotation, NPC.velocity.X * 0.05f, AITimer / 250);
                 NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center - Vector2.UnitY * 200f, false) * 0.02f;
                 if (AITimer >= 250)
@@ -318,7 +346,7 @@ namespace Regressus.NPCs.Minibosses
                 if (AITimer < 50)
                 {
                     vel = RegreUtils.FromAToB(NPC.Center, player.Center);
-                    NPC.rotation = (RegreUtils.FromAToB(NPC.Center, player.Center).ToRotation() + MathHelper.PiOver2);
+                    NPC.rotation = MathHelper.Lerp(NPC.rotation, (RegreUtils.FromAToB(NPC.Center, player.Center).ToRotation() + MathHelper.PiOver2), AITimer / 250);
                     for (int i = 0; i < 15; i++)
                     {
                         Dust dust;
@@ -350,7 +378,7 @@ namespace Regressus.NPCs.Minibosses
             else if (AIState == Boomerang)
             {
                 AITimer++;
-                NPC.rotation = NPC.velocity.X * 0.05f;
+                NPC.rotation = MathHelper.Lerp(NPC.rotation, NPC.velocity.X * 0.05f, AITimer / 250);
                 NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center - Vector2.UnitY * 200f, false) * 0.007f;
                 if (AITimer < 45)
                     for (int i = 0; i < 15; i++)
