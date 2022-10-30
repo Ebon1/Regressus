@@ -41,7 +41,7 @@ namespace Regressus.NPCs.Minibosses
             NPC.lifeMax = 2000;
             NPC.defense = 14;
             NPC.damage = 0;
-            NPC.HitSound = SoundID.NPCHit42;
+            NPC.HitSound = SoundID.NPCHit1;
             SoundStyle style = SoundID.NPCDeath7;
             style.Pitch = -.6f;
             style.Volume = 0;
@@ -292,7 +292,7 @@ namespace Regressus.NPCs.Minibosses
                     Main.NewText("The divine creature has been defeated.", new Color(118, 50, 173));
                     //player.DelBuff(player.FindBuffIndex(ModContent.BuffType<PilgrimBlindness>()));
                     NPC.immortal = false;
-                    NPC.StrikeNPC(NPC.lifeMax, 0, 0);
+                    NPC.StrikeNPC(NPC.lifeMax, 0, 0, true, true);
                 }
             }
             else if (AIState == Idle)
@@ -302,7 +302,8 @@ namespace Regressus.NPCs.Minibosses
                 if (AITimer == 150)
                     hasDoneIntro = true;
                 NPC.rotation = MathHelper.Lerp(NPC.rotation, NPC.velocity.X * 0.05f, AITimer / 250);
-                NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center - Vector2.UnitY * 200f, false) * 0.02f;
+                AITimer3 += 0.05f;
+                NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center - new Vector2(200 * (float)Math.Sin(AITimer3), 200f), false) * 0.05f;
                 if (AITimer >= 250)
                 {
                     AITimer = 0;
@@ -408,8 +409,9 @@ namespace Regressus.NPCs.Minibosses
             {
                 AITimer++;
                 AITimer2++;
-                NPC.rotation = MathHelper.Lerp(NPC.rotation, 0, AITimer / 400);
-                NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center - Vector2.UnitY * 200f, false) * 0.007f;
+                NPC.rotation = MathHelper.Lerp(NPC.rotation, NPC.velocity.X * 0.05f, AITimer / 400);
+                AITimer3 += 0.05f;
+                NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center - new Vector2(200 * (float)Math.Sin(AITimer3), 200f), false) * 0.05f;
                 if (AITimer2 == 30)
                 {
                     toTheSide = Main.rand.NextBool();
@@ -417,7 +419,7 @@ namespace Regressus.NPCs.Minibosses
                     Beamposition = new(toTheSide ? Main.screenPosition.X : player.Center.X, toTheSide ? player.Center.Y : Main.screenPosition.Y);
                     if (!toTheSide)
                         for (int i = -2; i < 3; ++i)
-                            RegreUtils.SpawnTelegraphLine(Beamposition + Vector2.UnitX * 100 * i, NPC.GetSource_FromThis(), vell);
+                            RegreUtils.SpawnTelegraphLine(Beamposition + Vector2.UnitX * 150 * i, NPC.GetSource_FromThis(), vell);
                     else
                         RegreUtils.SpawnTelegraphLine(Beamposition, NPC.GetSource_FromThis(), vell);
                 }
@@ -427,7 +429,7 @@ namespace Regressus.NPCs.Minibosses
                     Vector2 vell = new(toTheSide ? 1 : 0, toTheSide ? 0 : 1);
                     if (!toTheSide)
                         for (int i = -2; i < 3; ++i)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), Beamposition + Vector2.UnitX * 100 * i, vell, ModContent.ProjectileType<LuminaryBeam3>(), 15, 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), Beamposition + Vector2.UnitX * 150 * i, vell, ModContent.ProjectileType<LuminaryBeam3>(), 15, 0);
                     else
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), Beamposition, vell, ModContent.ProjectileType<LuminaryBeam3>(), 15, 0);
                 }
@@ -570,6 +572,10 @@ namespace Regressus.NPCs.Minibosses
         public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            SoundEngine.PlaySound(new("Regressus/Sounds/Custom/LuminaryConjure"));
         }
         public override void AI()
         {
