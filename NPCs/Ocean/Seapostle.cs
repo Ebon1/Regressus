@@ -208,6 +208,7 @@ namespace Regressus.NPCs.Ocean
         {
             DisplayName.SetDefault("Seapostle");
             Main.npcFrameCount[Type] = 7;
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, });
         }
         public override void SetDefaults()
         {

@@ -298,7 +298,7 @@ namespace Regressus.NPCs.Bosses.Oracle
         {
             #region "random stuff"
             Player player = Main.player[NPC.target];
-            if (AIState != PreIntro && !phase2)
+            /*if (AIState != PreIntro && !phase2)
             {
                 if (!Terraria.Graphics.Effects.Filters.Scene["Regressus:OracleSummon"].IsActive())
                 {
@@ -317,7 +317,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 {
                     Terraria.Graphics.Effects.Filters.Scene.Deactivate("Regressus:OracleSummon");
                 }
-            }
+            }*/
             _finalCountdown = theFinalCountdown;
             if (NPC.life <= NPC.lifeMax / 2 && !hasTransformed)
             {
@@ -592,12 +592,12 @@ namespace Regressus.NPCs.Bosses.Oracle
                 {
                     AIValue = MathHelper.Lerp(AIValue, 8f, (savantFrameCounter - 105) / 165);
                 }
-                if (savantFrameCounter >= 105 && savantFrameCounter <= 125)
-                    Main.musicFade[Main.curMusic] = MathHelper.Lerp(1, 0, (savantFrameCounter - 105) / 20);
+                //if (savantFrameCounter >= 105 && savantFrameCounter <= 125)
+                //    Main.musicFade[Main.curMusic] = MathHelper.Lerp(1, 0, (savantFrameCounter - 105) / 20);
                 if (savantFrameCounter >= 136 && savantFrameCounter <= 145)
                 {
                     Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/oracle");
-                    Main.musicFade[Main.curMusic] = MathHelper.Lerp(0, 1, (savantFrameCounter - 136) / 9);
+                    //Main.musicFade[Main.curMusic] = MathHelper.Lerp(0, 1, (savantFrameCounter - 136) / 9);
                 }
                 if (savantFrameCounter > 165)
                 {

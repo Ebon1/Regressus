@@ -22,6 +22,7 @@ using Terraria.Utilities;
 using Regressus.Buffs.Debuffs;
 using static System.Formats.Asn1.AsnWriter;
 using IL.Terraria.GameContent.Events;
+using System.IO;
 
 namespace Regressus.NPCs.Minibosses
 {
@@ -92,6 +93,13 @@ namespace Regressus.NPCs.Minibosses
         {
             get => NPC.ai[3];
             set => NPC.ai[3] = value;
+        }
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
+                new FlavorTextBestiaryInfoElement("These beings are made out of pure light and pieces of holy metal. While they are usually sent for minor inconveniences, they are a force to be reckoned with"),
+            });
         }
         public override void FindFrame(int frameHeight)
         {
@@ -184,6 +192,7 @@ namespace Regressus.NPCs.Minibosses
                 RegreUtils.DustExplosion(NPC.Center, NPC.Size, true, Color.DeepPink);
                 Main.NewText("The wind is blowing...", new Color(118, 50, 173));
                 phase2 = true;
+                hasDoneIntro = true;
                 AIState = Boomerang;
                 AITimer = 0;
                 AITimer2 = 0;
@@ -317,7 +326,7 @@ namespace Regressus.NPCs.Minibosses
             {
                 NPC.rotation = MathHelper.Lerp(NPC.rotation, 0, AITimer / 300);
                 AITimer++;
-                if (AITimer >= 30)
+                if (AITimer >= 30 && AITimer <= 400)
                 {
                     AITimer2++;
                     if (AITimer2 >= 40)
@@ -333,11 +342,11 @@ namespace Regressus.NPCs.Minibosses
                         AITimer2 = 0;
                     }
                 }
-                if (AITimer >= 400)
+                if (AITimer >= 460)
                 {
                     AITimer = 0;
-                    nextAttack = Beam;
-                    AIState = Idle;
+                    AIState = Beam;
+                    //AIState = Idle;
                     AITimer2 = AITimer3 = 0;
                 }
             }
@@ -419,9 +428,27 @@ namespace Regressus.NPCs.Minibosses
                     Beamposition = new(toTheSide ? Main.screenPosition.X : player.Center.X, toTheSide ? player.Center.Y : Main.screenPosition.Y);
                     if (!toTheSide)
                         for (int i = -2; i < 3; ++i)
+                        {
+                            float x = (Beamposition + Vector2.UnitX * 150 * i).X;
+                            float y = (Beamposition + Vector2.UnitX * 150 * i).Y;
                             RegreUtils.SpawnTelegraphLine(Beamposition + Vector2.UnitX * 150 * i, NPC.GetSource_FromThis(), vell);
+                            Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<LuminaryP3>(), 0, 0, NPC.target);
+                            a.ai[0] = x;
+                            a.ai[1] = y;
+                            a.localAI[0] = NPC.whoAmI;
+                        }
                     else
-                        RegreUtils.SpawnTelegraphLine(Beamposition, NPC.GetSource_FromThis(), vell);
+                    {
+                        for (int i = 0; i < 2; ++i)
+                        {
+                            Vector2 pos = i == 0 ? Beamposition : Beamposition + Vector2.UnitX * Main.screenWidth;
+                            RegreUtils.SpawnTelegraphLine(Beamposition, NPC.GetSource_FromThis(), vell);
+                            Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<LuminaryP3>(), 0, 0, NPC.target);
+                            a.ai[0] = pos.X;
+                            a.ai[1] = pos.Y;
+                            a.localAI[0] = NPC.whoAmI;
+                        }
+                    }
                 }
                 if (AITimer2 == 60)
                 {
@@ -429,9 +456,19 @@ namespace Regressus.NPCs.Minibosses
                     Vector2 vell = new(toTheSide ? 1 : 0, toTheSide ? 0 : 1);
                     if (!toTheSide)
                         for (int i = -2; i < 3; ++i)
+                        {
+                            float x = (Beamposition + Vector2.UnitX * 150 * i).X;
+                            float y = (Beamposition + Vector2.UnitX * 150 * i).Y;
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), Beamposition + Vector2.UnitX * 150 * i, vell, ModContent.ProjectileType<LuminaryBeam3>(), 15, 0);
+                        }
                     else
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), Beamposition, vell, ModContent.ProjectileType<LuminaryBeam3>(), 15, 0);
+                    {
+                        for (int i = 0; i < 2; ++i)
+                        {
+                            Vector2 pos = i == 0 ? Beamposition : Beamposition + Vector2.UnitX * Main.screenWidth;
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, vell, ModContent.ProjectileType<LuminaryBeam3>(), 15, 0);
+                        }
+                    }
                 }
                 if (AITimer >= 60 * 5)
                 {
@@ -441,6 +478,76 @@ namespace Regressus.NPCs.Minibosses
                     AITimer2 = AITimer3 = 0;
                 }
             }
+        }
+    }
+    public class LuminaryP3 : ModProjectile
+    {
+        public override string Texture => RegreUtils.Empty;
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Type] = 9;
+        }
+        public override void SetDefaults()
+        {
+            Projectile.Size = new(118, 84);
+            Projectile.aiStyle = 0;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.timeLeft = 200;
+            Projectile.penetrate = -1;
+            Projectile.tileCollide = false;
+            Projectile.frame = 5;
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D a = TextureAssets.Npc[ModContent.NPCType<PreHMLuminary>()].Value;
+            Main.EntitySpriteDraw(a, Projectile.Center - Main.screenPosition, new Rectangle(0, Projectile.frame * 84, 118, 84), Color.DeepPink * alpha, Projectile.rotation, Projectile.Size / 2, 1f, SpriteEffects.None, 0);
+            return false;
+        }
+        float alpha = 1;
+        int startingTimeLeft;
+        float thing;
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(Projectile.localAI[0]);
+            writer.Write(Projectile.localAI[1]);
+        }
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            Projectile.localAI[0] = reader.ReadSingle();
+            Projectile.localAI[1] = reader.ReadSingle();
+        }
+        Vector2 targetPos;
+        Vector2 basePos;
+        public override void OnSpawn(IEntitySource source)
+        {
+            basePos = Projectile.Center;
+            targetPos = new(Projectile.ai[0], Projectile.ai[1]);
+        }
+        public override void AI()
+        {
+            targetPos = new(Projectile.ai[0], Projectile.ai[1]);
+            if (++Projectile.frameCounter % 5 == 0)
+            {
+                if (Projectile.frame < 5)
+                    Projectile.frame++;
+                else
+                    Projectile.frame = 0;
+            }
+            if (targetPos == Vector2.Zero)
+                return;
+            NPC owner = Main.npc[(int)Projectile.localAI[0]];
+            /*Projectile.ai[1] += 2f * (float)Math.PI / 600f * 4 * alpha * thing;
+            Projectile.ai[1] %= 2f * (float)Math.PI;
+            Projectile.Center = npc.Center + (200 * alpha) * new Vector2((float)Math.Cos(Projectile.ai[1]), (float)Math.Sin(Projectile.ai[1]));*/
+            if (Projectile.timeLeft > 100)
+                Projectile.velocity = RegreUtils.FromAToB(Projectile.Center, targetPos, false) * 0.1f;
+            else
+            {
+                alpha -= 0.05f;
+                Projectile.velocity = RegreUtils.FromAToB(Projectile.Center, owner.Center, false) * 0.1f;
+            }
+
         }
     }
     public class LuminaryP : ModProjectile

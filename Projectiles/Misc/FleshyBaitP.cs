@@ -10,6 +10,7 @@ namespace Regressus.Projectiles.Misc
     {
         public override void SetStaticDefaults()
         {
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, });
             DisplayName.SetDefault("Fleshy Bait");
             Main.npcFrameCount[Type] = 4;
         }
