@@ -17,7 +17,7 @@ namespace Regressus.Items.Weapons.Magic
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Stormstaff");
-            Tooltip.SetDefault("Invokes the power of zeus!");
+            Tooltip.SetDefault("You don't have the balls!");
             Item.staff[Item.type] = true;
         }
         public override void SetDefaults()
