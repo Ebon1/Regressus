@@ -11,12 +11,15 @@ using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Regressus.Projectiles.Enemy.Overworld;
 using Terraria.Audio;
-using static Terraria.ModLoader.PlayerDrawLayer;
-
+using System.Collections.Generic;
 namespace Regressus.NPCs.Ocean
 {
     public class Seapostle : ModNPC
     {
+        public List<NPC> clones = new List<NPC>();
+        NPC teleportTo;
+        bool issue;
+        bool success = false;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 7;
@@ -38,7 +41,7 @@ namespace Regressus.NPCs.Ocean
         }
         public override Color? GetAlpha(Color drawColor)
         {
-            return Color.White;
+            return new Color(drawColor.R - NPC.alpha, drawColor.G - NPC.alpha, drawColor.B - NPC.alpha, drawColor.A - NPC.alpha);
         }
         /*public override bool PreDraw(SpriteBatch spriteBatch, Vector2 pos, Color drawColor)
         {
@@ -113,24 +116,25 @@ namespace Regressus.NPCs.Ocean
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            if (flash != Vector2.Zero)
+            if (flash)
             {
                 RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
-                float progress = Utils.GetLerpValue(0f, 25, AITimer2);
+                float progress = Utils.GetLerpValue(1, 0, AITimer2);
                 Texture2D glow = ModContent.Request<Texture2D>("Regressus/Extras/crosslight").Value;
-                float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.3f);
-                Main.spriteBatch.Draw(glow, flash - Main.screenPosition, null, Color.White, Main.GameUpdateCount * 0.0025f, glow.Size() / 2, 0.65f * mult, SpriteEffects.None, 0f);
-                Main.spriteBatch.Draw(glow, flash - Main.screenPosition, null, Color.Red, Main.GameUpdateCount * 0.0025f, glow.Size() / 2, 0.75f * mult, SpriteEffects.None, 0f);
+                float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 3f);
+                Main.spriteBatch.Draw(glow, NPC.Center - Main.screenPosition, null, drawColor * progress, mult, glow.Size() / 2, 0.25f * mult, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(glow, NPC.Center - Main.screenPosition, null, new Color(drawColor.R + 150, drawColor.G, drawColor.B, drawColor.A) * progress, mult, glow.Size() / 2, 0.35f * mult, SpriteEffects.None, 0f);
                 RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
             }
         }
-        Vector2 flash;
+        bool flash;
         public override void OnSpawn(IEntitySource source)
         {
             for (int i = 0; i < 8; i++)
             {
                 float b = MathHelper.ToRadians(360);
                 NPC a = NPC.NewNPCDirect(source, NPC.Center + (Vector2.One * 250).RotatedByRandom(b), ModContent.NPCType<CloneSeapostle>());
+                clones.Add(a);
                 a.ai[3] = NPC.whoAmI;
                 a.ai[2] = b;
                 a.ai[0] = i;
@@ -138,40 +142,94 @@ namespace Regressus.NPCs.Ocean
         }
         public override void AI()
         {
+            AITimer3 += (float)Math.PI / 30;
+            NPC.alpha = (int)MathHelper.Lerp(45, 90, (float)Math.Sin(AITimer3));
+            NPC.TargetClosest(false);
             Player player = Main.player[NPC.target];
-            NPC.direction = player.Center.X > NPC.Center.X ? 1 : -1;
+            Vector2 targ = !player.wet ? NPC.Center + new Vector2(player.Center.X - NPC.Center.X) : player.MountedCenter;
+            void BubbleSurprise()
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    float angle = 2f * (float)MathHelper.Pi / 4 * i;
+                    Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.One.RotatedBy(angle), ProjectileID.Bubble, 0, 0f);
+                    a.friendly = false;
+                    a.hostile = true;
+                }
+            }
+            void Move()
+            {
+                SetVel(true);
+                SetVel(false);
+                SetVel(false);
+            }
+            void SetVel(bool alt)
+            {
+                Vector2 to = targ - NPC.Center;
+                float rot = (float)Math.Atan(to.Y / to.X) + (to.X < 0 ? (float)Math.PI : 0);
+                rot += Main.rand.Next(-45, 45) * (alt ? 0.01f : 0.1f);
+                Vector2 towards = new Vector2((float)Math.Cos(rot), (float)Math.Sin(rot));
+                towards *= alt ? (to.Length() * 0.0001f) : 0.00625f;
+                NPC.velocity += towards;
+            }
+            NPC.direction = targ.X > NPC.Center.X ? 1 : -1;
             NPC.spriteDirection = NPC.direction;
             NPC.TargetClosest();
             NPC.noGravity = true;
+            //Main.NewText($"{Main.tile[(int)NPC.Center.X / 16, (int)NPC.Center.Y / 16].LiquidAmount}");
+
+            bool InWater() { Tile tile = Main.tile[(int)NPC.Center.X / 16, (int)NPC.Center.Y / 16]; return tile.LiquidAmount == 255 || !WorldGen.TileEmpty((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16); }
             if (AIState == idle)
             {
+                NPC.noTileCollide = false;
                 AITimer++;
-                AITimer2 += 0.01f;
-                Vector2 moveTo = player.Center;
-                NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center, false) * 0.0025f;
+                if (InWater())
+                {
+                    Move();
+                    NPC.noGravity = true;
+                }
+                else
+                    NPC.noGravity = false;
                 if (AITimer >= 250)
                 {
-                    AITimer2 = 0;
                     AIState = attack;
                     AITimer = 0;
                     NPC.velocity = Vector2.Zero;
                     NPC.frame.Y = NPC.height * 4;
-                    for (int i = 0; i < 7; i++)
-                    {
-                        float angle = 2f * (float)MathHelper.Pi / 4 * i;
-                        Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.One.RotatedBy(angle), ProjectileID.Bubble, 0, 0f);
-                        a.friendly = false;
-                        a.hostile = true;
-                    }
+                    BubbleSurprise();
                 }
             }
             else if (AIState == attack)
             {
+                if(!issue)
+                {
+                    int attempt = 0;
+                    while (!success)
+                    {
+                        attempt++;
+                        NPC npc = Main.rand.Next(clones);
+                        if (npc != null && npc.active)
+                        {
+                            success = true;
+                            teleportTo = npc;
+                            NPC.Center = teleportTo.Center;
+                        }
+                        if (attempt >= 10)
+                        {
+                            success = true;
+                            issue = true;
+                        }
+                    }
+                }
+                NPC.noTileCollide = true;
                 AITimer++;
+                AITimer2 -= (float)1 / 50;
+                NPC.alpha = 75;
+                NPC.velocity *= 0.975f;
                 if (AITimer == 25)
                 {
-                    flash = NPC.Center;
-                    SoundEngine.PlaySound(SoundID.Roar);
+                    flash = true;
+                    SoundEngine.PlaySound(SoundID.DD2_BetsyScream);
                 }
                 if (AITimer < 50)
                 {
@@ -180,7 +238,6 @@ namespace Regressus.NPCs.Ocean
                 }
                 if (AITimer == 50)
                 {
-                    flash = Vector2.Zero;
                     Vector2 vector9 = NPC.Center;
                     {
                         float rotation2 = (float)Math.Atan2((vector9.Y) - (player.Center.Y), (vector9.X) - (player.Center.X));
@@ -188,14 +245,22 @@ namespace Regressus.NPCs.Ocean
                         NPC.velocity.Y = (float)(Math.Sin(rotation2) * 22) * -1;
                     }
                 }
-                if (AITimer >= 65)
+                if (AITimer > 50)
                 {
-                    AITimer3++;
-                    AITimer2 = 0;
+                    Dust.NewDustDirect(new Vector2(NPC.Center.X + Main.rand.Next(NPC.width / -2, NPC.width / 2), NPC.Center.Y + Main.rand.Next(NPC.height / -2, NPC.height / 2)), 0, 0, DustID.BubbleBlock).noGravity = true;
+                    AITimer2 += (float)1 / 25;
+                }
+                if (AITimer >= 100)
+                {
+                    AITimer2 = 1;
                     AIState = idle;
                     AITimer = 0;
                     NPC.rotation = 0;
                     NPC.velocity = Vector2.Zero;
+                    flash = false;
+                    success = false;
+                    NPC.Center = teleportTo.Center;
+                    BubbleSurprise();
                 }
 
             }
@@ -227,7 +292,7 @@ namespace Regressus.NPCs.Ocean
         }
         public override Color? GetAlpha(Color drawColor)
         {
-            return Color.White * 0.7f;
+            return new Color(drawColor.R - NPC.alpha, drawColor.G - NPC.alpha, drawColor.B - NPC.alpha, drawColor.A - NPC.alpha);
         }
         public override void FindFrame(int frameHeight)
         {
@@ -263,15 +328,29 @@ namespace Regressus.NPCs.Ocean
         }
         public override void AI()
         {
-            NPC.TargetClosest();
-            Player player = Main.player[NPC.target];
-            if (!Main.npc[(int)AITimer3].active)
-                NPC.life = 0;
             NPC npc = Main.npc[(int)AITimer3];
-            AITimer++;
-            Vector2 moveTo = player.Center + (Vector2.One * 350).RotatedBy(AITimer2);
-            NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center, false) * 0.0018f;
-            if (AITimer >= 250)
+            NPC.alpha = (int)MathHelper.Lerp(75, 255, AITimer / 90);
+            if(AITimer++ < 1)
+            {
+                SetVel(true);
+                SetVel(false);
+                SetVel(false);
+            }
+            void SetVel(bool alt)
+            {
+                Vector2 to = npc.Center - NPC.Center;
+                float rot = (float)Math.Atan(to.Y / to.X) + (to.X < 0 ? (float)Math.PI : 0);
+                rot += Main.rand.Next(-45, 45) * (alt ? 0.01f : 0.1f);
+                Vector2 towards = new Vector2((float)Math.Cos(rot), (float)Math.Sin(rot));
+                towards *= alt ? (to.Length() * 0.01f) : 1.625f;
+                NPC.velocity += towards;
+            }
+            if(AITimer > 60)
+            {
+                NPC.velocity = Vector2.Zero;
+                AITimer = 0;
+            }
+            /*if (AITimer2 >= 250)
             {
                 if (npc.ai[3] == AIState)
                 {
@@ -285,30 +364,76 @@ namespace Regressus.NPCs.Ocean
                     }
                     NPC.life = 0;
                 }
-                AITimer = 0;
+                AITimer2 = 0;
                 NPC.velocity = Vector2.Zero;
             }
-            /*else
+            else
             {
-                AITimer++;
-                if (AITimer == 25)
+                AITimer2++;
+                if (AITimer2 == 25)
                 {
                     SoundEngine.PlaySound(SoundID.Roar);
                 }
-                if (AITimer < 50)
+                if (AITimer2 < 50)
                     NPC.rotation = RegreUtils.FromAToB(NPC.Center, Main.player[NPC.target].Center).ToRotation() + MathHelper.PiOver2;
                 Vector2 moveTo = player.Center + (Vector2.One * 350).RotatedBy(AITimer2);
-                if (AITimer == 50)
+                if (AITimer2 == 50)
                     NPC.velocity = RegreUtils.FromAToB(NPC.Center, moveTo) * 30f;
-                if (AITimer >= 80)
+                if (AITimer2 >= 80)
                 {
                     AIState = idle;
-                    AITimer = 0;
+                    AITimer2 = 0;
                     NPC.rotation = 0;
                     NPC.velocity = Vector2.Zero;
                 }
 
             }*/
+            /* NPC.TargetClosest();
+             Player player = Main.player[NPC.target];
+             if (!Main.npc[(int)AITimer3].active)
+                 NPC.life = 0;
+             NPC npc = Main.npc[(int)AITimer3];
+             AITimer++;
+             Vector2 moveTo = player.Center + (Vector2.One * 350).RotatedBy(AITimer2);
+             NPC.velocity = RegreUtils.FromAToB(NPC.Center, player.Center, false) * 0.0018f;
+             if (AITimer >= 250)
+             {
+                 if (npc.ai[3] == AIState)
+                 {
+                     npc.Center = NPC.Center;
+                     for (int i = 0; i < 7; i++)
+                     {
+                         float angle = 2f * (float)MathHelper.Pi / 7 * i;
+                         Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), npc.Center, Vector2.One.RotatedBy(angle), ProjectileID.Bubble, 0, 0f);
+                         a.friendly = false;
+                         a.hostile = true;
+                     }
+                     NPC.life = 0;
+                 }
+                 AITimer = 0;
+                 NPC.velocity = Vector2.Zero;
+             }
+             else
+             {
+                 AITimer++;
+                 if (AITimer == 25)
+                 {
+                     SoundEngine.PlaySound(SoundID.Roar);
+                 }
+                 if (AITimer < 50)
+                     NPC.rotation = RegreUtils.FromAToB(NPC.Center, Main.player[NPC.target].Center).ToRotation() + MathHelper.PiOver2;
+                 Vector2 moveTo = player.Center + (Vector2.One * 350).RotatedBy(AITimer2);
+                 if (AITimer == 50)
+                     NPC.velocity = RegreUtils.FromAToB(NPC.Center, moveTo) * 30f;
+                 if (AITimer >= 80)
+                 {
+                     AIState = idle;
+                     AITimer = 0;
+                     NPC.rotation = 0;
+                     NPC.velocity = Vector2.Zero;
+                 }
+
+             }*/
         }
     }
 }
