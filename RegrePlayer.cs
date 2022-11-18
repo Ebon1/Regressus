@@ -46,6 +46,12 @@ namespace Regressus
         public int[] AerialBudItem = new int[3];
         public int[] AerialBudItemStack = new int[3];
 
+
+        //Weapons
+        public int itemCombo;
+        public int itemComboReset;
+        public int lastSelectedItem;
+
         public bool ShrineBiome = false;
         public override void UpdateBadLifeRegen()
         {
@@ -67,6 +73,37 @@ namespace Regressus
             AcornFairyPet = false;
             ginnungagapHide = false;
             bladeSummon = false;
+
+            if (itemComboReset <= 0)
+            {
+                itemCombo = 0;
+                itemComboReset = 0;
+            }
+            else
+            {
+                itemComboReset--;
+            }
+        }
+
+
+        public override bool PreItemCheck()
+        {
+            if (Player.selectedItem != lastSelectedItem)
+            {
+                itemComboReset = 0;
+                itemCombo = 0;
+                lastSelectedItem = Player.selectedItem;
+            }
+            if (itemComboReset > 0)
+            {
+                itemComboReset--;
+                if (itemComboReset == 0)
+                {
+                    itemCombo = 0;
+                }
+            }
+
+            return true;
         }
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
