@@ -237,7 +237,7 @@ namespace Regressus
                     {
                         if (regrePlayer.AerialBudItem[i] != 0)
                         {
-                            Projectile.NewProjectile(new EntitySource_Misc("Aerial Bud"), Main.LocalPlayer.Center - new Vector2(0, Main.screenHeight / 2), Vector2.Zero, ModContent.ProjectileType<NPCs.Sky.AerialBudGiveBack>(), 0, 0, Main.myPlayer, i);
+                            //Projectile.NewProjectile(new EntitySource_Misc("Aerial Bud"), Main.LocalPlayer.Center - new Vector2(0, Main.screenHeight / 2), Vector2.Zero, ModContent.ProjectileType<NPCs.Sky.AerialBudGiveBack>(), 0, 0, Main.myPlayer, i);
                         }
                     }
                 }

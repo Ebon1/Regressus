@@ -185,6 +185,7 @@ namespace Regressus.NPCs.Minibosses
         bool hasDoneIntro;
         public override void AI()
         {
+            Lighting.AddLight(NPC.Center, TorchID.UltraBright);
             Player player = Main.player[NPC.target];
             NPC.TargetClosest();
             if (NPC.life < NPC.lifeMax / 2 && !phase2)

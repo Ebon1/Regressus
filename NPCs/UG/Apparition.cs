@@ -191,7 +191,7 @@ namespace Regressus.NPCs.UG
                 NPC.ai[2] -= 0.05f;
                 if (NPC.ai[2] < 0)
                 {
-                    NPC.life = 0;
+                    NPC.StrikeNPC(NPC.lifeMax * 5, 0, 0, false, true);
                 }
             }
         }

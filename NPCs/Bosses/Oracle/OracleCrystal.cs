@@ -16,6 +16,7 @@ using Terraria.Initializers;
 using Terraria.Graphics;
 using Regressus.Projectiles.Oracle;
 using Regressus.Projectiles;
+using Terraria.GameContent.Bestiary;
 
 namespace Regressus.NPCs.Bosses.Oracle
 {
@@ -25,6 +26,7 @@ namespace Regressus.NPCs.Bosses.Oracle
         {
             DisplayName.SetDefault("Crystal");
             Main.npcFrameCount[NPC.type] = 4;
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, });
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {

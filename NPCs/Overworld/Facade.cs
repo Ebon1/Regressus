@@ -93,11 +93,11 @@ namespace Regressus.NPCs.Overworld
             Texture2D a = RegreUtils.GetExtraTexture("PulseCircle");
             if (AIState == Attack)
             {
-                sb.Reload(BlendState.Additive);
-                float alpha = MathHelper.Clamp((float)Math.Sin(AITimer3 * Math.PI), 0, 1);
-                if (AITimer2 < 1)
-                    sb.Draw(a, NPC.Center - screenPos, null, Color.Yellow * alpha, 0, a.Size() / 2, 0.4f * AITimer3, SpriteEffects.None, 0f);
-                sb.Reload(BlendState.AlphaBlend);
+                //sb.Reload(BlendState.Additive);
+                //float alpha = MathHelper.Clamp((float)Math.Sin(AITimer3 * Math.PI), 0, 1);
+                //if (AITimer2 < 1)
+                //  sb.Draw(a, NPC.Center - screenPos, null, Color.Yellow * alpha, 0, a.Size() / 2, 0.4f * AITimer3, SpriteEffects.None, 0f);
+                //sb.Reload(BlendState.AlphaBlend);
             }
         }
         public override void AI()
@@ -116,7 +116,13 @@ namespace Regressus.NPCs.Overworld
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Main.rand.NextVector2Unit(), ModContent.GoreType<Facade2>());
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Main.rand.NextVector2Unit(), ModContent.GoreType<Facade3>());
                 Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Main.rand.NextVector2Unit(), ModContent.GoreType<Facade4>());
-                AIState = PreAttack;
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Main.rand.NextVector2Unit(), GoreID.Rat1);
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Main.rand.NextVector2Unit(), GoreID.CrimsonBunnyHead);
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Main.rand.NextVector2Unit(), GoreID.Ladybug1);
+                Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, Main.rand.NextVector2Unit(), GoreID.Owl2);
+                for (int i = 0; i < 8; i++)
+                    Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.BrownMoss);
+                AIState = Attack;
             }
             else if (AIState == PreAttack)
             {
@@ -141,7 +147,7 @@ namespace Regressus.NPCs.Overworld
                         Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, new Vector2(i, -1), ModContent.ProjectileType<FacadeTentacle>(), 15, 0, NPC.target);
                         a.ai[0] = 10;
                         a.damage = 15;
-                        a.ai[1] = 10;
+                        a.ai[1] = 20;
                     }
                 }
                 if (AITimer >= 300)
@@ -163,12 +169,17 @@ namespace Regressus.NPCs.Overworld
             Projectile.tileCollide = false;
             Projectile.hostile = true;
             Projectile.width = 1;
+            Projectile.hide = true;
             Projectile.height = 1;
-            Projectile.timeLeft = 250;
+            Projectile.timeLeft = 300;
             Projectile.damage = 1000;
             Projectile.penetrate = -1;
             rots = new List<float>();
             len = 0;
+        }
+        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+        {
+            behindNPCs.Add(index);
         }
         private void DrawLine(List<Vector2> list)
         {
@@ -201,22 +212,20 @@ namespace Regressus.NPCs.Overworld
         public override void AI()
         {
             if (Projectile.ai[0] == 0)
-                Projectile.ai[0] = 75;
+                Projectile.ai[0] = 10;
             //for (int i = 0; i < 3; i++)
             //{
             value += Projectile.ai[1];
-            if (base.Projectile.timeLeft % 1 == 0)
+            float factor = 1f;
+            Vector2 velocity = base.Projectile.velocity * factor * 4f;
+            Projectile.rotation = 0.3f * (float)Math.Sin((double)(value / 100f)) + velocity.ToRotation();
+            rots.Insert(0, Projectile.rotation);
+            while (rots.Count > Projectile.ai[0])
             {
-                float factor = 1f;
-                Vector2 velocity = base.Projectile.velocity * factor * 4f;
-                Projectile.rotation = 0.3f * (float)Math.Sin((double)(value / 100f)) + velocity.ToRotation();
-                rots.Insert(0, Projectile.rotation);
-                while (rots.Count > Projectile.ai[0])
-                {
-                    rots.RemoveAt(rots.Count - 1);
-                }
+                rots.RemoveAt(rots.Count - 1);
             }
-            if (len < Projectile.ai[0] && Projectile.timeLeft < 200)// && Projectile.timeLeft > 50)
+
+            if (len < Projectile.ai[0] && Projectile.timeLeft > 150 && Projectile.timeLeft % 3 == 0)// && Projectile.timeLeft > 50)
             {
                 len++;
             }
@@ -225,9 +234,9 @@ namespace Regressus.NPCs.Overworld
                 len -= 5;
             }
             */
-            if (len >= 0 && Projectile.timeLeft > 200)
+            if (len >= 0 && Projectile.timeLeft < 150 && Projectile.timeLeft % 3 == 0)
             {
-                len -= 2;
+                len--;
             }
             //}
         }
@@ -294,7 +303,7 @@ namespace Regressus.NPCs.Overworld
 
                 float prog = Utils.GetLerpValue(0, 250, Projectile.timeLeft);
                 float alpha = Math.Clamp((float)Math.Sin(prog * Math.PI) * 3, 0, 1);
-                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, color * factor * alpha, rotation, origin, 1, flip, 0);
+                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, color/* * factor * alpha*/, rotation, origin, 1, flip, 0);
 
                 pos += diff;
             }
