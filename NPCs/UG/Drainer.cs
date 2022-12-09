@@ -48,7 +48,7 @@ namespace Regressus.NPCs.UG
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.ZoneRockLayerHeight && spawnInfo.Player.ZonePurity)
-                return 0.1f;
+                return 0.05f;
             return 0;
         }
         public override void FindFrame(int frameHeight)
@@ -110,7 +110,7 @@ namespace Regressus.NPCs.UG
                     state[0] = 330;
                 bool invulnerable = alpha < 0.25f;
                 NPC.dontTakeDamage = invulnerable;
-                NPC.defense = 50;
+                NPC.defense = 10;
                 NPC.damage = invulnerable ? 0 : 50;
                 if (!invulnerable)
                     SuckLife();
@@ -204,7 +204,7 @@ namespace Regressus.NPCs.UG
                 {
                     if (NPC.life < NPC.lifeMax)
                     {
-                        int exchange = (int)Math.Round(3 * MathHelper.Clamp(alpha, 0, 1));
+                        int exchange = (int)Math.Round(2 * MathHelper.Clamp(alpha, 0, 1));
                         Vector2 towards = NPC.Center - player.MountedCenter;
                         Dust.NewDustPerfect(player.MountedCenter + new Vector2(Main.rand.Next(player.width / -4, player.width / 4), Main.rand.Next(player.height / -4, player.height / 4)), DustID.LifeDrain, towards / 100);
                         player.statLife -= exchange;

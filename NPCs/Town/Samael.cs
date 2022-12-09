@@ -36,7 +36,7 @@ namespace Regressus.NPCs.Town
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneOverworldHeight && RegreSystem.SamaelDay == 0 && !Main.dayTime)
+            if (spawnInfo.Player.ZoneOverworldHeight && RegreSystem.SamaelDay == 0 && !Main.dayTime && !NPC.AnyNPCs(ModContent.NPCType<Samael>()))
             {
                 return 0.74f;
             }

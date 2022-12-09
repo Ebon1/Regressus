@@ -143,7 +143,7 @@ namespace Regressus.NPCs.UG
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.ZoneRockLayerHeight && spawnInfo.Player.ZonePurity)
-                return 0.21f;
+                return 0.1f;
             return 0;
         }
         public float AIState

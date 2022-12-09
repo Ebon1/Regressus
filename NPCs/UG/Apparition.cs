@@ -22,7 +22,7 @@ namespace Regressus.NPCs.UG
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.ZoneRockLayerHeight && spawnInfo.Player.ZonePurity)
-                return 0.1f;
+                return 0.05f;
             return 0;
         }
         public override Color? GetAlpha(Color drawColor)
