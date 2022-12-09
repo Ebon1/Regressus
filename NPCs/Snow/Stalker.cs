@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -64,7 +64,7 @@ namespace Regressus.NPCs.Snow
                 return false;
             }
             return true;
-        }*/
+        }*//*
         float thing = -1;
         public float AIState
         {
@@ -146,3 +146,4 @@ namespace Regressus.NPCs.Snow
         }
     }
 }
+*/

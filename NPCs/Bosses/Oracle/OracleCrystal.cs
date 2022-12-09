@@ -155,7 +155,7 @@ namespace Regressus.NPCs.Bosses.Oracle
             }
             #region "ai"
             Vector2 moveTo = pos - NPC.Center;
-            float factor = 0.38f;
+            float factor = 0.48f;
             if (pos != Vector2.Zero && NPC.ai[2] != 1)
                 NPC.velocity = moveTo * factor;
             if (NPC.ai[1] == -9)

@@ -12,10 +12,11 @@ using ReLogic.Content;
 using Terraria.GameContent.Bestiary;
 using Regressus.Projectiles.Oracle;
 using Terraria.Audio;
+using Terraria.Utilities;
 
 namespace Regressus.NPCs.Bosses.Vagrant
 {
-    public class VoltageVargant : ModNPC
+    public class VoltageVagrant : ModNPC
     {
         public override void SetStaticDefaults()
         {
@@ -30,12 +31,8 @@ namespace Regressus.NPCs.Bosses.Vagrant
         {
             NPC.width = 116;
             NPC.height = 114;
-            NPC.lifeMax = 2000;
-            if (Main.expertMode)
-                NPC.lifeMax = 3000;
-            if (Main.masterMode)
-                NPC.lifeMax = 4500;
-            NPC.defense = 5;
+            NPC.lifeMax = 3000;
+            NPC.defense = 10;
             NPC.aiStyle = 0;
             NPC.damage = 10;
             NPC.HitSound = SoundID.NPCHit1;
@@ -145,39 +142,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
             }
             return false;
         }
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-        {
-            /*if (AIState == Rain)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    Texture2D texture = RegreUtils.GetExtraTexture("cloud2");
-                    float progress = Utils.GetLerpValue(0, 240, AITimer);
-                    float mult = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 1.2f, 0, 1);
-                    float mult2 = 1f;
-                    Vector2 pos = new Vector2(Main.screenWidth - ((Main.screenWidth / 5) * mult), -100);
-                    SpriteEffects effects = SpriteEffects.None;
-                    if (i == 1)
-                    {
-                        pos.X = (Main.screenWidth / 5) * mult;
-                        effects = SpriteEffects.FlipVertically;
-                    }
-                    else if (i == 2)
-                    {
-                        pos.X = Main.screenWidth / 2;
-                        pos.Y = -200 + 100 * mult;
-                        mult2 = .5f;
-                        texture = RegreUtils.GetExtraTexture("cloud");
-                    }
-                    spriteBatch.Reload(BlendState.Additive);
-                    if (mult2 == .5f)
-                        for (int j = 0; j < 2; j++)
-                            spriteBatch.Draw(texture, pos, null, Color.White * mult * mult2, 0, texture.Size() / 2, 2, effects, 0);
-                    spriteBatch.Draw(texture, pos, null, Color.White * mult * mult2, 0, texture.Size() / 2, 2, effects, 0);
-                    spriteBatch.Reload(BlendState.AlphaBlend);
-                }
-            }*/ //ugly fucking clouds
-        }
+        int[] sparkVariation = new int[4];
         public override bool CheckDead()
         {
             if (NPC.life <= 0 && !ded)
@@ -196,32 +161,6 @@ namespace Regressus.NPCs.Bosses.Vagrant
             }
             return true;
         }
-        /*public override void ModifyHitByProjectile(Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
-            if (damage >= NPC.life && !ded)
-            {
-                damage = 0;
-                AIState = Death;
-                NPC.life = 1;
-                NPC.dontTakeDamage = true;
-                ded = true;
-                AITimer = AITimer2 = 0;
-                NPC.velocity = Vector2.Zero;
-            }
-        }
-        public override void ModifyHitByItem(Player player, Item item, ref int damage, ref float knockback, ref bool crit)
-        {
-            if (damage >= NPC.life && !ded)
-            {
-                damage = 0;
-                ded = true;
-                AIState = Death;
-                NPC.life = 1;
-                NPC.dontTakeDamage = true;
-                AITimer = AITimer2 = 0;
-                NPC.velocity = Vector2.Zero;
-            }
-        }*/
         bool ded;
         private const int AISlot = 0;
         private const int TimerSlot = 1;
@@ -267,7 +206,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
         int firstDir;
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            return spawnInfo.Player.ZoneOverworldHeight && spawnInfo.Player.ZonePurity && !NPC.AnyNPCs(ModContent.NPCType<VoltageVargant>()) ? 0.01f : 0;
+            return spawnInfo.Player.ZoneOverworldHeight && spawnInfo.Player.ZonePurity && !NPC.AnyNPCs(ModContent.NPCType<VoltageVagrant>()) ? 0.01f : 0;
         }
         bool yes;
         int nextAttack = Rain;
@@ -276,8 +215,68 @@ namespace Regressus.NPCs.Bosses.Vagrant
         int aa;
         bool angery;
         float alpha;
+        float lightningRot;
+        int lightningInterval;
+        float lightningAlpha;
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            /*float idk = (float)Math.Sin(Main.GlobalTimeWrappedHourly);
+            float alpha = (idk + 1) / 2;
+            float idk2 = (float)Math.Sin(-Main.GlobalTimeWrappedHourly);
+            float alpha2 = (idk2 + 1) / 2;*/
+            //Main.NewText(alpha + " and " + idk);
+            if (AIState == Rain)
+            {
+                spriteBatch.Reload(BlendState.Additive);
+                Texture2D glow = RegreUtils.GetExtraTexture("Spotlight");
+                spriteBatch.Draw(glow, NPC.Center - screenPos, null, Color.White * 0.25f, NPC.rotation, glow.Size() / 2, NPC.scale / 0.25f, SpriteEffects.None, 0);
+                spriteBatch.Reload(BlendState.AlphaBlend);
+                for (int i = 0; i < 2; i++)
+                {
+                    Texture2D a = RegreUtils.GetExtraTexture("Extras2/spark_" + sparkVariation[i]);
+                    spriteBatch.Reload(BlendState.Additive);
+                    spriteBatch.Draw(a, NPC.Center - screenPos, null, Color.White * lightningAlpha, lightningRot, a.Size() / 2, 0.35f, SpriteEffects.None, 0);
+                    spriteBatch.Draw(a, NPC.Center - screenPos, null, Color.DeepSkyBlue * lightningAlpha, lightningRot, a.Size() / 2, 0.35f, SpriteEffects.None, 0);
+                    spriteBatch.Reload(BlendState.AlphaBlend);
+                }
+            }
+            /*for (int i = 2; i < 4; i++)
+            {
+                Texture2D a = RegreUtils.GetExtraTexture("Extras2/spark_" + sparkVariation[i]);
+                spriteBatch.Reload(BlendState.Additive);
+                spriteBatch.Draw(a, NPC.Center - screenPos, null, Color.White * alpha2 * 0.5f, 0.025f * Main.GameUpdateCount, a.Size() / 2, 0.25f, SpriteEffects.None, 0);
+                spriteBatch.Draw(a, NPC.Center - screenPos, null, Color.DeepSkyBlue * alpha2 * 0.5f, 0.025f * Main.GameUpdateCount, a.Size() / 2, 0.25f, SpriteEffects.None, 0);
+                spriteBatch.Reload(BlendState.AlphaBlend);
+            }*/
+        }
+
+        void LightningStuff()
+        {
+            if (lightningAlpha > 0)
+                lightningAlpha -= 0.08f;
+            lightningInterval++;
+            if (lightningInterval >= 12)
+            {
+                lightningRot = MathHelper.ToRadians(Main.rand.Next(360));
+                lightningInterval = 0;
+                lightningAlpha = 1f;
+                //Main.NewText("help");
+                for (int i = 0; i < 2; i++)
+                {
+                    sparkVariation[i] = Main.rand.Next(4);
+                }
+            }
+        }
         public override void AI()
         {
+            if (AIState == Rain)
+            {
+                LightningStuff();
+            }
+            else
+            {
+                lightningAlpha = 0;
+            }
             if (NPC.life < NPC.lifeMax / 2 && !angery && Main.expertMode)
             {
                 AITimer = 0;

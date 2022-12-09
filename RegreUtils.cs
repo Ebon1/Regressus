@@ -273,6 +273,7 @@ namespace Regressus
         }
         public static string BuffPlaceholder = "Regressus/Buffs/Debuffs/DecryptCooldown";
         public static string Empty = "Regressus/Extras/Empty";
+        public static string Placeholder = "Regressus/Extras/Placeholder";
         public static class TRay
         {
             public static Vector2 Cast(Vector2 start, Vector2 direction, float length)
@@ -298,9 +299,9 @@ namespace Regressus
                 return (end - start).Length();
             }
         }
-        public static Texture2D GetExtraTexture(string tex, bool uh = false)
+        public static Texture2D GetExtraTexture(string tex, bool altMethod = false)
         {
-            if (uh)
+            if (altMethod)
                 return GetTextureAlt("Extras/" + tex);
             return GetTexture("Extras/" + tex);
         }

@@ -51,6 +51,7 @@ namespace Regressus.NPCs.Minibosses
             NPC.noGravity = true;
             NPC.lavaImmune = true;
             NPC.knockBackResist = 0;
+            Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/Luminary");
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -188,6 +189,7 @@ namespace Regressus.NPCs.Minibosses
             Lighting.AddLight(NPC.Center, TorchID.UltraBright);
             Player player = Main.player[NPC.target];
             NPC.TargetClosest();
+            NPC.timeLeft = 2;
             if (NPC.life < NPC.lifeMax / 2 && !phase2)
             {
                 RegreUtils.DustExplosion(NPC.Center, NPC.Size, true, Color.DeepPink);
@@ -213,29 +215,35 @@ namespace Regressus.NPCs.Minibosses
             }
             if (!hasDoneIntro)
             {
-                float progress = Utils.GetLerpValue(0, 303, AITimer2);
+                float progress = Utils.GetLerpValue(0, 200 + 8 * 60, AITimer2);
                 spawnAlpha = Math.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
             }
             else
                 spawnAlpha = 0;
             if (AIState == PreSpawn)
             {
+                NPC.boss = true;
+                Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/Luminary");
                 AITimer++;
-                AITimer2++;
+                if (AITimer >= 10 * 60)
+                    AITimer2++;
                 NPC.Center = player.Center - Vector2.UnitY * (Main.screenHeight);
-                if (AITimer >= 100)
+                if (AITimer >= 18 * 60)
                 {
+                    AITimer = 0;
                     AIState = Spawn;
                 }
             }
             else if (AIState == Spawn)
             {
-                NPC.Center = player.Center - Vector2.UnitY * (Main.screenHeight - ((AITimer - 100) * 15));
+                NPC.Center = Vector2.Lerp(NPC.Center, player.Center - Vector2.UnitY * 200, AITimer / 50);
                 AITimer++;
                 AITimer2++;
                 //if (AITimer >= 190)
                 //    alpha += 0.1f;
-                if (AITimer >= 153)
+                if (NPC.Center.Distance(player.Center - Vector2.UnitY * 200) < 5)
+                    AITimer = 50;
+                if (AITimer >= 50)
                 {
                     RegreUtils.SetBossTitle(150, "lol this doesnt even matter", Color.DeepPink, "sex penis", BossTitleStyleID.Luminary);
                     for (int i = 0; i < 15; i++)

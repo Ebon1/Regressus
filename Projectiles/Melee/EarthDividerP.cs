@@ -6,6 +6,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Regressus.Items.Weapons.Melee;
 using Terraria.GameContent;
+using System.Net;
+using System.Net.Http;
 
 namespace Regressus.Projectiles.Melee
 {

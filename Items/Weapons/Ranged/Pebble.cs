@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Regressus.NPCs.Chronolands;
 
 namespace Regressus.Items.Weapons.Ranged
 {

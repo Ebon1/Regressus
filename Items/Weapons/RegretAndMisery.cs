@@ -52,7 +52,7 @@ namespace Regressus.Items.Weapons
         };
         ParticleSystem2 sys = new();
         ParticleSystem2 sys2 = new();
-        public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        /*public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             sys.CreateParticle((part) =>
             {
@@ -115,7 +115,7 @@ namespace Regressus.Items.Weapons
             sys2.UpdateParticles();
             sys2.DrawParticles();
             return true;
-        }
+        }*/
 
         int attacks;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

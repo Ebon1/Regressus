@@ -65,18 +65,18 @@ namespace Regressus.NPCs.Bosses.Vagrant
             Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail1").Value;
             Texture2D glow = ModContent.Request<Texture2D>("Regressus/Projectiles/Minibosses/Vagrant/Hail1_Glow").Value;
             var fadeMult = 1f / NPCID.Sets.TrailCacheLength[NPC.type];
-            for (int i = 0; i < NPCID.Sets.TrailCacheLength[NPC.type]; i++)
-            {
-                spriteBatch.Draw(glow, NPC.oldPos[i] - screenPosition + new Vector2(NPC.width / 2f, NPC.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), Color.LightBlue * (1f - fadeMult * i), NPC.oldRot[i], glow.Size() / 2, NPC.scale * (NPCID.Sets.TrailCacheLength[NPC.type] - i) / NPCID.Sets.TrailCacheLength[NPC.type], NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
-            }
-
             const float TwoPi = (float)Math.PI * 2f;
             float scale = (float)Math.Sin(Main.GlobalTimeWrappedHourly * TwoPi / 2f) * 0.3f + 0.7f;
+            for (int i = 0; i < NPCID.Sets.TrailCacheLength[NPC.type]; i++)
+            {
+                spriteBatch.Draw(glow, NPC.oldPos[i] - screenPosition + new Vector2(NPC.width / 2f, NPC.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), Color.LightBlue * (1f - fadeMult * i), NPC.oldRot[i], glow.Size() / 2, scale * (NPCID.Sets.TrailCacheLength[NPC.type] - i) / NPCID.Sets.TrailCacheLength[NPC.type], NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+            }
+
             spriteBatch.Reload(BlendState.AlphaBlend);
-            spriteBatch.Draw(tex, NPC.Center - screenPosition, new Rectangle(0, 0, tex.Width, tex.Height), Color.White, NPC.rotation, tex.Size() / 2, NPC.scale, NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+            spriteBatch.Draw(tex, NPC.Center - screenPosition, new Rectangle(0, 0, tex.Width, tex.Height), Color.White, NPC.rotation, tex.Size() / 2, scale, NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
             spriteBatch.Reload(BlendState.Additive);
             for (int i = 0; i < 5; i++)
-                spriteBatch.Draw(tex, NPC.Center - screenPosition, new Rectangle(0, 0, tex.Width, tex.Height), Color.White * scale, NPC.rotation, tex.Size() / 2, NPC.scale, NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
+                spriteBatch.Draw(tex, NPC.Center - screenPosition, new Rectangle(0, 0, tex.Width, tex.Height), Color.White * scale, NPC.rotation, tex.Size() / 2, scale, NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
             spriteBatch.Reload(BlendState.AlphaBlend);
             return false;
         }
@@ -90,7 +90,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
         public override void AI()
         {
             NPC center = Main.npc[(int)NPC.ai[0]];
-            if (!center.active || center.type != ModContent.NPCType<VoltageVargant>())
+            if (!center.active || center.type != ModContent.NPCType<VoltageVagrant>())
             {
                 NPC.active = false;
             }
