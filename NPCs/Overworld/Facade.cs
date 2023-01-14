@@ -137,7 +137,7 @@ namespace Regressus.NPCs.Overworld
             {
                 AITimer++;
                 if (AITimer == 1)
-                    SoundEngine.PlaySound(SoundID.Zombie7);
+                    SoundEngine.PlaySound(SoundID.Zombie7, NPC.Center);
                 if (AITimer3 < 1f)
                     AITimer3 += 0.02f;
                 if (AITimer == 30)

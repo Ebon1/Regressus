@@ -11,6 +11,7 @@ using Regressus.Projectiles.Melee;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using System.IO;
+using Regressus.NPCs.Minibosses;
 
 namespace Regressus.Projectiles.Dev
 {
@@ -109,9 +110,97 @@ namespace Regressus.Projectiles.Dev
             }
         }
     }
-    public class EbonP2 : ModProjectile
+    public class EbonP2 : LuminaryBeamBase
     {
-        public override string Texture => "Regressus/Extras/Sprites/Exol";
+        public override string Texture => RegreUtils.Empty;
+        public override void Extra()
+        {
+            Projectile.friendly = true;
+            Projectile.hostile = false;
+            MAX_TIME = 180;
+            Projectile.timeLeft = 180;
+            Projectile.width = 200;
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Projectile.rotation += 0.3f;
+
+            RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
+            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
+            Texture2D bolt = RegreUtils.GetExtraTexture("laser");
+            Texture2D bolt1 = RegreUtils.GetExtraTexture("laser2");
+            Texture2D bolt2 = RegreUtils.GetExtraTexture("oracleBeamLight");
+
+            // make the beam slightly change scale with time
+            float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
+            // base scale for the flash so it actually connects with beam
+            float scale = Projectile.scale * 5 * mult;
+            Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Line").Value;
+            //float scale = Projectile.scale * 2 * mult;
+            BeamPacket packet = new BeamPacket();
+            packet.Pass = "Texture";
+            Vector2 start = Projectile.Center;
+            Vector2 vel = Projectile.velocity;
+            vel.Normalize();
+            Vector2 end = Projectile.Center + vel * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity,*/ Main.screenWidth;//);
+            float width = Projectile.width * Projectile.scale;
+            // offset so i can make the triangles i want to kill myself
+            Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
+
+            BeamColor = Color.White;
+            BeamPacket.SetTexture(0, bolt);
+            float off = -Main.GlobalTimeWrappedHourly % 1;
+            // draw the flame part of the beam
+            packet.Add(start + offset * 3 * mult, BeamColor, new Vector2(0 + off, 0));
+            packet.Add(start - offset * 3 * mult, BeamColor, new Vector2(0 + off, 1));
+            packet.Add(end + offset * 3 * mult, BeamColor, new Vector2(1 + off, 0));
+
+            packet.Add(start - offset * 3 * mult, BeamColor, new Vector2(0 + off, 1));
+            packet.Add(end - offset * 3 * mult, BeamColor, new Vector2(1 + off, 1));
+            packet.Add(end + offset * 3 * mult, BeamColor, new Vector2(1 + off, 0));
+            packet.Send();
+
+            BeamColor = Main.DiscoColor;
+            BeamPacket.SetTexture(0, bolt1);
+            // draw the flame part of the beam
+            packet.Add(start + offset * 3 * mult, BeamColor, new Vector2(0 + off, 0));
+            packet.Add(start - offset * 3 * mult, BeamColor, new Vector2(0 + off, 1));
+            packet.Add(end + offset * 3 * mult, BeamColor, new Vector2(1 + off, 0));
+
+            packet.Add(start - offset * 3 * mult, BeamColor, new Vector2(0 + off, 1));
+            packet.Add(end - offset * 3 * mult, BeamColor, new Vector2(1 + off, 1));
+            packet.Add(end + offset * 3 * mult, BeamColor, new Vector2(1 + off, 0));
+            packet.Send();
+
+            BeamColor = Main.DiscoColor;
+            BeamPacket packet2 = new BeamPacket();
+            packet2.Pass = "Texture";
+            BeamPacket.SetTexture(0, bolt2);
+            packet2.Add(start + offset * 2 * mult, BeamColor, new Vector2(0 + off, 0));
+            packet2.Add(start - offset * 2 * mult, BeamColor, new Vector2(0 + off, 1));
+            packet2.Add(end + offset * 2 * mult, BeamColor, new Vector2(1 + off, 0));
+
+            packet2.Add(start - offset * 2 * mult, BeamColor, new Vector2(0 + off, 1));
+            packet2.Add(end - offset * 2 * mult, BeamColor, new Vector2(1 + off, 1));
+            packet2.Add(end + offset * 2 * mult, BeamColor, new Vector2(1 + off, 0));
+            packet2.Send();
+            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);
+
+            texture = ModContent.Request<Texture2D>("Regressus/Extras/Extras2/circle_05").Value;
+
+            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Color.White, 0, new Vector2(texture.Width, texture.Height) / 2, scale * 0.9f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Main.DiscoColor, 0, new Vector2(texture.Width, texture.Height) / 2, scale, SpriteEffects.None, 0f);
+
+            texture = ModContent.Request<Texture2D>("Regressus/Extras/Extras2/circle_05").Value;
+            Main.spriteBatch.Draw(texture, end - Main.screenPosition, null, Color.White, Projectile.rotation, new Vector2(texture.Width, texture.Height) / 2, scale * 0.9f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture, end - Main.screenPosition, null, Main.DiscoColor, Projectile.rotation, new Vector2(texture.Width, texture.Height) / 2, scale, SpriteEffects.None, 0f);
+
+
+
+            RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
+
+            return false;
+        }
     }
     public class EbonP3 : ModProjectile
     {

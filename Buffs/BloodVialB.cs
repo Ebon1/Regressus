@@ -9,6 +9,11 @@ namespace Regressus.Buffs
 {
     public class BloodVialB : ModBuff
     {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Blood Vial");
+            Description.SetDefault("You are attracting dangerous mosquitoes");
+        }
         public override void Update(Player player, ref int buffIndex)
         {
             if (player.buffTime[buffIndex] % 30 == 0 && player.buffTime[buffIndex] > 5)

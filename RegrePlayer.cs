@@ -18,14 +18,15 @@ namespace Regressus
 {
     public class RegrePlayer : ModPlayer
     {
-        public int bossTextProgress, bossMaxProgress,
-            biomeTextProgress, biomeMaxProgress;
-        public string bossName, biomeName;
-        public string bossTitle, biomeTitle;
+        public static RegrePlayer instance;
+        public int bossTextProgress, bossMaxProgress/*,
+            biomeTextProgress, biomeMaxProgress*/;
+        public string bossName;//, biomeName;
+        public string bossTitle;//, biomeTitle;
         public int bossStyle;
-        public bool[] notFirstTimeEnteringBiome = new bool[17];
-        public bool[] inBiome = new bool[17];
-        public Color bossColor, biomeColor;
+        //public bool[] notFirstTimeEnteringBiome = new bool[17];
+        //public bool[] inBiome = new bool[17];
+        public Color bossColor;//, biomeColor;
         public Vector2[] oldCenter = new Vector2[950];
         public int[] oldLife = new int[950], oldDir = new int[950];
         public bool reverseTime;
@@ -53,6 +54,7 @@ namespace Regressus
         public int lastSelectedItem;
 
         public bool ShrineBiome = false;
+        public bool hasEncounteredMoth;
         public override void UpdateBadLifeRegen()
         {
             if (starshroomed)
@@ -66,6 +68,7 @@ namespace Regressus
         }
         public override void ResetEffects()
         {
+            instance = Player.GetModPlayer<RegrePlayer>();
             infectedIdol = false;
             starshroomed = false;
             reverseTime = false;
@@ -108,46 +111,49 @@ namespace Regressus
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             ModPacket packet = Mod.GetPacket();
-            for (int i = 0; i < notFirstTimeEnteringBiome.Length; i++)
+            /*for (int i = 0; i < notFirstTimeEnteringBiome.Length; i++)
             {
                 packet.Write(notFirstTimeEnteringBiome[i]);
             }
-
+            */
             for (int i = 0; i < AerialBudItem.Length; i++)
             {
                 packet.Write(AerialBudItem[i]);
                 packet.Write(AerialBudItemStack[i]);
             }
             packet.Write(AerialBudsGiven);
+            packet.Write(hasEncounteredMoth);
             packet.Write(CantEatBaguette);
 
             packet.Send(toWho, fromWho);
         }
         public override void SaveData(TagCompound tag)
         {
-            for (int i = 0; i < notFirstTimeEnteringBiome.Length; i++)
-                tag.Set("Biome" + i, notFirstTimeEnteringBiome[i]);
+            //for (int i = 0; i < notFirstTimeEnteringBiome.Length; i++)
+            //    tag.Set("Biome" + i, notFirstTimeEnteringBiome[i]);
             for (int i = 0; i < AerialBudItem.Length; i++)
             {
                 tag.Set("ItemBud" + i, AerialBudItem[i]);
                 tag.Set("StackBud" + i, AerialBudItemStack[i]);
             }
             tag.Set("Buds", AerialBudsGiven);
+            tag.Set("Moth", hasEncounteredMoth);
             tag.Set("Baguette", CantEatBaguette);
         }
         public override void LoadData(TagCompound tag)
         {
-            for (int i = 0; i < notFirstTimeEnteringBiome.Length; i++)
-                notFirstTimeEnteringBiome[i] = tag.GetBool("Biome" + i);
+            //for (int i = 0; i < notFirstTimeEnteringBiome.Length; i++)
+            //    notFirstTimeEnteringBiome[i] = tag.GetBool("Biome" + i);
             for (int i = 0; i < AerialBudItem.Length; i++)
             {
                 AerialBudItem[i] = tag.GetInt("ItemBud" + i);
                 AerialBudItemStack[i] = tag.GetInt("StackBud" + i);
             }
             AerialBudsGiven = tag.GetInt("Buds");
+            hasEncounteredMoth = tag.GetBool("Moth");
             CantEatBaguette = tag.GetBool("Baguette");
         }
-        public void BiomeCheck()
+        /*public void BiomeCheck()
         {
 
             ShrineBiome = ShrineBiomeSystem.IsInOrNearShrine(Player);
@@ -485,7 +491,7 @@ namespace Regressus
                     inBiome[16] = false;
                 }
             }
-        }
+        }*/
         float voidDelay;
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
@@ -533,7 +539,7 @@ namespace Regressus
             if (!Player.HasBuff(ModContent.BuffType<PilgrimBlindness>()))
                 if (Filters.Scene["Regressus:Blindness"].IsActive())
                     Filters.Scene["Regressus:Blindness"].Deactivate();
-            BiomeCheck();
+            //BiomeCheck();
             if (voidDelay >= 1)
             {
                 voidDelay--;
@@ -548,7 +554,7 @@ namespace Regressus
                 bossStyle = -1;
                 bossColor = Color.White;
             }
-            if (biomeTextProgress > 0)
+            /*if (biomeTextProgress > 0)
                 biomeTextProgress--;
             if (biomeTextProgress == 0)
             {
@@ -556,7 +562,7 @@ namespace Regressus
                 biomeTitle = null;
                 biomeMaxProgress = 0;
                 biomeColor = Color.White;
-            }
+            }*/
             if (!reverseTime)
             {
                 thing = 0;

@@ -56,7 +56,7 @@ namespace Regressus.Projectiles
         {
             Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/laser3").Value;
             Vector2 startPosition = Projectile.Center;
-            Vector2 endPosition = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/;
+            Vector2 endPosition = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
             float width = Projectile.width * Projectile.scale;
             // offset so i can make the triangles
             Main.spriteBatch.Reload(BlendState.Additive);

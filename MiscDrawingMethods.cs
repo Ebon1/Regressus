@@ -21,6 +21,7 @@ using Terraria.Chat;
 using Terraria.GameContent.UI.Chat;
 using System.IO;
 using Regressus.Items.Dev;
+using System.Linq.Expressions;
 
 namespace Regressus
 {
@@ -86,19 +87,24 @@ namespace Regressus
                 float alpha = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
                 string something = GetBossText();
 
+                Main.spriteBatch.Draw(TextureAssets.BlackTile.Value, new(0, (int)(-250 + (250 * alpha)), Main.screenWidth, 250), null, Color.Black, 0, Vector2.Zero, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(TextureAssets.BlackTile.Value, new(0, (int)(Main.screenHeight + 250 - (500 * alpha)), Main.screenWidth, 250), null, Color.Black, 0, Vector2.Zero, SpriteEffects.None, 0f);
+
                 //float alpha2 = MathHelper.Clamp((1f - progress) - 1 / 3, 0, 1);
                 Main.spriteBatch.Reload(BlendState.Additive);
                 Main.spriteBatch.Reload(BlendState.AlphaBlend);
                 if (player.bossTitle != null)
-                    DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.MouseText.Value, something, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(something).X / 2, Main.screenHeight * 0.225f), player.bossColor * alpha);
+                    DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.MouseText.Value, something, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(something).X / 2, Main.screenHeight * 0.175f), player.bossColor * alpha);
 
                 const float TwoPi = (float)Math.PI * 2f;
                 float scale = (float)Math.Sin(Main.GlobalTimeWrappedHourly * TwoPi / 2f) * 0.3f + 0.7f;
-                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f), player.bossColor * alpha);
-                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f) + (Vector2.UnitX * 10 * scale), player.bossColor * alpha * 0.5f * scale);
-                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f) + (Vector2.UnitX * -10 * scale), player.bossColor * alpha * 0.5f * scale);
-                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f) + (Vector2.UnitY * 10 * scale), player.bossColor * alpha * 0.5f * scale);
-                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.25f) + (Vector2.UnitY * -10 * scale), player.bossColor * alpha * 0.5f * scale);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.2f) + (Vector2.UnitX * 10 * scale), Color.White * alpha * 0.5f * scale);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.2f) + (Vector2.UnitX * -10 * scale), Color.White * alpha * 0.5f * scale);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.2f) + (Vector2.UnitY * 10 * scale), Color.White * alpha * 0.5f * scale);
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.2f) + (Vector2.UnitY * -10 * scale), Color.White * alpha * 0.5f * scale);
+
+
+                DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, FontAssets.DeathText.Value, player.bossName, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(player.bossName).X / 2, Main.screenHeight * 0.2f), player.bossColor * alpha);
             }
         }
         public static readonly BlendState Subtractive = new BlendState
@@ -176,12 +182,19 @@ namespace Regressus
         }
         public static void DrawFlawlessRarity(DrawableTooltipLine line)
         {
+            var font = FontAssets.MouseText.Value;
+
+            DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, font, line.Text, new Vector2(line.X, line.Y), line.Color * 0.5f);
+            MiscDrawingMethods.LocalDrawFlawlessRarity(line, 0.5f);
+        }
+        public static void LocalDrawFlawlessRarity(DrawableTooltipLine line, float opacity = 1)
+        {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, Regressus.CrystalShine, Main.UIScaleMatrix);
             var font = FontAssets.MouseText.Value;
             Regressus.CrystalShine.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
-            Regressus.CrystalShine.Parameters["uOpacity"].SetValue(1);
-            DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, font, line.Text, new Vector2(line.X, line.Y), Color.Gold);
+            Regressus.CrystalShine.Parameters["uOpacity"].SetValue(opacity);
+            DynamicSpriteFontExtensionMethods.DrawString(Main.spriteBatch, font, line.Text, new Vector2(line.X, line.Y), Color.White);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
         }

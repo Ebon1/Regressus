@@ -11,17 +11,23 @@ using ReLogic.Content;
 using Regressus.Dusts;
 using Regressus.Effects.Prims;
 using Terraria.ID;
+using System.Collections.Generic;
+using ReLogic.Graphics;
+using System.Linq;
+using Mono.Cecil.Cil;
 
 namespace Regressus
 {
     public class Regressus : Mod
     {
         public RenderTarget2D render, render3, render4;
+        public List<RenderTarget2D> lineRender;
+        public List<DrawableTooltipLine> lines;
         public int a;
         public static Regressus Instance;
         public static Effect BeamShader, Lens, Test1, Test2, LavaRT, Galaxy, CrystalShine, TrailShader, RTAlpha;
         public static Effect Tentacle, TentacleBlack, TentacleRT, ScreenDistort, TextGradient, TextGradient2, TextGradientY;
-        public DrawableTooltipLine[] lines = new DrawableTooltipLine[Main.maxItems];
+        /*public DrawableTooltipLine[] lines = new DrawableTooltipLine[Main.maxItems];
         public DrawableTooltipLine activeLine;
         public static void GetLine(DrawableTooltipLine line, int index)
         {
@@ -34,7 +40,7 @@ namespace Regressus
                     r.activeLine = line;
                 }
             }
-        }
+        }*/
         public override void Load()
         {
             /*Particle.Load();
@@ -145,6 +151,7 @@ namespace Regressus
         {
             GraphicsDevice gd = Main.instance.GraphicsDevice;
             SpriteBatch sb = Main.spriteBatch;
+
             #region "rt2d"
             gd.SetRenderTarget(Main.screenTargetSwap);
             gd.Clear(Color.Transparent);
@@ -161,7 +168,7 @@ namespace Regressus
                 {
                     Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_03").Value, proj.Center - Main.screenPosition, null, Color.DarkViolet, proj.rotation, ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_03").Size() / 2, new Vector2(proj.ai[1] * proj.scale, (proj.ai[0] == 1 ? 0.5f : 1) * proj.scale), SpriteEffects.None, 0f);
                 }
-                if (proj.active && proj.timeLeft > 1 && proj.type == ModContent.ProjectileType<Projectiles.TentacleRT>() || proj.type == ModContent.ProjectileType<Projectiles.SmolTentacleRT>() || proj.type == ModContent.ProjectileType<Projectiles.Oracle.OracleBeamRT>())
+                if (proj.active && proj.timeLeft > 1 && proj.type == ModContent.ProjectileType<Projectiles.TentacleRT>() || proj.type == ModContent.ProjectileType<Projectiles.SmolTentacleRT>())
                 {
                     Color color = Color.White;
                     proj.ModProjectile.PreDraw(ref color);
@@ -291,8 +298,6 @@ namespace Regressus
             ColoredFireDust.DrawAll(sb);
             sb.End();
             #endregion
-            #region "dev names"
-            #endregion
             #region "lens"
             RenderTarget2D render2 = Main.screenTargetSwap;
             foreach (Projectile proj in Main.projectile)
@@ -381,6 +386,7 @@ namespace Regressus
             sb.Draw(render3, Vector2.Zero, Color.White);
             sb.End();
             #endregion
+
             /*
 
             gd.SetRenderTarget(render4);

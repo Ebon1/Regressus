@@ -27,6 +27,10 @@ namespace Regressus.Items.Consumables
             Item.TurnToAir();
             return false;
         }
+        public override void Update(ref float gravity, ref float maxFallSpeed)
+        {
+            Lighting.AddLight(Item.Center, TorchID.Yellow);
+        }
         public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;

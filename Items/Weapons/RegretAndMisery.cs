@@ -16,14 +16,14 @@ namespace Regressus.Items.Weapons
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("RegreSUS");
-            Tooltip.SetDefault("STOP POSTING ABOUT AMONG US! I'M TIRED OF SEEING IT! MY FRIENDS ON TIKTOK SEND ME MEMES, ON DISCORD IT'S MEMES!");
+            Tooltip.SetDefault("Worth it\nSTOP POSTING ABOUT AMONG US! I'M TIRED OF SEEING IT! MY FRIENDS ON TIKTOK SEND ME MEMES, ON DISCORD IT'S MEMES!");
         }
         public override void SetDefaults()
         {
             Item.width = 20;
             Item.height = 20;
             Item.crit = 50;
-            Item.damage = 135;
+            Item.damage = 500;
             Item.useTime = 10;
             Item.useAnimation = 10;
             Item.reuseDelay = 100;

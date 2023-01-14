@@ -83,8 +83,8 @@ namespace Regressus.NPCs.Bosses.Vagrant
         public override Color? GetAlpha(Color drawColor) => Color.White;
         public override void OnKill()
         {
-            Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HailExplosion>(), 15, 1);
-            Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, RegreUtils.FromAToB(NPC.Center, Main.LocalPlayer.Center) * 5f, ModContent.ProjectileType<Hail1>(), 15, 1);
+            Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HailExplosion>(), 0, 1);
+            //Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, RegreUtils.FromAToB(NPC.Center, Main.LocalPlayer.Center) * 5f, ModContent.ProjectileType<Hail1>(), 15, 1);
         }
         int a;
         public override void AI()

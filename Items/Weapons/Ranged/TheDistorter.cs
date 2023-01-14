@@ -40,6 +40,10 @@ namespace Regressus.Items.Weapons.Ranged
             Item.shootSpeed = 20f;
             Item.shoot = ModContent.ProjectileType<Lens2>();
         }
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return false;
+        }
         int a = -1;
         Vector2 vel;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

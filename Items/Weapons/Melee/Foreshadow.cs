@@ -43,7 +43,7 @@ namespace Regressus.Items.Weapons.Melee
             Item.shoot = ModContent.ProjectileType<ForeshadowP>();
         }
         public int dir = 1, attacks = -1;
-        public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
+        /*public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
             if (line.Index == 0)
             {
@@ -59,7 +59,7 @@ namespace Regressus.Items.Weapons.Melee
                 return false;
             }
             return true;
-        }
+        }*/
         public override bool AltFunctionUse(Player player)
         {
             return true;

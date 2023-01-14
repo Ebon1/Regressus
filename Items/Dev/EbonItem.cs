@@ -77,9 +77,12 @@ namespace Regressus.Items.Dev
                     SoundEngine.PlaySound(b);
                     Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<EbonP1>(), damage, knockback, player.whoAmI);
                     break;
-                case 1: //Ebonfly
+                case 1: ///Duke rainbow
+                    SoundStyle c = new("Regressus/Sounds/Custom/DukeRainbow");
+                    SoundEngine.PlaySound(c);
+                    Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<EbonP2>(), damage, knockback, player.whoAmI);
                     break;
-                case 2: //Duke rainbow
+                case 2: //Ebonfly
                     break;
                 case 3: //djungelskog
                     break;

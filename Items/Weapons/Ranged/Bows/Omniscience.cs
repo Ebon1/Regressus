@@ -36,7 +36,7 @@ namespace Regressus.Items.Weapons.Ranged.Bows
             Item.shootSpeed = 18.5f;
             Item.shoot = ProjectileID.WoodenArrowFriendly;
         }
-        public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
+        /*public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
             if (line.Index == 0)
             {
@@ -52,7 +52,7 @@ namespace Regressus.Items.Weapons.Ranged.Bows
                 return false;
             }
             return true;
-        }
+        }*/
         public override bool CanConsumeAmmo(Item ammo, Player player)
         {
             return Main.rand.NextFloat() >= .1f;

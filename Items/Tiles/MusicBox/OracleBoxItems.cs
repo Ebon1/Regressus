@@ -48,7 +48,7 @@ namespace Regressus.Items.Tiles.MusicBox
             Item.value = 100000;
             Item.accessory = true;
         }
-        public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
+        /*public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
             if (line.Index == 0)
             {
@@ -64,7 +64,7 @@ namespace Regressus.Items.Tiles.MusicBox
                 return false;
             }
             return true;
-        }
+        }*/
         public override bool? PrefixChance(int pre, UnifiedRandom rand)
         {
             return false;
@@ -108,7 +108,7 @@ namespace Regressus.Items.Tiles.MusicBox
             Item.value = 100000;
             Item.accessory = true;
         }
-        public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
+        /*public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
             if (line.Index == 0)
             {
@@ -124,6 +124,6 @@ namespace Regressus.Items.Tiles.MusicBox
                 return false;
             }
             return true;
-        }
+        }*/
     }
 }

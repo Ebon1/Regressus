@@ -25,7 +25,7 @@ namespace Regressus.NPCs.Overworld
         {
             NPC.width = 116;
             NPC.height = 88;
-            NPC.lifeMax = 100;
+            NPC.lifeMax = 250;
             NPC.defense = 3;
             NPC.damage = 0;
             NPC.knockBackResist = 0.5f;
@@ -37,7 +37,7 @@ namespace Regressus.NPCs.Overworld
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneOverworldHeight && !Main.dayTime)
+            if (spawnInfo.Player.ZoneOverworldHeight && Main.IsItRaining && !Main.dayTime)
                 return 0.02f;
             return 0;
         }

@@ -34,7 +34,7 @@ namespace Regressus.NPCs.Overworld
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneOverworldHeight)
+            if (spawnInfo.Player.ZoneOverworldHeight && Main.hardMode)
                 return 0.015f;
             return 0;
         }
@@ -119,12 +119,12 @@ namespace Regressus.NPCs.Overworld
                 if (NPC.frame.Y == 12 * frameHeight && AITimer2 < 1)
                 {
                     AITimer2 = 1;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.direction * Vector2.UnitX, ModContent.ProjectileType<TerraKnightP>(), 0, 0, player.whoAmI, ai0: -1, ai1: NPC.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.direction * Vector2.UnitX, ModContent.ProjectileType<TerraKnightP>(), 35, 0, player.whoAmI, ai0: -1, ai1: NPC.whoAmI);
                 }
                 if (NPC.frame.Y == 17 * frameHeight && AITimer2 < 3)
                 {
                     AITimer2 = 3;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.direction * Vector2.UnitX, ModContent.ProjectileType<TerraKnightP>(), 0, 0, player.whoAmI, ai0: 1, ai1: NPC.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.direction * Vector2.UnitX, ModContent.ProjectileType<TerraKnightP>(), 35, 0, player.whoAmI, ai0: 1, ai1: NPC.whoAmI);
                 }
                 if (NPC.frameCounter >= 5)
                 {
@@ -286,7 +286,7 @@ namespace Regressus.NPCs.Overworld
                 if (idkAnymore == 1)
                 {
 
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.direction * Vector2.UnitX, ModContent.ProjectileType<TerraKnightP>(), 0, 0, player.whoAmI, ai0: 1, ai1: NPC.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.direction * Vector2.UnitX, ModContent.ProjectileType<TerraKnightP>(), 35, 0, player.whoAmI, ai0: 1, ai1: NPC.whoAmI);
                 }
                 if (NPC.ai[3] == 1)
                 {

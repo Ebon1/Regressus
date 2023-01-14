@@ -30,5 +30,9 @@ namespace Regressus.Items.Ammo
             Item.shoot = ModContent.ProjectileType<Projectiles.Ranged.ChroniteBullet>();
             Item.ammo = AmmoID.Bullet;
         }
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return false;
+        }
     }
 }

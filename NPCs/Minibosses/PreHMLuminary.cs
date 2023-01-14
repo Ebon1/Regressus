@@ -23,6 +23,7 @@ using Regressus.Buffs.Debuffs;
 using static System.Formats.Asn1.AsnWriter;
 using IL.Terraria.GameContent.Events;
 using System.IO;
+using Terraria.GameContent.UI;
 
 namespace Regressus.NPCs.Minibosses
 {
@@ -56,6 +57,7 @@ namespace Regressus.NPCs.Minibosses
         public override void OnSpawn(IEntitySource source)
         {
             Main.windSpeedTarget = 0;
+            EmoteBubble.MakeLocalPlayerEmote(EmoteID.EmotionAlert);
             Main.NewText("Something divine approaches...", new Color(118, 50, 173));
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -98,7 +100,7 @@ namespace Regressus.NPCs.Minibosses
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
                 new FlavorTextBestiaryInfoElement("These beings are made out of pure light and pieces of holy metal. While they are usually sent for minor inconveniences, they are a force to be reckoned with"),
             });
         }
@@ -106,7 +108,7 @@ namespace Regressus.NPCs.Minibosses
         {
             if (AIState != Death)
                 NPC.frameCounter++;
-            if (AIState == Idle || AIState == Spawn || AIState == Death)
+            if (AIState == Idle || AIState == Spawn || AIState == Death || NPC.IsABestiaryIconDummy)
             {
                 if (NPC.frameCounter % 5 == 0)
                 {
@@ -190,6 +192,12 @@ namespace Regressus.NPCs.Minibosses
             Player player = Main.player[NPC.target];
             NPC.TargetClosest();
             NPC.timeLeft = 2;
+            if (player.dead)
+            {
+                NPC.velocity = -Vector2.UnitY * 15;
+                if (NPC.timeLeft > 35)
+                    NPC.timeLeft = 35;
+            }
             if (NPC.life < NPC.lifeMax / 2 && !phase2)
             {
                 RegreUtils.DustExplosion(NPC.Center, NPC.Size, true, Color.DeepPink);
@@ -310,7 +318,9 @@ namespace Regressus.NPCs.Minibosses
                     Main.NewText("The divine creature has been defeated.", new Color(118, 50, 173));
                     //player.DelBuff(player.FindBuffIndex(ModContent.BuffType<PilgrimBlindness>()));
                     NPC.immortal = false;
-                    NPC.StrikeNPC(NPC.lifeMax, 0, 0, true, true);
+                    NPC.life = 0;
+                    NPC.checkDead();
+                    //NPC.StrikeNPC(NPC.lifeMax, 0, 0, true, true);
                 }
             }
             else if (AIState == Idle)
@@ -455,6 +465,7 @@ namespace Regressus.NPCs.Minibosses
                             Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<LuminaryP3>(), 0, 0, NPC.target);
                             a.ai[0] = pos.X;
                             a.ai[1] = pos.Y;
+
                             a.localAI[0] = NPC.whoAmI;
                         }
                     }
@@ -502,7 +513,7 @@ namespace Regressus.NPCs.Minibosses
             Projectile.aiStyle = 0;
             Projectile.friendly = false;
             Projectile.hostile = true;
-            Projectile.timeLeft = 200;
+            Projectile.timeLeft = 170;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
             Projectile.frame = 5;

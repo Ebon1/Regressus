@@ -21,8 +21,8 @@ namespace Regressus.NPCs.UG
         public override void SetDefaults()
         {
             NPC.CloneDefaults(ModContent.NPCType<Apparition>());
-            NPC.lifeMax = 100;
-            NPC.defense = 5;
+            NPC.lifeMax = 200;
+            NPC.defense = 20;
             NPC.Size = new Vector2(104, 86);
             NPC.dontTakeDamage = false;
             NPC.aiStyle = 0;

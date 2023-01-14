@@ -92,7 +92,7 @@ namespace Regressus
             }, InterfaceScaleType.UI));*/
             layers.Insert(textIndex2, new LegacyGameInterfaceLayer("Regressus: BiomeText", () =>
             {
-                RegreUtils.DrawBiomeTitle();
+                //RegreUtils.DrawBiomeTitle();
                 if (SamaelShopOpen)
                     Samael.DrawDialogue();
                 return true;

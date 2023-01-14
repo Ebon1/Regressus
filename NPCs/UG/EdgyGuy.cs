@@ -32,6 +32,10 @@ namespace Regressus.NPCs.UG
             NPC.noGravity = true;
             NPC.noTileCollide = true;
         }
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            return Main.hardMode && !Main.dayTime && spawnInfo.Player.ZonePurity ? 0.025f : 0;
+        }
         public override void FindFrame(int frameHeight)
         {
             height = frameHeight;

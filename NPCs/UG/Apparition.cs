@@ -25,9 +25,10 @@ namespace Regressus.NPCs.UG
                 return 0.05f;
             return 0;
         }
+        Color color = Color.Black;
         public override Color? GetAlpha(Color drawColor)
         {
-            return drawColor * (AIState == RunAway ? NPC.ai[2] : 1f);
+            return color * (AIState == RunAway ? NPC.ai[2] : 1f);
         }
         public override void SetDefaults()
         {
@@ -38,7 +39,7 @@ namespace Regressus.NPCs.UG
             NPC.damage = 0;
             NPC.noTileCollide = true;
             NPC.noGravity = true;
-            NPC.dontTakeDamage = true;
+            NPC.dontTakeDamage = false;
             NPC.lavaImmune = true;
             NPC.knockBackResist = 0;
         }
@@ -136,26 +137,64 @@ namespace Regressus.NPCs.UG
             get => NPC.ai[1];
             set => NPC.ai[1] = value;
         }
+        bool ded;
+        public virtual bool CheckTile(int i, int j)
+        {
+            if (Main.tile[i, j - 1].LiquidType == 1)
+            {
+                return false;
+            }
+            if (Main.tileSolid[Main.tile[i, j].TileType] && !Collision.SolidTiles(i - 1, i + 1, j - 4, j - 1))
+            {
+                return false;
+            }
+            NPC.Center = new(i, j);
+            return true;
+        }
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            NPC.ai[2] = 1;
+        }
+        public override bool CheckDead()
+        {
+            if (NPC.life <= 0 && !ded)
+            {
+                NPC.life = 1;
+                AIState = RunAway;
+                NPC.frameCounter = 0;
+                NPC.immortal = true;
+                NPC.dontTakeDamage = true;
+                ded = true;
+                AITimer = 0;
+                NPC.velocity = Vector2.Zero;
+                NPC.life = 1;
+                return false;
+            }
+            return true;
+        }
         public override void AI()
         {
             NPC.TargetClosest(false);
             Player player = Main.player[NPC.target];
             if (AIState == TP)
             {
-                AITimer++;
-                if (AITimer == 30)
-                {
-                    NPC.Center = player.Center - Vector2.UnitX * player.direction * 145;
-                }
+                if (player.Distance(NPC.Center) < 100 || AITimer > 0)
+                    AITimer++;
+                color = Color.Lerp(Color.Black, Color.White, AITimer / 100);
+                //if (AITimer == 30)
+                //{
+                //    NPC.Center = player.Center - Vector2.UnitX * player.direction * 145;
+                //}
                 if (AITimer >= 100)
                 {
                     AITimer = 0;
-                    if (player.direction != NPC.direction)
+                    /*if (player.direction != NPC.direction)
                     {
                         AIState = RunAway;
                         NPC.ai[2] = 1;
                     }
-                    else
+                    else*/
                     {
                         NPC.frameCounter = 0;
                         AIState = Screech;
@@ -165,6 +204,7 @@ namespace Regressus.NPCs.UG
             else if (AIState == Screech)
             {
                 AITimer++;
+                color = Color.Lerp(Color.White, Color.Black, AITimer / 60);
                 NPC.ai[3] += 0.06f;
                 if (NPC.ai[3] > 1.2f)
                 {
@@ -174,14 +214,17 @@ namespace Regressus.NPCs.UG
                 {
                     RegreSystem.ScreenShakeAmount = 10f;
                     Terraria.Audio.SoundStyle ae = new Terraria.Audio.SoundStyle("Regressus/Sounds/Custom/GhostScream");
+                    ae.PitchVariance = 0.2f;
                     Terraria.Audio.SoundEngine.PlaySound(ae);
                 }
                 if (AITimer == 30)
                 {
-                    player.Hurt(Terraria.DataStructures.PlayerDeathReason.ByCustomReason(player.name + " was consumed by the banshee!"), 20, 0);
+                    if (player.Distance(NPC.Center) < 100)
+                        player.Hurt(Terraria.DataStructures.PlayerDeathReason.ByCustomReason(player.name + " was consumed by the banshee!"), 20, 0);
                 }
                 if (AITimer >= 60)
                 {
+                    NPC.Center = Main.rand.NextVector2FromRectangle(new Rectangle((int)Main.screenPosition.X, (int)Main.screenPosition.Y, Main.screenWidth, Main.screenHeight));
                     AITimer = 0;
                     AIState = TP;
                 }
@@ -191,7 +234,9 @@ namespace Regressus.NPCs.UG
                 NPC.ai[2] -= 0.05f;
                 if (NPC.ai[2] < 0)
                 {
-                    NPC.StrikeNPC(NPC.lifeMax * 5, 0, 0, false, true);
+                    NPC.immortal = false;
+                    NPC.life = 0;
+                    NPC.checkDead();
                 }
             }
         }

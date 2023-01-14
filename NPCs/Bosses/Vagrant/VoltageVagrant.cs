@@ -31,7 +31,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
         {
             NPC.width = 116;
             NPC.height = 114;
-            NPC.lifeMax = 3000;
+            NPC.lifeMax = 2500;
             NPC.defense = 10;
             NPC.aiStyle = 0;
             NPC.damage = 10;
@@ -189,6 +189,11 @@ namespace Regressus.NPCs.Bosses.Vagrant
             get => NPC.ai[2];
             set => NPC.ai[2] = value;
         }
+        public float AITimer3
+        {
+            get => NPC.ai[3];
+            set => NPC.ai[3] = value;
+        }
         bool stunned;
         public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
         {
@@ -210,7 +215,8 @@ namespace Regressus.NPCs.Bosses.Vagrant
         }
         bool yes;
         int nextAttack = Rain;
-        Vector2[] random = new Vector2[8]; //up to 3 = first lightning attack, 4 to 8 = second lightning attack
+        Vector2[] random = new Vector2[11];
+        Vector2[] random2 = new Vector2[11]; //up to 3 = first lightning attack, 4 to 8 = second lightning attack 9 to 11 = hail
         Vector2 arena;
         int aa;
         bool angery;
@@ -225,7 +231,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
             float idk2 = (float)Math.Sin(-Main.GlobalTimeWrappedHourly);
             float alpha2 = (idk2 + 1) / 2;*/
             //Main.NewText(alpha + " and " + idk);
-            if (AIState == Rain)
+            if (AIState == Rain || AIState == Angry)
             {
                 spriteBatch.Reload(BlendState.Additive);
                 Texture2D glow = RegreUtils.GetExtraTexture("Spotlight");
@@ -269,7 +275,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
         }
         public override void AI()
         {
-            if (AIState == Rain)
+            if (AIState == Rain || AIState == Angry)
             {
                 LightningStuff();
             }
@@ -277,7 +283,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
             {
                 lightningAlpha = 0;
             }
-            if (NPC.life < NPC.lifeMax / 2 && !angery && Main.expertMode)
+            if (NPC.life < (NPC.lifeMax / 2) + NPC.lifeMax / 5 && !angery && Main.expertMode)
             {
                 AITimer = 0;
                 AITimer2 = 0;
@@ -331,7 +337,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
             }
             if (AIState == PreProvokation)
             {
-                NPC.Center = Vector2.Lerp(NPC.Center, player.Center, 0.0005f);
+                NPC.Center = Vector2.Lerp(NPC.Center, player.Center, 0.0025f);
                 if (NPC.life < NPC.lifeMax)
                 {
                     Main.StartRain();
@@ -354,6 +360,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
                     Main._shouldUseStormMusic = true;
                     Main.windSpeedTarget = 1f;
                     RegreSystem.ScreenShakeAmount = 20f;
+                    Main.NewLightning();
                     RegreUtils.SetBossTitle(160, "Voltage Vagrant", Color.White, "Bringer of Storms", BossTitleStyleID.Vagrant);
                     RegreSystem.ChangeCameraPos(NPC.Center, 160);
                     Terraria.Audio.SoundEngine.PlaySound(SoundID.DD2_LightningBugDeath);
@@ -372,7 +379,6 @@ namespace Regressus.NPCs.Bosses.Vagrant
                 SoundStyle a = SoundID.NPCHit1;
                 a.Volume = 0;
                 NPC.HitSound = a; Dust dust;
-                // You need to set position depending on what you are doing. You may need to subtract width/2 and height/2 as well to center the spawn rectangle.
                 Vector2 position = NPC.Center;
                 dust = Main.dust[Terraria.Dust.NewDust(position, NPC.width / 2, NPC.height / 2, ModContent.DustType<Dusts.MothDust>(), 0f, 1f, 0, new Color(255, 255, 255), 1.2790698f)];
 
@@ -420,8 +426,11 @@ namespace Regressus.NPCs.Bosses.Vagrant
                 NPC.frameCounter++;
                 AITimer++;
                 if (AITimer == 1)
+                {
+                    RegreSystem.ChangeCameraPos(NPC.Center, 70);
                     Terraria.Audio.SoundEngine.PlaySound(SoundID.DD2_LightningBugDeath);
-                if (AITimer > 50)
+                }
+                if (AITimer > 100)
                 {
                     AITimer2++;
                     if (AITimer2 == 5)
@@ -445,10 +454,10 @@ namespace Regressus.NPCs.Bosses.Vagrant
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), random[3], Vector2.Zero, ModContent.ProjectileType<Lightning>(), 15, 0);
                     }
                 }
-                if (AITimer >= 230)
+                if (AITimer >= 330)
                 {
                     AIState = Idle;
-                    nextAttack = Rain;
+                    nextAttack = Thunderbolts2;
                     AITimer = 0;
                     AITimer2 = 0;
                 }
@@ -457,7 +466,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
             {
                 AITimer++;
                 NPC.Center = Vector2.Lerp(NPC.Center, player.Center, 0.015f);
-                if (AITimer >= 180)
+                if (AITimer >= 180 - (angery ? 100 : 0))
                 {
                     AIState = nextAttack;
                     AITimer = 0;
@@ -470,8 +479,19 @@ namespace Regressus.NPCs.Bosses.Vagrant
                     alpha += 0.05f;
                 if (!NPC.AnyNPCs(ModContent.NPCType<OrbitingHail>()))
                     AITimer++;
-
-                NPC.Center = Vector2.Lerp(NPC.Center, player.Center - Vector2.UnitY * 200, 0.035f);
+                /*if (angery)
+                    AITimer3++;
+                if (AITimer3 == 30)
+                {
+                    random[9] = new Vector2(player.Center.X + Main.rand.NextFloat(-250, 250), player.Center.Y);
+                    RegreUtils.SpawnTelegraphLine(random[9], NPC.InheritSource(NPC), 20);
+                }
+                if (AITimer3 >= 60)
+                {
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), random[9], Vector2.Zero, ModContent.ProjectileType<Lightning>(), 15, 0);
+                    AITimer3 = 0;
+                }*/
+                NPC.Center = Vector2.Lerp(NPC.Center, player.Center - Vector2.UnitY * 200, 0.045f);
                 NPC.dontTakeDamage = NPC.AnyNPCs(ModContent.NPCType<OrbitingHail>());
                 if (AITimer == 1)
                 {
@@ -491,10 +511,10 @@ namespace Regressus.NPCs.Bosses.Vagrant
                     AITimer2 = -40;
                 if (AITimer2 == 20)
                 {
-                    for (int i = 0; i < 2; i++)
+                    for (int i = 0; i < 4; i++)
                     {
-                        Vector2 randomVel = new(Main.rand.NextFloat(-10f, 10f), -7.5f);
-                        Vector2 randomVel2 = new(Main.rand.NextFloat(-10f, 10f), -7.5f);
+                        Vector2 randomVel = new(Main.rand.NextFloat(-15f, 15f), -7.5f);
+                        Vector2 randomVel2 = new(Main.rand.NextFloat(-15f, 15f), -7.5f);
                         Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, randomVel, ModContent.ProjectileType<Hail2>(), 10, 0, player.whoAmI);
                         Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, randomVel2, ModContent.ProjectileType<Hail3>(), 15, 0, player.whoAmI);
                         proj.aiStyle = proj2.aiStyle = 2;
@@ -542,7 +562,15 @@ namespace Regressus.NPCs.Bosses.Vagrant
                 {
                     NPC.ai[3] = -1;
                 }
-                if (AITimer < 100 || (AITimer > 150 && AITimer < 200))
+                else if (AITimer == 201 + (angery ? 1 : 0))
+                {
+                    NPC.ai[3] = 1;
+                }
+                else if (AITimer == 301 + (angery ? 1 : 0))
+                {
+                    NPC.ai[3] = -1;
+                }
+                if (AITimer < 100 || (AITimer > 140 && AITimer < 200) || (AITimer > 250 && AITimer < 300) || (AITimer > 360 && AITimer < 400))
                 {
                     NPC.damage = 0;
                     NPC.velocity = Vector2.Zero;
@@ -568,11 +596,11 @@ namespace Regressus.NPCs.Bosses.Vagrant
                                 break;
                         }
                         Vector2 random = new Vector2(Main.screenPosition.X + Main.screenWidth * Main.rand.NextFloat(), Main.screenPosition.Y);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), random, new Vector2(Main.windSpeedCurrent * 2, 5), rain, 10, 0, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), random, new Vector2(Main.windSpeedCurrent * 2, 4), rain, 10, 0, Main.myPlayer);
                     }
                 }
 
-                if ((AITimer == 100 || AITimer == 200) && !stunned)
+                if ((AITimer == 130 || AITimer == 240 || AITimer == 350 || AITimer == 460) && !stunned)
                 {
                     NPC.rotation = 0;
                     Terraria.Audio.SoundEngine.PlaySound(SoundID.ForceRoar);
@@ -581,10 +609,11 @@ namespace Regressus.NPCs.Bosses.Vagrant
                     Vector2 vector9 = new Vector2(NPC.position.X + (NPC.width * 0.5f), NPC.position.Y + (NPC.height * 0.5f));
 
                     float rotation2 = (float)Math.Atan2((vector9.Y) - (player.Center.Y), (vector9.X) - (player.Center.X));
-                    NPC.velocity.X = (float)(Math.Cos(rotation2) * 65) * -1;
+                    NPC.velocity.X = (float)(Math.Cos(rotation2) * 55) * -1;
+                    //NPC.velocity.Y = (float)(Math.Sin(rotation2) * 65) * -1;
                     //NPC.velocity += new Vector2(40 * (NPC.direction), 0);
                 }
-                if (AITimer >= 240)
+                if (AITimer >= 240 + (angery ? 250 : 0))
                 {
                     stunned = false;
                     NPC.damage = 10;
@@ -608,26 +637,26 @@ namespace Regressus.NPCs.Bosses.Vagrant
                     AITimer2++;
                     if (AITimer2 == 10)
                     {
-                        random[3] = player.Center;
-                        for (int i = 0; i < 3; i++)
+                        random2[10] = player.Center;
+                        for (int i = 0; i < 4 + (angery ? 2 : 0); i++)
                         {
-                            random[i] = new Vector2(Main.screenPosition.X + Main.screenWidth * Main.rand.NextFloat(), player.Center.Y);
-                            RegreUtils.SpawnTelegraphLine(random[i], NPC.GetSource_FromAI());
+                            random2[i] = new Vector2(Main.screenPosition.X + Main.screenWidth * Main.rand.NextFloat(), player.Center.Y);
+                            RegreUtils.SpawnTelegraphLine(random2[i], NPC.GetSource_FromAI());
                         }
-                        RegreUtils.SpawnTelegraphLine(random[3], NPC.GetSource_FromAI());
+                        RegreUtils.SpawnTelegraphLine(random2[10], NPC.GetSource_FromAI());
                     }
                     if (AITimer2 == (angery ? 45 : 60))
                     {
                         RegreSystem.ScreenShakeAmount = 5f;
                         AITimer2 = 0;
-                        for (int i = 0; i < 3; i++)
+                        for (int i = 0; i < 4 + (angery ? 2 : 0); i++)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), random[i], Vector2.Zero, ModContent.ProjectileType<Lightning>(), 15, 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), random2[i], Vector2.Zero, ModContent.ProjectileType<Lightning>(), 15, 0);
                         }
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), random[3], Vector2.Zero, ModContent.ProjectileType<Lightning>(), 15, 0);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), random2[10], Vector2.Zero, ModContent.ProjectileType<Lightning>(), 15, 0);
                     }
                 }
-                if (AITimer >= 290)
+                if (AITimer >= 290 - (angery ? 10 : 0))
                 {
                     AIState = Idle;
                     nextAttack = Hail2;
@@ -638,20 +667,22 @@ namespace Regressus.NPCs.Bosses.Vagrant
             else if (AIState == Hail2)
             {
                 AITimer++;
-                if (++AITimer2 >= 100)
+                if (++AITimer2 >= 100 && AITimer < 300)
                 {
                     for (int i = 0; i < 7; i++)
                     {
                         float angle = 2f * (float)Math.PI / 7f * i;
                         Vector2 pos = new Vector2(NPC.Center.X + (float)Math.Cos(angle) * 100, NPC.Center.Y + (float)Math.Sin(angle) * 100);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, Vector2.Zero, ModContent.ProjectileType<OrbitingHailP>(), 15, 0, player.whoAmI, 0, angle);
+                        Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), pos, Vector2.Zero, ModContent.ProjectileType<OrbitingHailP>(), 15, 0, player.whoAmI, 0, angle);
+                        a.ai[0] = (i + 1) * 20;
+                        a.ai[1] = angle;
                     }
                     Terraria.Audio.SoundEngine.PlaySound(SoundID.DD2_LightningBugDeath);
                     AITimer2 = 0;
                 }
 
 
-                if (AITimer >= 200)
+                if (AITimer >= (angery ? 400 : 290))
                 {
                     AIState = Idle;
                     if (angery)
@@ -673,7 +704,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
                 }
                 if (AITimer >= 50)
                 {
-                    if (++AITimer2 >= 5)
+                    if (++AITimer2 >= (angery ? 8 : 10))
                     {
                         AITimer2 = 0;
                         int rain = 0;
@@ -689,8 +720,8 @@ namespace Regressus.NPCs.Bosses.Vagrant
                                 rain = ModContent.ProjectileType<Hail3>();
                                 break;
                         }
-                        Vector2 random = new Vector2(Main.screenPosition.X + Main.screenWidth * Main.rand.NextFloat(), Main.screenPosition.Y);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), random, new Vector2(0, 7), rain, 10, 0, Main.myPlayer);
+                        Vector2 random = new Vector2(Main.screenPosition.X + Main.screenWidth * Main.rand.NextFloat(), Main.screenPosition.Y - 300);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), random, new Vector2(0, 10), rain, 10, 0, Main.myPlayer);
                     }
                     if (AITimer == 50 || AITimer == 100 || AITimer == 150 || AITimer == 200 || AITimer == 250)
                     {
@@ -708,7 +739,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
                     }
                 }
 
-                if (AITimer >= 275)
+                if (AITimer >= 375)
                 {
                     AIState = Idle;
                     nextAttack = Rain;
