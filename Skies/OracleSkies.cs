@@ -118,16 +118,6 @@ namespace Regressus.Skies
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D vignette1 = ModContent.Request<Texture2D>("Regressus/Extras/Vignette_big").Value;
             spriteBatch.Draw(vignette1, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.DarkViolet * intensity);
-            Texture2D a = ModContent.Request<Texture2D>("Regressus/Extras/Empty").Value;
-            Effect effect = Regressus.ScreenDistort;
-            effect.Parameters["screenPosition"].SetValue(Main.screenPosition);
-            effect.Parameters["noiseTex"].SetValue(ModContent.Request<Texture2D>("Regressus/Extras/seamlessNoise").Value);
-            effect.Parameters["distortionMultiplier"].SetValue(0.75f * intensity);
-            effect.Parameters["screenSize"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) * -15f);
-            effect.Parameters["alpha"].SetValue(intensity);
-            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
-            effect.CurrentTechnique.Passes[0].Apply();
-            Main.spriteBatch.Draw(a, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White * intensity);
             Main.spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
         }
@@ -139,7 +129,7 @@ namespace Regressus.Skies
         public override void Activate(Vector2 position, params object[] args)
         {
             isActive = true;
-            int num = 10;
+            /*int num = 10;
             int num2 = 10;
             _stars = new Star[num * num2];
             int num3 = 0;
@@ -158,7 +148,7 @@ namespace Regressus.Skies
                     num3++;
                 }
             }
-            Array.Sort(_stars, SortMethod);
+            Array.Sort(_stars, SortMethod);*/
         }
         private int SortMethod(Star meteor1, Star meteor2)
         {
@@ -257,14 +247,14 @@ namespace Regressus.Skies
         public override void Activate(Vector2 position, params object[] args)
         {
             isActive = true;
-            _pillars = new LightPillar[40];
+            /*_pillars = new LightPillar[40];
             for (int i = 0; i < _pillars.Length; i++)
             {
                 _pillars[i].Position.X = (float)i / (float)_pillars.Length * ((float)Main.maxTilesX * 16f + 20000f) + Main.rand.NextFloat() * 40f - 20f - 20000f;
                 _pillars[i].Position.Y = Main.rand.NextFloat() * 200f - 2000f;
                 _pillars[i].Depth = Main.rand.NextFloat() * 8f + 7f;
             }
-            Array.Sort(_pillars, SortMethod);
+            Array.Sort(_pillars, SortMethod);*/
         }
         private int SortMethod(LightPillar pillar1, LightPillar pillar2)
         {

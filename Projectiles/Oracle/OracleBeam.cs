@@ -86,15 +86,19 @@ namespace Regressus.Projectiles.Oracle
             Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Line").Value;
             //Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), 0, new Vector2(texture.Width, texture.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
             rotation += MathHelper.ToRadians(1 * Projectile.ai[1]);
-            Texture2D rune1 = ModContent.Request<Texture2D>("Regressus/Extras/rune1").Value;
-            Texture2D rune2 = ModContent.Request<Texture2D>("Regressus/Extras/rune2").Value;
-            Texture2D rune3 = ModContent.Request<Texture2D>("Regressus/Extras/rune3").Value;
-            Texture2D rune4 = ModContent.Request<Texture2D>("Regressus/Extras/rune4").Value;
-            Main.spriteBatch.Draw(rune1, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), -rotation, new Vector2(rune1.Width, rune1.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(rune2, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), rotation, new Vector2(rune2.Width, rune2.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(rune3, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), -rotation, new Vector2(rune3.Width, rune3.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(rune4, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), rotation, new Vector2(rune4.Width, rune4.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
-
+            if (Main.frameRate > 25)
+            {
+                Texture2D rune1 = ModContent.Request<Texture2D>("Regressus/Extras/rune1").Value;
+                Texture2D rune2 = ModContent.Request<Texture2D>("Regressus/Extras/rune2").Value;
+                Texture2D rune3 = ModContent.Request<Texture2D>("Regressus/Extras/rune3").Value;
+                Texture2D rune4 = ModContent.Request<Texture2D>("Regressus/Extras/rune4").Value;
+                Main.spriteBatch.Draw(rune1, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), -rotation, new Vector2(rune1.Width, rune1.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(rune2, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), rotation, new Vector2(rune2.Width, rune2.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(rune3, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), -rotation, new Vector2(rune3.Width, rune3.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(rune4, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), rotation, new Vector2(rune4.Width, rune4.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
+            }
+            else
+                Main.NewText("get a better computer nerd", Color.Orange);
             //float scale = Projectile.scale * 2 * mult;
             RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
             BeamPacket packet = new BeamPacket();

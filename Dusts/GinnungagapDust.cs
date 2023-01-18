@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Regressus.Dusts
@@ -36,7 +38,9 @@ namespace Regressus.Dusts
                 if (d.type == ModContent.DustType<GinnungagapDust>() && d.active)
                 {
                     Texture2D tex = ModContent.Request<Texture2D>("Regressus/Dusts/GinnungagapDust").Value;
-                    sb.Draw(tex, d.position - Main.screenPosition, null, Color.White * 0.5f, 0, tex.Size() / 2, d.scale, SpriteEffects.None, 0);
+                    DrawData a = new(tex, d.position - Main.screenPosition, null, Color.White * 0.5f, 0, tex.Size() / 2, d.scale, SpriteEffects.None, 0);
+
+                    MiscDrawingMethods.DrawWithDye(sb, a, 3024, null);
                 }
             }
         }

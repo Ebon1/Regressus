@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+﻿/*using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Terraria.Graphics.Shaders;
 using Terraria;
@@ -38,4 +38,4 @@ namespace Regressus.Effects.Prims
             return MathHelper.Lerp(0f, 50, num);
         }
     }
-}
+}*/

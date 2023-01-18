@@ -22,6 +22,7 @@ using Terraria.GameContent.UI.Chat;
 using System.IO;
 using Regressus.Items.Dev;
 using System.Linq.Expressions;
+using Terraria.Graphics.Shaders;
 
 namespace Regressus
 {
@@ -125,7 +126,16 @@ namespace Regressus
             ColorBlendFunction = BlendFunction.ReverseSubtract,
             AlphaBlendFunction = BlendFunction.ReverseSubtract
         };
-
+        public static void DrawWithDye(SpriteBatch spriteBatch, DrawData data, int dye, Entity entity, bool Additive = false)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, Additive ? BlendState.Additive : BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+            //DrawData a = new(tex, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, tex.Size() / 2, 1, SpriteEffects.None, 0);
+            GameShaders.Armor.GetShaderFromItemId(dye).Apply(entity, data);
+            data.Draw(Main.spriteBatch);
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+        }
         public static void DrawDevName(DrawableTooltipLine line, ParticleSystem sys)
         {
             Color currentColor = Main.hslToRgb((float)Math.Sin(Main.GlobalTimeWrappedHourly) / 2 + 0.5f, 1f, 0.5f);

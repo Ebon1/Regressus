@@ -45,7 +45,7 @@ namespace Regressus
             this.wrappedString = RegreUtils.WrapText(font, this.text, this.rect.Width);
         }
     }
-    public class BiomeID
+    /*public class BiomeID
     {
         public static readonly int Forest = 0;
         public static readonly int Jungle = 1;
@@ -64,7 +64,7 @@ namespace Regressus
         public static readonly int Space = 14;
         public static readonly int Meteorite = 15;
         public static readonly int Hell = 16;
-    }
+    }*/
 
     public static class RegreUtils
     {
@@ -337,11 +337,11 @@ namespace Regressus
         {
             return new Vector4(color.X / 255f, color.Y / 255f, color.Z / 255f, 1);
         }
-        public static Player[] activePlayers = new Player[Main.maxPlayers];
-        public static Player GetRandomPlayer()
-        {
-            return Main.player[Main.rand.Next(activePlayers.Length)];
-        }
+        //public static Player[] activePlayers = new Player[Main.maxPlayers];
+        //public static Player GetRandomPlayer()
+        //{
+        //   return Main.player[Main.rand.Next(activePlayers.Length)];
+        //}
         public static SpriteSortMode previousSortMode;
         public static BlendState previousBlendState;
         public static SamplerState previousSamplerState;

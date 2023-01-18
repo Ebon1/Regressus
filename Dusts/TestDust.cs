@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Regressus.Dusts
@@ -36,7 +38,9 @@ namespace Regressus.Dusts
                 if (d.type == ModContent.DustType<TestDust>() && d.active)
                 {
                     Texture2D tex = ModContent.Request<Texture2D>("Regressus/Dusts/TestDust").Value;
-                    sb.Draw(tex, d.position - Main.screenPosition, null, Color.White, 0, tex.Size() / 2, d.scale, SpriteEffects.None, 0);
+
+                    DrawData a = new(tex, d.position - Main.screenPosition, null, Color.White, 0, tex.Size() / 2, d.scale, SpriteEffects.None, 0);
+                    MiscDrawingMethods.DrawWithDye(sb, a, ItemID.TwilightDye, null, true);
                 }
             }
         }

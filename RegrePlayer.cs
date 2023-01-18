@@ -53,7 +53,7 @@ namespace Regressus
         public int itemComboReset;
         public int lastSelectedItem;
 
-        public bool ShrineBiome = false;
+        //public bool ShrineBiome = false;
         public bool hasEncounteredMoth;
         public override void UpdateBadLifeRegen()
         {
@@ -73,6 +73,8 @@ namespace Regressus
             starshroomed = false;
             reverseTime = false;
             ginnungagap = false;
+            CantEatBaguette = false;
+            hasEncounteredMoth = false;
             AcornFairyPet = false;
             ginnungagapHide = false;
             bladeSummon = false;
@@ -108,7 +110,7 @@ namespace Regressus
 
             return true;
         }
-        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        /*public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             ModPacket packet = Mod.GetPacket();
             /*for (int i = 0; i < notFirstTimeEnteringBiome.Length; i++)
@@ -116,382 +118,55 @@ namespace Regressus
                 packet.Write(notFirstTimeEnteringBiome[i]);
             }
             */
-            for (int i = 0; i < AerialBudItem.Length; i++)
-            {
-                packet.Write(AerialBudItem[i]);
-                packet.Write(AerialBudItemStack[i]);
-            }
-            packet.Write(AerialBudsGiven);
-            packet.Write(hasEncounteredMoth);
-            packet.Write(CantEatBaguette);
+        /* for (int i = 0; i < AerialBudItem.Length; i++)
+         {
+             packet.Write(AerialBudItem[i]);
+             packet.Write(AerialBudItemStack[i]);
+         }
+         packet.Write(AerialBudsGiven);
+         packet.Write(hasEncounteredMoth);
+         packet.Write(CantEatBaguette);*/
 
-            packet.Send(toWho, fromWho);
-        }
+
+        /*packet.Send(toWho, fromWho);
+    }*/
         public override void SaveData(TagCompound tag)
         {
             //for (int i = 0; i < notFirstTimeEnteringBiome.Length; i++)
             //    tag.Set("Biome" + i, notFirstTimeEnteringBiome[i]);
-            for (int i = 0; i < AerialBudItem.Length; i++)
+            var boolList = tag.GetList<string>("boolList");
+            /*for (int i = 0; i < AerialBudItem.Length; i++)
             {
                 tag.Set("ItemBud" + i, AerialBudItem[i]);
                 tag.Set("StackBud" + i, AerialBudItemStack[i]);
             }
-            tag.Set("Buds", AerialBudsGiven);
-            tag.Set("Moth", hasEncounteredMoth);
-            tag.Set("Baguette", CantEatBaguette);
+            tag.Set("Buds", AerialBudsGiven);*/
+            //tag.Set("Moth", hasEncounteredMoth);
+            //tag.Set("Baguette", CantEatBaguette);
+
+            if (hasEncounteredMoth)
+                boolList.Add("Moth");
+            if (CantEatBaguette)
+                boolList.Add("Baguette");
+            tag["boolList"] = boolList;
         }
         public override void LoadData(TagCompound tag)
         {
             //for (int i = 0; i < notFirstTimeEnteringBiome.Length; i++)
             //    notFirstTimeEnteringBiome[i] = tag.GetBool("Biome" + i);
-            for (int i = 0; i < AerialBudItem.Length; i++)
+            /*for (int i = 0; i < AerialBudItem.Length; i++)
             {
                 AerialBudItem[i] = tag.GetInt("ItemBud" + i);
                 AerialBudItemStack[i] = tag.GetInt("StackBud" + i);
             }
-            AerialBudsGiven = tag.GetInt("Buds");
-            hasEncounteredMoth = tag.GetBool("Moth");
-            CantEatBaguette = tag.GetBool("Baguette");
+            AerialBudsGiven = tag.GetInt("Buds");*/
+            //hasEncounteredMoth = tag.GetBool("Moth");
+            //CantEatBaguette = tag.GetBool("Baguette");
+
+            var boolList = tag.GetList<string>("boolList");
+            CantEatBaguette = boolList.Contains("Baguette");
+            hasEncounteredMoth = boolList.Contains("Moth");
         }
-        /*public void BiomeCheck()
-        {
-
-            ShrineBiome = ShrineBiomeSystem.IsInOrNearShrine(Player);
-
-            //RegreUtils.SetBiomeTitle("The Chronolands", Color.SlateGray, "End of Time", 0);
-            if (!inBiome[0])
-            {
-                if (Player.ZoneForest)
-                {
-                    RegreUtils.SetBiomeTitle("The Forest", Color.LightGreen, "Tranquil Grove", 0);
-                    if (!notFirstTimeEnteringBiome[0])
-                    {
-                        notFirstTimeEnteringBiome[0] = true;
-                    }
-                    inBiome[0] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneForest)
-                {
-                    inBiome[0] = false;
-                }
-            }
-
-
-            if (!inBiome[1])
-            {
-                if (Player.ZoneJungle)
-                {
-                    RegreUtils.SetBiomeTitle("The Jungle", Color.DarkOliveGreen, "Equatorial Lumber", 1);
-                    if (!notFirstTimeEnteringBiome[1])
-                    {
-                        notFirstTimeEnteringBiome[1] = true;
-                    }
-                    inBiome[1] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneJungle)
-                {
-                    inBiome[1] = false;
-                }
-            }
-
-
-            if (!inBiome[2])
-            {
-                if (Player.ZoneCrimson || Player.ZoneCorrupt)
-                {
-                    RegreUtils.SetBiomeTitle(Player.ZoneCrimson ? "The Crimson" : "The Corruption", Player.ZoneCrimson ? Color.DarkRed : Color.MediumPurple, "Infestation", 2);
-                    if (!notFirstTimeEnteringBiome[2])
-                    {
-                        notFirstTimeEnteringBiome[2] = true;
-                    }
-                    inBiome[2] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneCrimson && !Player.ZoneCorrupt)
-                {
-                    inBiome[2] = false;
-                }
-            }
-
-
-            if (!inBiome[3])
-            {
-                if (Player.ZoneHallow)
-                {
-                    RegreUtils.SetBiomeTitle("The Hallow", Color.Pink, "Ethereal Wilds", 3);
-                    if (!notFirstTimeEnteringBiome[3])
-                    {
-                        notFirstTimeEnteringBiome[3] = true;
-                    }
-                    inBiome[3] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneHallow)
-                {
-                    inBiome[3] = false;
-                }
-            }
-
-
-            if (!inBiome[4])
-            {
-                if (Player.ZoneGlowshroom)
-                {
-                    RegreUtils.SetBiomeTitle("Glowing Mushroom", Color.DarkBlue, "Glinting Haven", 4);
-                    if (!notFirstTimeEnteringBiome[4])
-                    {
-                        notFirstTimeEnteringBiome[4] = true;
-                    }
-                    inBiome[4] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneGlowshroom)
-                {
-                    inBiome[4] = false;
-                }
-            }
-
-
-            if (!inBiome[5])
-            {
-                if (Player.ZoneNormalUnderground)
-                {
-                    RegreUtils.SetBiomeTitle("The Caves", Color.SaddleBrown, "Afflicted Depths", 5);
-                    if (!notFirstTimeEnteringBiome[5])
-                    {
-                        notFirstTimeEnteringBiome[5] = true;
-                    }
-                    inBiome[5] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneNormalUnderground)
-                {
-                    inBiome[5] = false;
-                }
-            }
-
-
-            if (!inBiome[6])
-            {
-                if (Player.ZoneDungeon)
-                {
-                    RegreUtils.SetBiomeTitle("The Dungeon", Color.DarkGray, "Forgotten Tomb", 6);
-                    if (!notFirstTimeEnteringBiome[6])
-                    {
-                        notFirstTimeEnteringBiome[6] = true;
-                    }
-                    inBiome[6] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneDungeon)
-                {
-                    inBiome[6] = false;
-                }
-            }
-
-
-            if (!inBiome[7])
-            {
-                if (Player.ZoneDesert)
-                {
-                    RegreUtils.SetBiomeTitle("The Desert", Color.Beige, "Scorched Wasteland", 7);
-                    if (!notFirstTimeEnteringBiome[7])
-                    {
-                        notFirstTimeEnteringBiome[7] = true;
-                    }
-                    inBiome[7] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneDesert)
-                {
-                    inBiome[7] = false;
-                }
-            }
-
-
-            if (!inBiome[8])
-            {
-                if (Player.ZoneSnow)
-                {
-                    RegreUtils.SetBiomeTitle("The Tundra", Color.LightCyan, "Frozen Barrens", 8);
-                    if (!notFirstTimeEnteringBiome[8])
-                    {
-                        notFirstTimeEnteringBiome[8] = true;
-                    }
-                    inBiome[8] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneSnow)
-                {
-                    inBiome[8] = false;
-                }
-            }
-
-
-            if (!inBiome[9])
-            {
-                if (Player.ZoneBeach)
-                {
-                    RegreUtils.SetBiomeTitle("The Ocean", Color.LightSkyBlue, "Grand Blue", 9);
-                    if (!notFirstTimeEnteringBiome[9])
-                    {
-                        notFirstTimeEnteringBiome[9] = true;
-                    }
-                    inBiome[9] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneBeach)
-                {
-                    inBiome[9] = false;
-                }
-            }
-
-
-            if (!inBiome[10])
-            {
-                if (Player.ZoneGranite)
-                {
-                    RegreUtils.SetBiomeTitle("Granite", Color.DarkSlateBlue, "Crackling Geode", 10);
-                    if (!notFirstTimeEnteringBiome[10])
-                    {
-                        notFirstTimeEnteringBiome[10] = true;
-                    }
-                    inBiome[10] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneGranite)
-                {
-                    inBiome[10] = false;
-                }
-            }
-
-
-            if (!inBiome[11])
-            {
-                if (Player.ZoneMarble)
-                {
-                    RegreUtils.SetBiomeTitle("Marble", Color.GhostWhite, "Haunted Corridors", 11);
-                    if (!notFirstTimeEnteringBiome[11])
-                    {
-                        notFirstTimeEnteringBiome[11] = true;
-                    }
-                    inBiome[11] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneMarble)
-                {
-                    inBiome[11] = false;
-                }
-            }
-
-
-            if (!inBiome[12])
-            {
-                if (RegreSystem.TempleBricks > 30)
-                {
-                    RegreUtils.SetBiomeTitle("The Temple", Color.Yellow, "Sunlight Monastery", 12);
-                    if (!notFirstTimeEnteringBiome[12])
-                    {
-                        notFirstTimeEnteringBiome[12] = true;
-                    }
-                    inBiome[12] = true;
-                }
-            }
-            else
-            {
-                if (RegreSystem.TempleBricks < 30)
-                {
-                    inBiome[12] = false;
-                }
-            }
-
-
-            if (!inBiome[14])
-            {
-                if (Player.ZoneNormalSpace)
-                {
-                    RegreUtils.SetBiomeTitle("Space", Color.Pink, "The Great Beyond", 14);
-                    if (!notFirstTimeEnteringBiome[14])
-                    {
-                        notFirstTimeEnteringBiome[14] = true;
-                    }
-                    inBiome[14] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneNormalSpace)
-                {
-                    inBiome[14] = false;
-                }
-            }
-
-
-            if (!inBiome[15])
-            {
-                if (Player.ZoneMeteor)
-                {
-                    RegreUtils.SetBiomeTitle("The Meteor", Color.Pink, "Heaven's Fall", 15);
-                    if (!notFirstTimeEnteringBiome[15])
-                    {
-                        notFirstTimeEnteringBiome[15] = true;
-                    }
-                    inBiome[15] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneMeteor)
-                {
-                    inBiome[16] = false;
-                }
-            }
-            if (!inBiome[16])
-            {
-                if (Player.ZoneUnderworldHeight)
-                {
-                    RegreUtils.SetBiomeTitle("The Underworld", Color.OrangeRed, "Lake of Fire", 16);
-                    if (!notFirstTimeEnteringBiome[16])
-                    {
-                        notFirstTimeEnteringBiome[16] = true;
-                    }
-                    inBiome[16] = true;
-                }
-            }
-            else
-            {
-                if (!Player.ZoneUnderworldHeight)
-                {
-                    inBiome[16] = false;
-                }
-            }
-        }*/
         float voidDelay;
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
@@ -546,7 +221,7 @@ namespace Regressus
             }
             if (bossTextProgress > 0)
                 bossTextProgress--;
-            if (bossTextProgress == 0)
+            if (bossTextProgress == 0 && bossMaxProgress != 0)
             {
                 bossName = null;
                 bossTitle = null;

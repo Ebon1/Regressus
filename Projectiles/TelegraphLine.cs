@@ -35,6 +35,7 @@ namespace Regressus.Projectiles
         }
         public override void AI()
         {
+            Projectile.velocity.Normalize();
             if (Projectile.ai[1] == 1)
             {
                 NPC npc = Main.npc[(int)Projectile.ai[0]];
@@ -54,31 +55,7 @@ namespace Regressus.Projectiles
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = Mod.Assets.Request<Texture2D>("Extras/laser3").Value;
-            Vector2 startPosition = Projectile.Center;
-            Vector2 endPosition = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
-            float width = Projectile.width * Projectile.scale;
-            // offset so i can make the triangles
-            Main.spriteBatch.Reload(BlendState.Additive);
-            Vector2 offset = (startPosition - endPosition).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * Projectile.width;
-
-            float mult = 0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f;
-            Color BeamColor = Color.White * 0.5f /*new Color(20, 63, 128)*/;
-            BeamPacket.SetTexture(0, texture);
-            float off = -Main.GlobalTimeWrappedHourly % 1;
-            // draw the flame part of the beam
-            BeamPacket packet = new BeamPacket();
-            packet.Pass = "Texture";
-            packet.Add(startPosition + offset * 3 * mult, BeamColor, new Vector2(0 + off, 0));
-            packet.Add(startPosition - offset * 3 * mult, BeamColor, new Vector2(0 + off, 1));
-            packet.Add(endPosition + offset * 3 * mult, BeamColor, new Vector2(1 + off, 0));
-
-            packet.Add(startPosition - offset * 3 * mult, BeamColor, new Vector2(0 + off, 1));
-            packet.Add(endPosition - offset * 3 * mult, BeamColor, new Vector2(1 + off, 1));
-            packet.Add(endPosition + offset * 3 * mult, BeamColor, new Vector2(1 + off, 0));
-            packet.Send();
-            //DrawBeam(Main.spriteBatch, texture, startPosition, endPosition, drawScale, (Projectile.timeLeft % 10 == 0) ? Color.White * 0.5f : new Color(20, 63, 128) * 0.5f);
-            Main.spriteBatch.Reload(BlendState.AlphaBlend);
+            Utils.DrawLine(Main.spriteBatch, Projectile.Center, Projectile.Center + Projectile.velocity * Main.screenWidth, Color.White, Color.White, 5);
             return false;
         }
         /*private void DrawBeam(SpriteBatch spriteBatch, Texture2D texture, Vector2 startPosition, Vector2 endPosition, Vector2 drawScale, Color beamColor)

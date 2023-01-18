@@ -52,6 +52,7 @@ namespace Regressus.NPCs.Minibosses
             NPC.noGravity = true;
             NPC.lavaImmune = true;
             NPC.knockBackResist = 0;
+            NPC.dontTakeDamage = true;
             Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/Luminary");
         }
         public override void OnSpawn(IEntitySource source)
@@ -240,6 +241,8 @@ namespace Regressus.NPCs.Minibosses
                 {
                     AITimer = 0;
                     AIState = Spawn;
+
+                    NPC.dontTakeDamage = false;
                 }
             }
             else if (AIState == Spawn)
