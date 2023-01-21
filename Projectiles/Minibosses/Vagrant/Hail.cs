@@ -136,36 +136,67 @@ namespace Regressus.Projectiles.Minibosses.Vagrant
                 Main.spriteBatch.Draw(glow, Projectile.oldPos[i] - Main.screenPosition + new Vector2(Projectile.width / 2f, Projectile.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), Color.LightBlue * (1f - fadeMult * i), Projectile.oldRot[i], glow.Size() / 2, Projectile.scale * (ProjectileID.Sets.TrailCacheLength[Projectile.type] - i) / ProjectileID.Sets.TrailCacheLength[Projectile.type], Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
             }
 
+            const float TwoPi = (float)Math.PI * 2f;
+            float scale = (float)Math.Sin(Main.GlobalTimeWrappedHourly * TwoPi / 2f) * 0.3f + 0.7f;
+            for (int i = 0; i < 4; i++)
+                Main.spriteBatch.Draw(glow, Projectile.Center - Main.screenPosition + (Vector2.UnitX * 20 * scale).RotatedBy(MathHelper.ToRadians((90 * scale) * i)), null, Color.Cyan * 0.5f * scale * pulseProgress, Projectile.rotation, glow.Size() / 2, Projectile.scale, SpriteEffects.None, 0);
             Main.spriteBatch.Reload(BlendState.AlphaBlend);
             Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, tex.Width, tex.Height), Color.White, Projectile.rotation, tex.Size() / 2, Projectile.scale, Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
             return false;
         }
         public override void Kill(int timeLeft)
         {
-            for (int num613 = 0; num613 < 15; num613++)
+            if (!yes)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Ice, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default(Color), 0.8f);
-            }
+                for (int num613 = 0; num613 < 15; num613++)
+                {
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Ice, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default(Color), 0.8f);
+                }
 
-            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<HailExplosion>(), 15, 1);
+                Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<HailExplosion>(), 15, 1);
+            }
         }
         float balls;
         bool maybe;
+        bool yes;
         public override void OnSpawn(IEntitySource source)
         {
             maybe = Main.rand.NextBool();
-            balls = Main.rand.NextFloat(1f, 3f);
+            balls = Main.rand.NextFloat(0.1f, 1f);
         }
+        int timer, deathCounter;
+        float pulseProgress;
         Vector2 center;
+        void ShootOut()
+        {
+            yes = true;
+            Projectile a = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, RegreUtils.FromAToB(Projectile.Center, Main.LocalPlayer.Center) * 7.5f, ModContent.ProjectileType<Hail1>(), 15, 1);
+            a.ai[1] = 1;
+            Projectile.Kill();
+        }
         public override void AI()
         {
             Player p = Main.player[Projectile.owner];
             Projectile.ai[1] += 2f * (float)Math.PI / 600f * balls * (maybe ? -1 : 1);
             Projectile.ai[1] %= 2f * (float)Math.PI;
-            if (++Projectile.ai[0] < 100)
+            if (++timer < 50)
                 center = p.Center;
+            if (p.Center.Distance(center) > 500)
+            {
+                ShootOut();
+            }
+            if (pulseProgress < 1 && timer > 50)
+                pulseProgress += 0.1f;
+            if (timer > 100)
+            {
+                deathCounter++;
+                if (deathCounter >= Projectile.ai[0])
+                {
+                    ShootOut();
+                }
+            }
 
-            Projectile.Center = center + Projectile.timeLeft * new Vector2((float)Math.Cos(Projectile.ai[1]), (float)Math.Sin(Projectile.ai[1]));
+            Projectile.Center = center + 500 * new Vector2((float)Math.Cos(Projectile.ai[1]), (float)Math.Sin(Projectile.ai[1]));
             Projectile.rotation += MathHelper.ToRadians(5);
             float progress = Utils.GetLerpValue(0, 500, Projectile.timeLeft);
             Projectile.scale = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
@@ -220,10 +251,15 @@ namespace Regressus.Projectiles.Minibosses.Vagrant
         }
         public override void AI()
         {
+            if (Projectile.ai[1] == 1)
+                Projectile.scale = 1;
             Projectile.rotation += MathHelper.ToRadians(5);
             Projectile.velocity *= 1.01f;
             float progress = Utils.GetLerpValue(0, 500, Projectile.timeLeft);
-            Projectile.scale = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
+            if (Projectile.ai[1] != 1)
+                Projectile.scale = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
+            else
+                Projectile.velocity *= 1.005f;
         }
     }
     public class Hail2 : ModProjectile
@@ -300,7 +336,7 @@ namespace Regressus.Projectiles.Minibosses.Vagrant
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Ice, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default(Color), 0.8f);
             }
-            if (Projectile.aiStyle != 2 && Projectile.friendly)
+            if (Projectile.aiStyle != 2 || Projectile.friendly)
                 Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<HailExplosion>(), 15, 1);
         }
         public override bool PreDraw(ref Color lightColor)

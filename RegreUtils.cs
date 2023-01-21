@@ -45,7 +45,7 @@ namespace Regressus
             this.wrappedString = RegreUtils.WrapText(font, this.text, this.rect.Width);
         }
     }
-    public class BiomeID
+    /*public class BiomeID
     {
         public static readonly int Forest = 0;
         public static readonly int Jungle = 1;
@@ -64,7 +64,7 @@ namespace Regressus
         public static readonly int Space = 14;
         public static readonly int Meteorite = 15;
         public static readonly int Hell = 16;
-    }
+    }*/
 
     public static class RegreUtils
     {
@@ -337,11 +337,11 @@ namespace Regressus
         {
             return new Vector4(color.X / 255f, color.Y / 255f, color.Z / 255f, 1);
         }
-        public static Player[] activePlayers = new Player[Main.maxPlayers];
-        public static Player GetRandomPlayer()
-        {
-            return Main.player[Main.rand.Next(activePlayers.Length)];
-        }
+        //public static Player[] activePlayers = new Player[Main.maxPlayers];
+        //public static Player GetRandomPlayer()
+        //{
+        //   return Main.player[Main.rand.Next(activePlayers.Length)];
+        //}
         public static SpriteSortMode previousSortMode;
         public static BlendState previousBlendState;
         public static SamplerState previousSamplerState;
@@ -453,7 +453,7 @@ namespace Regressus
             player.bossColor = color;
             player.bossStyle = style;
         }
-        public static void SetBiomeTitle(string name, Color color, string title, int biome)
+        /*public static void SetBiomeTitle(string name, Color color, string title, int biome)
         {
             RegrePlayer player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
             int Progress = player.notFirstTimeEnteringBiome[biome] ? 150 : 300;
@@ -462,7 +462,7 @@ namespace Regressus
             player.biomeName = name;
             player.biomeTitle = title;
             player.biomeColor = color;
-        }
+        }*/
         public static void DrawBossTitle()
         {
             var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
@@ -495,7 +495,7 @@ namespace Regressus
                 }
             }
         }
-        public static void DustExplosion(Vector2 pos, Vector2 size = default, bool colored = false, Color color = default, bool sound = true)
+        public static void DustExplosion(Vector2 pos, Vector2 size = default, bool colored = false, Color color = default, bool sound = true, bool smoke = true)
         {
             int dustType = colored ? ModContent.DustType<Dusts.ColoredFireDust>() : ModContent.DustType<Dusts.FireDust>();
             if (sound)
@@ -504,21 +504,23 @@ namespace Regressus
             {
                 Dust.NewDustPerfect(pos, dustType, Vector2.UnitY.RotatedBy(num614 * ((float)Math.PI * 2f) + Main.rand.NextFloat() * 0.5f) * (4f + Main.rand.NextFloat() * 4f), 150, color, Main.rand.NextFloat(1, 1.75f)).noGravity = true;
             }
-            for (int num905 = 0; num905 < 10; num905++)
-            {
-                int num906 = Dust.NewDust(new Vector2(pos.X, pos.Y), (int)size.X, (int)size.Y, 31, 0f, 0f, 0, default(Color), 2.5f);
-                Main.dust[num906].position = pos + Vector2.UnitX.RotatedByRandom(3.1415927410125732) * size.X / 2f;
-                Main.dust[num906].noGravity = true;
-                Dust dust2 = Main.dust[num906];
-                dust2.velocity *= 3f;
-            }
-            for (int num899 = 0; num899 < 4; num899++)
-            {
-                int num900 = Dust.NewDust(new Vector2(pos.X, pos.Y), (int)size.X, (int)size.Y, 31, 0f, 0f, 100, default(Color), 1.5f);
-                Main.dust[num900].position = pos + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * size.X / 2f;
-            }
+            if (smoke)
+                for (int num905 = 0; num905 < 10; num905++)
+                {
+                    int num906 = Dust.NewDust(new Vector2(pos.X, pos.Y), (int)size.X, (int)size.Y, 31, 0f, 0f, 0, default(Color), 2.5f);
+                    Main.dust[num906].position = pos + Vector2.UnitX.RotatedByRandom(3.1415927410125732) * size.X / 2f;
+                    Main.dust[num906].noGravity = true;
+                    Dust dust2 = Main.dust[num906];
+                    dust2.velocity *= 3f;
+                }
+            if (smoke)
+                for (int num899 = 0; num899 < 4; num899++)
+                {
+                    int num900 = Dust.NewDust(new Vector2(pos.X, pos.Y), (int)size.X, (int)size.Y, 31, 0f, 0f, 100, default(Color), 1.5f);
+                    Main.dust[num900].position = pos + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * size.X / 2f;
+                }
         }
-        public static void DrawBiomeTitle()
+        /*public static void DrawBiomeTitle()
         {
             var player = Main.LocalPlayer.GetModPlayer<RegrePlayer>();
             if (player.biomeTextProgress > 0)
@@ -547,7 +549,7 @@ namespace Regressus
                     Reload(Main.spriteBatch, BlendState.AlphaBlend);
                 }
             }
-        }
+        }*/
         public static void Log(this Projectile obj)
         {
             Main.NewText("Friendly?" + obj.friendly);

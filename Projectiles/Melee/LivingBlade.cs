@@ -10,7 +10,7 @@ using Regressus.Effects.Prims;
 
 namespace Regressus.Projectiles.Melee
 {
-    public class LivingBladeHeld : ModProjectile, IPrimitiveDrawer
+    public class LivingBladeHeld : ModProjectile//, IPrimitiveDrawer
     {
         public override string Texture => "Regressus/Items/Weapons/Melee/LivingBlade";
         // pitch is XY roll is YZ yaw is XZ
@@ -37,7 +37,7 @@ namespace Regressus.Projectiles.Melee
         {
             return 0.7f + (float)Math.Sin(progress * Math.PI) * 0.5f;
         }
-        List<Vector2> vert = new List<Vector2>();
+        //List<Vector2> vert = new List<Vector2>();
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -63,14 +63,14 @@ namespace Regressus.Projectiles.Melee
             player.itemTime = 2;
             player.itemAnimation = 2;
 
-            Vector2 off = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2();
+            /*Vector2 off = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2();
             vert.Add(Projectile.Center - off * 25 * 2 * ScaleFunction(swingProgress));
             vert.Add(Projectile.Center + off * 40 * 2 * ScaleFunction(swingProgress));
             if (vert.Count > 10)
             {
                 vert.RemoveAt(0);
                 vert.RemoveAt(0);
-            }
+            }*/
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
@@ -109,7 +109,7 @@ namespace Regressus.Projectiles.Melee
             float a = 0;
             return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), start, end, projHitbox.Width, ref a) && Collision.CanHitLine(player.TopLeft, player.width, player.height, targetHitbox.TopLeft(), targetHitbox.Width, targetHitbox.Height);
         }
-        public void DrawPrimitives()
+        /*public void DrawPrimitives()
         {
             if (vert.Count > 2)
             {
@@ -140,6 +140,6 @@ namespace Regressus.Projectiles.Melee
                 packet.Send();
                 dev.RasterizerState = prev;
             }
-        }
+        }*/
     }
 }

@@ -65,6 +65,8 @@ namespace Regressus.Projectiles.Magic
             if (Projectile.timeLeft > 72)
             {
                 mousePos = Main.MouseWorld;
+                clockCenter = Projectile.Center;
+                Projectile.Center = player.Center;
             }
             Projectile.rotation -= MathHelper.ToRadians(10);
             float progress = Utils.GetLerpValue(0, SwingTime, Projectile.timeLeft);

@@ -30,7 +30,7 @@ namespace Regressus.Items.Weapons.Magic
             Item.reuseDelay = 20;
             Item.noMelee = true;
             Item.autoReuse = true;
-            Item.mana = 10;
+            Item.mana = 15;
             Item.DamageType = DamageClass.Magic;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.UseSound = SoundID.Item20;

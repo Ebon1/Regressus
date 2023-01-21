@@ -24,7 +24,7 @@ namespace Regressus.Projectiles.Oracle
         public override void SetDefaults()
         {
             Projectile.width = 25;
-            Projectile.height = 2650;
+            Projectile.height = Main.screenWidth;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
@@ -50,7 +50,7 @@ namespace Regressus.Projectiles.Oracle
                 RunOnce = false;
             }
 
-            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
             RotationDirection = isLeft(Projectile.Center, end, Target.Center) ? 1 : -1;
 
             Projectile.velocity = Projectile.velocity.SafeNormalize(-Vector2.UnitY).RotatedBy(MathHelper.ToRadians(MathHelper.SmoothStep(Projectile.ai[1], 0, Projectile.timeLeft / MAX_TIME)) * RotationDirection);
@@ -86,21 +86,25 @@ namespace Regressus.Projectiles.Oracle
             Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Line").Value;
             //Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), 0, new Vector2(texture.Width, texture.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
             rotation += MathHelper.ToRadians(1 * Projectile.ai[1]);
-            Texture2D rune1 = ModContent.Request<Texture2D>("Regressus/Extras/rune1").Value;
-            Texture2D rune2 = ModContent.Request<Texture2D>("Regressus/Extras/rune2").Value;
-            Texture2D rune3 = ModContent.Request<Texture2D>("Regressus/Extras/rune3").Value;
-            Texture2D rune4 = ModContent.Request<Texture2D>("Regressus/Extras/rune4").Value;
-            Main.spriteBatch.Draw(rune1, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), -rotation, new Vector2(rune1.Width, rune1.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(rune2, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), rotation, new Vector2(rune2.Width, rune2.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(rune3, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), -rotation, new Vector2(rune3.Width, rune3.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(rune4, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), rotation, new Vector2(rune4.Width, rune4.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
-
+            if (Main.frameRate > 25)
+            {
+                Texture2D rune1 = ModContent.Request<Texture2D>("Regressus/Extras/rune1").Value;
+                Texture2D rune2 = ModContent.Request<Texture2D>("Regressus/Extras/rune2").Value;
+                Texture2D rune3 = ModContent.Request<Texture2D>("Regressus/Extras/rune3").Value;
+                Texture2D rune4 = ModContent.Request<Texture2D>("Regressus/Extras/rune4").Value;
+                Main.spriteBatch.Draw(rune1, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), -rotation, new Vector2(rune1.Width, rune1.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(rune2, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), rotation, new Vector2(rune2.Width, rune2.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(rune3, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), -rotation, new Vector2(rune3.Width, rune3.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(rune4, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), rotation, new Vector2(rune4.Width, rune4.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
+            }
+            else
+                Main.NewText("get a better computer nerd", Color.Orange);
             //float scale = Projectile.scale * 2 * mult;
             RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
             BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
             Vector2 start = Projectile.Center;
-            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
             float width = Projectile.width * Projectile.scale;
             // offset so i can make the triangles
             Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
@@ -165,7 +169,7 @@ namespace Regressus.Projectiles.Oracle
             if (Projectile.type == ModContent.ProjectileType<OracleBeamTarget>())
             {
                 DelegateMethods.v3_1 = new Color(20, 63, 128).ToVector3();
-                Terraria.Utils.PlotTileLine(Projectile.Center, Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/, Projectile.width * Projectile.scale, new Terraria.Utils.TileActionAttempt(DelegateMethods.CastLight));
+                Terraria.Utils.PlotTileLine(Projectile.Center, Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/, Projectile.width * Projectile.scale, new Terraria.Utils.TileActionAttempt(DelegateMethods.CastLight));
             }
         }
     }
@@ -176,7 +180,7 @@ namespace Regressus.Projectiles.Oracle
         public override void SetDefaults()
         {
             Projectile.width = 25;
-            Projectile.height = 2650;
+            Projectile.height = Main.screenWidth;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
@@ -200,7 +204,7 @@ namespace Regressus.Projectiles.Oracle
                 RunOnce = false;
             }
 
-            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
             RotationDirection = Projectile.ai[0] == 1 ? -1 : 1;
 
             Projectile.velocity = Projectile.velocity.SafeNormalize(-Vector2.UnitY).RotatedBy(MathHelper.ToRadians(MathHelper.SmoothStep(Projectile.ai[1], 0, Projectile.timeLeft / MAX_TIME)) * RotationDirection);
@@ -215,7 +219,7 @@ namespace Regressus.Projectiles.Oracle
         public override void SetDefaults()
         {
             Projectile.width = 25;
-            Projectile.height = 2650;
+            Projectile.height = Main.screenWidth;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
@@ -250,7 +254,7 @@ namespace Regressus.Projectiles.Oracle
                 Projectile.damage = damage;
             }
 
-            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
 
             //Projectile.velocity = -Vector2.UnitY.RotatedBy(MathHelper.ToRadians(Projectile.ai[1]));
 
@@ -276,7 +280,7 @@ namespace Regressus.Projectiles.Oracle
             BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
             Vector2 start = Projectile.Center;
-            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
             float width = Projectile.width * Projectile.scale;
             // offset so i can make the triangles
             Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
@@ -336,7 +340,7 @@ namespace Regressus.Projectiles.Oracle
             return false;
         }
     }
-    public class OracleBeamRT : OracleBeam
+    /*public class OracleBeamRT : OracleBeam
     {
 
         int MAX_TIME = 60;
@@ -344,7 +348,7 @@ namespace Regressus.Projectiles.Oracle
         public override void SetDefaults()
         {
             Projectile.width = Main.screenWidth / 6;
-            Projectile.height = 2650;
+            Projectile.height = Main.screenWidth;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
@@ -366,51 +370,52 @@ namespace Regressus.Projectiles.Oracle
 
             Texture2D _beamTexture = ModContent.Request<Texture2D>("Regressus/Extras/oracleBeamLight").Value;
             // make the beam slightly change scale with time
-            float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
+            float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2) * 0.1f);
             // base scale for the flash so it actually connects with beam
             float scale = Projectile.scale * 4 * mult;
-            //float scale = Projectile.scale * 2 * mult;
-            Vector2 start = Projectile.Center;
-            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/;
-            float width = Projectile.width * Projectile.scale;
-            // offset so i can make the triangles
-            Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
-            float off = 0;
-            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
+    //float scale = Projectile.scale * 2 * mult;
+    Vector2 start = Projectile.Center;
+    Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, 
+    Main.screenWidth/*);
+    float width = Projectile.width * Projectile.scale;
+    // offset so i can make the triangles
+    Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
+    float off = 0;
+    RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
             BeamPacket packet1 = new BeamPacket();
-            packet1.Pass = "Texture";
+    packet1.Pass = "Texture";
 
             BeamColor = Color.DeepSkyBlue;
             BeamPacket.SetTexture(0, _beamTexture);
             // draw the flame part of the beam
-            packet1.Add(start + offset * 15f * mult, BeamColor, new Vector2(0 + off, 0));
-            packet1.Add(start - offset * 15f * mult, BeamColor, new Vector2(0 + off, 1));
-            packet1.Add(end + offset * 15f * mult, BeamColor, new Vector2(1 + off, 0));
+            packet1.Add(start + offset* 15f * mult, BeamColor, new Vector2(0 + off, 0));
+            packet1.Add(start - offset* 15f * mult, BeamColor, new Vector2(0 + off, 1));
+            packet1.Add(end + offset* 15f * mult, BeamColor, new Vector2(1 + off, 0));
 
-            packet1.Add(start - offset * 15f * mult, BeamColor, new Vector2(0 + off, 1));
-            packet1.Add(end - offset * 15f * mult, BeamColor, new Vector2(1 + off, 1));
-            packet1.Add(end + offset * 15f * mult, BeamColor, new Vector2(1 + off, 0));
+            packet1.Add(start - offset* 15f * mult, BeamColor, new Vector2(0 + off, 1));
+            packet1.Add(end - offset* 15f * mult, BeamColor, new Vector2(1 + off, 1));
+            packet1.Add(end + offset* 15f * mult, BeamColor, new Vector2(1 + off, 0));
             packet1.Send();
             BeamPacket packet = new BeamPacket();
-            packet.Pass = "Texture";
+    packet.Pass = "Texture";
 
             BeamColor = Color.White;
             BeamPacket.SetTexture(0, _beamTexture);
             // draw the flame part of the beam
-            packet.Add(start + offset * 14f * mult, BeamColor, new Vector2(0 + off, 0));
-            packet.Add(start - offset * 14f * mult, BeamColor, new Vector2(0 + off, 1));
-            packet.Add(end + offset * 14f * mult, BeamColor, new Vector2(1 + off, 0));
+            packet.Add(start + offset* 14f * mult, BeamColor, new Vector2(0 + off, 0));
+            packet.Add(start - offset* 14f * mult, BeamColor, new Vector2(0 + off, 1));
+            packet.Add(end + offset* 14f * mult, BeamColor, new Vector2(1 + off, 0));
 
-            packet.Add(start - offset * 14f * mult, BeamColor, new Vector2(0 + off, 1));
-            packet.Add(end - offset * 14f * mult, BeamColor, new Vector2(1 + off, 1));
-            packet.Add(end + offset * 14f * mult, BeamColor, new Vector2(1 + off, 0));
+            packet.Add(start - offset* 14f * mult, BeamColor, new Vector2(0 + off, 1));
+            packet.Add(end - offset* 14f * mult, BeamColor, new Vector2(1 + off, 1));
+            packet.Add(end + offset* 14f * mult, BeamColor, new Vector2(1 + off, 0));
             packet.Send();
             RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);
             RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
 
             return false;
         }
-    }
+    }*/
     public class OracleBeam2 : OracleBeam
     {
         int MAX_TIME = 60;
@@ -418,7 +423,7 @@ namespace Regressus.Projectiles.Oracle
         public override void SetDefaults()
         {
             Projectile.width = Main.screenWidth / 6;
-            Projectile.height = 2650;
+            Projectile.height = Main.screenWidth;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
@@ -445,7 +450,7 @@ namespace Regressus.Projectiles.Oracle
             float scale = Projectile.scale * 4 * mult;
             //float scale = Projectile.scale * 2 * mult;
             Vector2 start = Projectile.Center;
-            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */2650/*)*/;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
             float width = Projectile.width * Projectile.scale;
             // offset so i can make the triangles
             Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
@@ -500,7 +505,7 @@ namespace Regressus.Projectiles.Oracle
         public override void SetDefaults()
         {
             Projectile.width = 25;
-            Projectile.height = 2650;
+            Projectile.height = Main.screenWidth;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;

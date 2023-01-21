@@ -206,7 +206,7 @@ namespace Regressus.Projectiles.Melee
     }
     public class ForeshadowP2 : ModProjectile
     {
-        public override string Texture => "Regressus/Extras/starSky2";
+        public override string Texture => "Regressus/Extras/Empty";
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tear");
@@ -233,13 +233,15 @@ namespace Regressus.Projectiles.Melee
             }
         }
         public float rotation = 0;
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        public override bool? Colliding(Rectangle ProjectileHitbox, Rectangle targetHitbox)
         {
             float a = 0f;
             return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - Projectile.velocity * ((Projectile.height * Projectile.scale * (Projectile.ai[0] == 1 ? 6 : 8)) / 2), Projectile.Center + Projectile.velocity * ((Projectile.height * Projectile.scale * (Projectile.ai[0] == 1 ? 6 : 8)) / 2), Projectile.width * (Projectile.ai[0] == 1 ? 0.5f : 1) * Projectile.scale * (Projectile.ai[0] == 1 ? 6 : 8), ref a);
         }
         public override bool PreDraw(ref Color lightColor)
         {
+            DrawData a = new(ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_03").Value, Projectile.Center - Main.screenPosition, null, Color.DarkViolet, Projectile.rotation, ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_03").Size() / 2, new Vector2(Projectile.ai[1] * Projectile.scale, (Projectile.ai[0] == 1 ? 0.5f : 1) * Projectile.scale), SpriteEffects.None, 0);
+            MiscDrawingMethods.DrawWithDye(Main.spriteBatch, a, ItemID.TwilightDye, Projectile);
             //Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_02").Value, Projectile.Center - Main.screenPosition, null, Color.DarkViolet * Projectile.scale, Projectile.rotation, ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_02").Size() / 2, Projectile.scale, SpriteEffects.None, 0f);
             return false;
         }

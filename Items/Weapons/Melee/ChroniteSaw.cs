@@ -17,7 +17,7 @@ namespace Regressus.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Slows down enemies on hit.\nCombat saw, does not work on trees.");
+            Tooltip.SetDefault("Slows down enemies on hit.");
         }
         public override void SetDefaults()
         {
@@ -28,6 +28,7 @@ namespace Regressus.Items.Weapons.Melee
             Item.useAnimation = 10;
             Item.useTime = 10;
             Item.noUseGraphic = true;
+            Item.axe = 17;
             Item.autoReuse = true;
             Item.DamageType = DamageClass.Melee;
             Item.UseSound = SoundID.Item1;

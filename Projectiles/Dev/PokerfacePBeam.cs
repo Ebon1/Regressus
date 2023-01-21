@@ -29,7 +29,7 @@ namespace Regressus.Projectiles.Dev
         private const float MaxBeamSpread = 2f;
 
 
-        private const float MaxBeamLength = 2400f;
+        // private const float Main.screenWidth = 2400f;
 
 
 
@@ -261,7 +261,7 @@ namespace Regressus.Projectiles.Dev
 
 
             float[] laserScanResults = new float[NumSamplePoints];
-            Collision.LaserScan(samplingPoint, Projectile.velocity, BeamTileCollisionWidth * Projectile.scale, MaxBeamLength, laserScanResults);
+            Collision.LaserScan(samplingPoint, Projectile.velocity, BeamTileCollisionWidth * Projectile.scale, Main.screenWidth, laserScanResults);
             float averageLengthSample = 0f;
             for (int i = 0; i < laserScanResults.Length; ++i)
             {
@@ -283,7 +283,7 @@ namespace Regressus.Projectiles.Dev
 
 
             float _ = float.NaN;
-            Vector2 beamEndPos = Projectile.Center + Projectile.velocity * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, MaxBeamLength);
+            Vector2 beamEndPos = Projectile.Center + Projectile.velocity * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, Main.screenWidth);
             return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, beamEndPos, BeamHitboxCollisionWidth * Projectile.scale, ref _);
         }
         public Color BeamColor = new Color(20, 63, 128);
@@ -305,7 +305,7 @@ namespace Regressus.Projectiles.Dev
             BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
             Vector2 start = Projectile.Center;
-            Vector2 end = Projectile.Center + Projectile.velocity * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, MaxBeamLength);
+            Vector2 end = Projectile.Center + Projectile.velocity * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, Main.screenWidth);
             float width = Projectile.width * Projectile.scale;
             // offset so i can make the triangles
             Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;

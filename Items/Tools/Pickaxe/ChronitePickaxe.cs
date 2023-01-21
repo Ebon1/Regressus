@@ -19,9 +19,5 @@ namespace Regressus.Items.Tools.Pickaxe
         {
             Item.CloneDefaults(ItemID.NightmarePickaxe);
         }
-        public override void MeleeEffects(Player player, Rectangle hitbox)
-        {
-            Dust.NewDust(Item.position, hitbox.Width, hitbox.Height, 15);
-        }
     }
 }

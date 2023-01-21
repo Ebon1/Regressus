@@ -17,7 +17,7 @@ public class Lightning : ModProjectile
     public override void SetDefaults()
     {
         Projectile.tileCollide = false;
-        Projectile.timeLeft = 30;
+        Projectile.timeLeft = 25;
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.penetrate = -1;
@@ -76,34 +76,42 @@ public class Lightning : ModProjectile
             LightningPoints.Add(pos);
         }
     }
+    void DrawLightning(Color _color, float scale = 1)
+    {
+        Main.spriteBatch.Reload(BlendState.Additive);
+
+        Texture2D tex = ModContent.Request<Texture2D>("Regressus/Extras/Tentacle").Value;
+        VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[(LightningPoints.Count - 1) * 6];
+        for (int i = 0; i < LightningPoints.Count - 1; i++)
+        {
+            Vector2 pos1 = LightningPoints[i] - Main.screenPosition;
+            Vector2 pos2 = LightningPoints[i + 1] - Main.screenPosition;
+            Vector2 dir1 = RegreUtils.GetRotation(LightningPoints, i) * Thickness * scale;
+            Vector2 dir2 = RegreUtils.GetRotation(LightningPoints, i + 1) * Thickness * scale;
+            float prog1 = Points[i];
+            float prog2 = Points[i + 1];
+            Vector2 v1 = pos1 + dir1; // bottom left
+            Vector2 v2 = pos1 - dir1; // top left
+            Vector2 v3 = pos2 + dir2; // bottom right
+            Vector2 v4 = pos2 - dir2; // top right
+            Color color = _color * ((float)Projectile.timeLeft / 30);
+            vertices[i * 6] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
+            vertices[i * 6 + 1] = RegreUtils.AsVertex(v3, color, new Vector2(prog2, 0));
+            vertices[i * 6 + 2] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
+
+            vertices[i * 6 + 3] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
+            vertices[i * 6 + 4] = RegreUtils.AsVertex(v2, color, new Vector2(prog1, 1));
+            vertices[i * 6 + 5] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
+        }
+        RegreUtils.DrawTexturedPrimitives(vertices, PrimitiveType.TriangleList, tex);
+        Main.spriteBatch.Reload(BlendState.AlphaBlend);
+    }
     public override bool PreDraw(ref Color lightColor)
     {
         if (LightningPoints.Count > 2 && !Main.gameInactive)
         {
-            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Extras/laser2").Value;
-            VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[(LightningPoints.Count - 1) * 6];
-            for (int i = 0; i < LightningPoints.Count - 1; i++)
-            {
-                Vector2 pos1 = LightningPoints[i] - Main.screenPosition;
-                Vector2 pos2 = LightningPoints[i + 1] - Main.screenPosition;
-                Vector2 dir1 = RegreUtils.GetRotation(LightningPoints, i) * Thickness;
-                Vector2 dir2 = RegreUtils.GetRotation(LightningPoints, i + 1) * Thickness;
-                float prog1 = Points[i];
-                float prog2 = Points[i + 1];
-                Vector2 v1 = pos1 + dir1; // bottom left
-                Vector2 v2 = pos1 - dir1; // top left
-                Vector2 v3 = pos2 + dir2; // bottom right
-                Vector2 v4 = pos2 - dir2; // top right
-                Color color = Color.LightBlue * ((float)Projectile.timeLeft / 30);
-                vertices[i * 6] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
-                vertices[i * 6 + 1] = RegreUtils.AsVertex(v3, color, new Vector2(prog2, 0));
-                vertices[i * 6 + 2] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
-
-                vertices[i * 6 + 3] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
-                vertices[i * 6 + 4] = RegreUtils.AsVertex(v2, color, new Vector2(prog1, 1));
-                vertices[i * 6 + 5] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
-            }
-            RegreUtils.DrawTexturedPrimitives(vertices, PrimitiveType.TriangleList, tex);
+            DrawLightning(Color.Cyan, 1.1f);
+            DrawLightning(Color.White);
         }
         return false;
     }
@@ -175,34 +183,42 @@ public class LightningF : ModProjectile
             LightningPoints.Add(pos);
         }
     }
+    void DrawLightning(Color _color, float scale = 1)
+    {
+
+        Main.spriteBatch.Reload(BlendState.Additive);
+        Texture2D tex = ModContent.Request<Texture2D>("Regressus/Extras/Tentacle").Value;
+        VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[(LightningPoints.Count - 1) * 6];
+        for (int i = 0; i < LightningPoints.Count - 1; i++)
+        {
+            Vector2 pos1 = LightningPoints[i] - Main.screenPosition;
+            Vector2 pos2 = LightningPoints[i + 1] - Main.screenPosition;
+            Vector2 dir1 = RegreUtils.GetRotation(LightningPoints, i) * Thickness * scale;
+            Vector2 dir2 = RegreUtils.GetRotation(LightningPoints, i + 1) * Thickness * scale;
+            float prog1 = Points[i];
+            float prog2 = Points[i + 1];
+            Vector2 v1 = pos1 + dir1; // bottom left
+            Vector2 v2 = pos1 - dir1; // top left
+            Vector2 v3 = pos2 + dir2; // bottom right
+            Vector2 v4 = pos2 - dir2; // top right
+            Color color = _color * ((float)Projectile.timeLeft / 30);
+            vertices[i * 6] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
+            vertices[i * 6 + 1] = RegreUtils.AsVertex(v3, color, new Vector2(prog2, 0));
+            vertices[i * 6 + 2] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
+
+            vertices[i * 6 + 3] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
+            vertices[i * 6 + 4] = RegreUtils.AsVertex(v2, color, new Vector2(prog1, 1));
+            vertices[i * 6 + 5] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
+        }
+        RegreUtils.DrawTexturedPrimitives(vertices, PrimitiveType.TriangleList, tex);
+        Main.spriteBatch.Reload(BlendState.AlphaBlend);
+    }
     public override bool PreDraw(ref Color lightColor)
     {
         if (LightningPoints.Count > 2 && !Main.gameInactive)
         {
-            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Extras/laser2").Value;
-            VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[(LightningPoints.Count - 1) * 6];
-            for (int i = 0; i < LightningPoints.Count - 1; i++)
-            {
-                Vector2 pos1 = LightningPoints[i] - Main.screenPosition;
-                Vector2 pos2 = LightningPoints[i + 1] - Main.screenPosition;
-                Vector2 dir1 = RegreUtils.GetRotation(LightningPoints, i) * Thickness;
-                Vector2 dir2 = RegreUtils.GetRotation(LightningPoints, i + 1) * Thickness;
-                float prog1 = Points[i];
-                float prog2 = Points[i + 1];
-                Vector2 v1 = pos1 + dir1; // bottom left
-                Vector2 v2 = pos1 - dir1; // top left
-                Vector2 v3 = pos2 + dir2; // bottom right
-                Vector2 v4 = pos2 - dir2; // top right
-                Color color = Color.LightBlue * ((float)Projectile.timeLeft / 30);
-                vertices[i * 6] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
-                vertices[i * 6 + 1] = RegreUtils.AsVertex(v3, color, new Vector2(prog2, 0));
-                vertices[i * 6 + 2] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
-
-                vertices[i * 6 + 3] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
-                vertices[i * 6 + 4] = RegreUtils.AsVertex(v2, color, new Vector2(prog1, 1));
-                vertices[i * 6 + 5] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
-            }
-            RegreUtils.DrawTexturedPrimitives(vertices, PrimitiveType.TriangleList, tex);
+            DrawLightning(Color.Cyan, 1.1f);
+            DrawLightning(Color.White);
         }
         return false;
     }
@@ -273,34 +289,42 @@ public class Lightning2 : ModProjectile
             LightningPoints.Add(pos);
         }
     }
+    void DrawLightning(Color _color, float scale = 1)
+    {
+
+        Main.spriteBatch.Reload(BlendState.Additive);
+        Texture2D tex = ModContent.Request<Texture2D>("Regressus/Extras/Tentacle").Value;
+        VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[(LightningPoints.Count - 1) * 6];
+        for (int i = 0; i < LightningPoints.Count - 1; i++)
+        {
+            Vector2 pos1 = LightningPoints[i] - Main.screenPosition;
+            Vector2 pos2 = LightningPoints[i + 1] - Main.screenPosition;
+            Vector2 dir1 = RegreUtils.GetRotation(LightningPoints, i) * Thickness * scale;
+            Vector2 dir2 = RegreUtils.GetRotation(LightningPoints, i + 1) * Thickness * scale;
+            float prog1 = Points[i];
+            float prog2 = Points[i + 1];
+            Vector2 v1 = pos1 + dir1; // bottom left
+            Vector2 v2 = pos1 - dir1; // top left
+            Vector2 v3 = pos2 + dir2; // bottom right
+            Vector2 v4 = pos2 - dir2; // top right
+            Color color = _color * ((float)Projectile.timeLeft / 30);
+            vertices[i * 6] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
+            vertices[i * 6 + 1] = RegreUtils.AsVertex(v3, color, new Vector2(prog2, 0));
+            vertices[i * 6 + 2] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
+
+            vertices[i * 6 + 3] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
+            vertices[i * 6 + 4] = RegreUtils.AsVertex(v2, color, new Vector2(prog1, 1));
+            vertices[i * 6 + 5] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
+        }
+        RegreUtils.DrawTexturedPrimitives(vertices, PrimitiveType.TriangleList, tex);
+        Main.spriteBatch.Reload(BlendState.AlphaBlend);
+    }
     public override bool PreDraw(ref Color lightColor)
     {
         if (LightningPoints.Count > 2 && !Main.gameInactive)
         {
-            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Extras/laser2").Value;
-            VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[(LightningPoints.Count - 1) * 6];
-            for (int i = 0; i < LightningPoints.Count - 1; i++)
-            {
-                Vector2 pos1 = LightningPoints[i] - Main.screenPosition;
-                Vector2 pos2 = LightningPoints[i + 1] - Main.screenPosition;
-                Vector2 dir1 = RegreUtils.GetRotation(LightningPoints, i) * Thickness;
-                Vector2 dir2 = RegreUtils.GetRotation(LightningPoints, i + 1) * Thickness;
-                float prog1 = Points[i];
-                float prog2 = Points[i + 1];
-                Vector2 v1 = pos1 + dir1; // bottom left
-                Vector2 v2 = pos1 - dir1; // top left
-                Vector2 v3 = pos2 + dir2; // bottom right
-                Vector2 v4 = pos2 - dir2; // top right
-                Color color = Color.LightBlue * ((float)Projectile.timeLeft / 15);
-                vertices[i * 6] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
-                vertices[i * 6 + 1] = RegreUtils.AsVertex(v3, color, new Vector2(prog2, 0));
-                vertices[i * 6 + 2] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
-
-                vertices[i * 6 + 3] = RegreUtils.AsVertex(v4, color, new Vector2(prog2, 1));
-                vertices[i * 6 + 4] = RegreUtils.AsVertex(v2, color, new Vector2(prog1, 1));
-                vertices[i * 6 + 5] = RegreUtils.AsVertex(v1, color, new Vector2(prog1, 0));
-            }
-            RegreUtils.DrawTexturedPrimitives(vertices, PrimitiveType.TriangleList, tex);
+            DrawLightning(Color.Cyan, 1.1f);
+            DrawLightning(Color.White);
         }
         return false;
     }

@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -183,8 +183,8 @@ namespace Regressus.Projectiles
                 if (base.Projectile.timeLeft % 1 == 0)
                 {
                     float factor = 1f;
-                    Vector2 velocity = base.Projectile.velocity * factor * 4f;
-                    Projectile.rotation = 0.3f * (float)Math.Sin((double)(value / 100f)) + velocity.ToRotation();
+                        Vector2 velocity = base.Projectile.velocity * factor * 4f;
+                        Projectile.rotation = 0.3f * (float)Math.Sin((double)(value / 100f)) + velocity.ToRotation();
                     rots.Insert(0, Projectile.rotation);
                     while (rots.Count > Projectile.ai[0])
                     {
@@ -217,3 +217,4 @@ namespace Regressus.Projectiles
         }
     }
 }
+*/

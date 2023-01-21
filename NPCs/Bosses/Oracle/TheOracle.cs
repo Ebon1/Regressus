@@ -631,13 +631,13 @@ namespace Regressus.NPCs.Bosses.Oracle
                 }
                 if (transformFrameCounter == 80)
                 {
-                    for (int i = 0; i < 15; i++)
+                    /*for (int i = 0; i < 15; i++)
                     {
                         float angle = 2f * (float)Math.PI / 15f * i;
                         Vector2 velocity = new Vector2(1, 1).RotatedBy(angle);
                         Projectile projectile = Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<TentacleBlack>(), 0, 0f, player.whoAmI, 200, .75f)];
                         projectile.timeLeft = 300;
-                    }
+                    }*/
                     Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/oracle2");
                 }
                 if (transformFrameCounter == 330)

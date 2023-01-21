@@ -22,6 +22,7 @@ namespace Regressus.Projectiles.SSW
             Projectile.height = 18;
             Projectile.width = 18;
             Projectile.friendly = false;
+            Projectile.scale = 0f;
             Projectile.hostile = true;
             Projectile.timeLeft = 500;
             Projectile.penetrate = -1;
@@ -64,8 +65,14 @@ namespace Regressus.Projectiles.SSW
                 initialVel = Projectile.velocity;
                 runOnce = true;
             }
-            RegreUtils.SineMovement(Projectile, initialCenter, initialVel, 0.15f, 60);
+            if (Projectile.ai[0] != 0)
+                RegreUtils.SineMovement(Projectile, initialCenter, initialVel, 0.15f, 60);
             Projectile.rotation += MathHelper.ToRadians(5f);
+            if (Projectile.ai[1] == 1 && Projectile.scale > 0.25f)
+                Projectile.velocity *= 1.025f;
+
+            float progress = Utils.GetLerpValue(0, 500, Projectile.timeLeft);
+            Projectile.scale = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
         }
         public override bool PreDraw(ref Color lightColor)
         {

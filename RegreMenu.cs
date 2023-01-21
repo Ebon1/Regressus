@@ -1,4 +1,4 @@
-﻿using Terraria;
+/*using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -46,19 +46,19 @@ namespace Regressus
             Main.spriteBatch.Reload(effect: null);
             Main.spriteBatch.Reload(BlendState.AlphaBlend);
 
-            /*//clock
+            /*//*//*clock
             minuteHandRot += 0.1666668f / 4;
-            hourHandRot += 0.0138889f / 4;
-            Vector2 arenaCenter = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
-            RegreUtils.Reload(spriteBatch, BlendState.Additive);
-            float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*//*) *0.1f);
+hourHandRot += 0.0138889f / 4;
+Vector2 arenaCenter = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
+RegreUtils.Reload(spriteBatch, BlendState.Additive);
+float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*//*) *0.1f);
             float scale = 0.5f * mult;
             spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clock").Value, arenaCenter, null, Color.White, 0, ModContent.Request<Texture2D>("Regressus/Extras/clock").Value.Size() / 2, .25f, SpriteEffects.None, 0);
             spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clockHand1").Value, arenaCenter, null, Color.White, MathHelper.ToRadians(hourHandRot), ModContent.Request<Texture2D>("Regressus/Extras/clockHand1").Value.Size() / 2, 2.5f, SpriteEffects.None, 0);
             spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/clockHand2").Value, arenaCenter, null, Color.White, MathHelper.ToRadians(minuteHandRot), ModContent.Request<Texture2D>("Regressus/Extras/clockHand2").Value.Size() / 2, 2.5f, SpriteEffects.None, 0);
             RegreUtils.Reload(spriteBatch, BlendState.AlphaBlend);
             */
-
+/*
             //logo draw
             Main.spriteBatch.Reload(BlendState.Additive);
             Texture2D c = ModContent.Request<Texture2D>("Regressus/Extras/Banner2_Glow").Value;
@@ -107,4 +107,4 @@ namespace Regressus
             return BackgroundTextureLoader.GetBackgroundSlot(Mod, "Extras/Empty");
         }
     }
-}
+}*/

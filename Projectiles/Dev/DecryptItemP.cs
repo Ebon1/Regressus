@@ -69,14 +69,14 @@ namespace Regressus.Projectiles.Dev
             float alpha = MathHelper.Clamp((float)Math.Sin(mult * Math.PI) * 3f, 0, 1);
             Vector2 pos = player.Center + Projectile.velocity * ((holdOffset * 0.45f) - mult * (holdOffset * 0.45f));
             RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
-            var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
+            /*var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
             {
                 if (i == Projectile.localAI[0])
                     continue;
                 Main.spriteBatch.Draw(glow, Projectile.oldPos[i] - Main.screenPosition + new Vector2(Projectile.width / 2f, Projectile.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), Color.Blue * (1f - fadeMult * i), Projectile.oldRot[i] + (Projectile.ai[0] == -1 ? 0 : MathHelper.PiOver2 * 3), glow.Size() / 2, Projectile.scale * (ProjectileID.Sets.TrailCacheLength[Projectile.type] - i) / ProjectileID.Sets.TrailCacheLength[Projectile.type], Projectile.ai[0] == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
             }
-
+            */
             Main.spriteBatch.Draw(slash, pos - Main.screenPosition, null, Color.Blue * alpha, Projectile.velocity.ToRotation() - MathHelper.PiOver2, slash.Size() / 2, Projectile.scale / 1.95f, SpriteEffects.None, 0f);
             Main.spriteBatch.Draw(glow, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, glow.Width, glow.Height), Color.Blue, Projectile.rotation + (Projectile.ai[0] == -1 ? 0 : MathHelper.PiOver2 * 3), glow.Size() / 2, Projectile.scale * 1.05f, Projectile.ai[0] == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
             RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
@@ -139,14 +139,14 @@ namespace Regressus.Projectiles.Dev
             float alpha = MathHelper.Clamp((float)Math.Sin(mult * Math.PI) * 3f, 0, 1);
             Vector2 pos = player.Center + Projectile.velocity * ((holdOffset * 0.45f) - mult * (holdOffset * 0.45f));
             RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
-            var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
+            /*var fadeMult = 1f / ProjectileID.Sets.TrailCacheLength[Projectile.type];
             for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
             {
                 if (i == Projectile.localAI[0])
                     continue;
                 Main.spriteBatch.Draw(glow, Projectile.oldPos[i] - Main.screenPosition + new Vector2(Projectile.width / 2f, Projectile.height / 2f), new Rectangle(0, 0, glow.Width, glow.Height), Color.Red * (1f - fadeMult * i), Projectile.oldRot[i] + (Projectile.ai[0] == -1 ? 0 : MathHelper.PiOver2 * 3), glow.Size() / 2, Projectile.scale * (ProjectileID.Sets.TrailCacheLength[Projectile.type] - i) / ProjectileID.Sets.TrailCacheLength[Projectile.type], Projectile.ai[0] == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
             }
-
+            */
             Main.spriteBatch.Draw(slash, pos - Main.screenPosition, null, Color.Red * alpha, Projectile.velocity.ToRotation() - MathHelper.PiOver2, slash.Size() / 2, Projectile.scale / 1.95f, SpriteEffects.None, 0f);
             Main.spriteBatch.Draw(glow, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, glow.Width, glow.Height), Color.Red, Projectile.rotation + (Projectile.ai[0] == -1 ? 0 : MathHelper.PiOver2 * 3), glow.Size() / 2, Projectile.scale * 1.05f, Projectile.ai[0] == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
             RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
@@ -176,7 +176,6 @@ namespace Regressus.Projectiles.Dev
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
         public override string Texture => "Regressus/Items/Dev/_DecryptItem";
-        int lmao = 1;
         float a, b, c;
         public override void AI()
         {

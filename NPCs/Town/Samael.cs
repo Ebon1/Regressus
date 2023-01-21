@@ -64,6 +64,7 @@ namespace Regressus.NPCs.Town
         }
         public override void OnSpawn(IEntitySource source)
         {
+            RegreSystem.SamaelDay++;
             Main.NewText("Something strange is nearby.", new Color(118, 50, 173));
         }
         public override string GetChat()
@@ -84,7 +85,7 @@ namespace Regressus.NPCs.Town
         {
             ModContent.ItemType<BloodVial>(),
         };
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        /*public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (RegreSystem.SamaelShopOpen && SamaelAlpha > 0f && (SamaelDialogue != "" || SamaelDialogue != null))
                 SamaelAlpha -= 0.05f;
@@ -99,7 +100,7 @@ namespace Regressus.NPCs.Town
                 else
                     SamaelDialogue = "";
             }
-        }
+        }*/
         public static string GetDialogueText()
         {
             float progress = Utils.GetLerpValue(0, 1, SamaelAlpha);
@@ -117,8 +118,8 @@ namespace Regressus.NPCs.Town
             /* Main.spriteBatch.Reload(BlendState.Additive);
              Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/textGlow").Value, new Vector2(Main.screenWidth / 4, (int)(Main.screenHeight * 0.55f)), null, Color.Gray, 0f, new Vector2(256) / 2, new Vector2(3, 3f), SpriteEffects.None, 0f);
              Main.spriteBatch.Reload(BlendState.AlphaBlend);*/
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/NPCs/Town/Samael").Value, new Vector2(180, (int)(Main.screenHeight * 0.65f)), null, Color.White, 0f, ModContent.Request<Texture2D>("Regressus/NPCs/Town/Samael").Value.Size() / 2, 1f, SpriteEffects.FlipHorizontally, 0f);
-            ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, new Vector2(225, Main.screenHeight * 0.65f), Color.White, 0, new Vector2(0.5f, 0.5f), new Vector2(1f, 1f), Main.screenWidth - 100);
+            //Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/NPCs/Town/Samael").Value, new Vector2(180, (int)(Main.screenHeight * 0.65f)), null, Color.White, 0f, ModContent.Request<Texture2D>("Regressus/NPCs/Town/Samael").Value.Size() / 2, 1f, SpriteEffects.FlipHorizontally, 0f);
+            //ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, new Vector2(225, Main.screenHeight * 0.65f), Color.White, 0, new Vector2(0.5f, 0.5f), new Vector2(1f, 1f), Main.screenWidth - 100);
             Main.spriteBatch.Reload(Main.DefaultSamplerState);
         }
         public override void SetChatButtons(ref string button, ref string button2)

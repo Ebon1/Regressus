@@ -71,15 +71,17 @@ namespace Regressus.Items.Accessories
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+            //Main.spriteBatch.End();
+            //Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
             float mult = 0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f;
             float scale = Projectile.scale * 3 * mult;
             const float TwoPi = (float)Math.PI * 2f;
             float scalee = (float)Math.Sin(Main.GlobalTimeWrappedHourly * TwoPi / 2f) * 0.3f + 0.7f;
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/vortex3").Value, Projectile.Center - Main.screenPosition, null, Color.Lerp(new Color(47, 50, 120), new Color(147, 96, 107), scalee) * Projectile.scale * 4, -Main.GameUpdateCount * 0.0075f, new Vector2(1230, 1264) / 2, scale, SpriteEffects.None, 0f);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            DrawData a = new(ModContent.Request<Texture2D>("Regressus/Extras/vortex3").Value, Projectile.Center - Main.screenPosition, null, Color.Lerp(new Color(47, 50, 120), new Color(147, 96, 107), scalee) * Projectile.scale * 4, -Main.GameUpdateCount * 0.0075f, new Vector2(1230, 1264) / 2, scale, SpriteEffects.None, 0);
+            MiscDrawingMethods.DrawWithDye(Main.spriteBatch, a, ItemID.PhaseDye, Projectile);
+
+            //Main.spriteBatch.End();
+            //Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             return false;
         }
         float MAX_TIME = 250;

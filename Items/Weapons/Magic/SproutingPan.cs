@@ -21,7 +21,6 @@ namespace Regressus.Items.Weapons.Magic
 {
     public class SproutingPan : ModItem
     {
-        public override string Texture => "Regressus/Extras/Empty";
         public override void SetStaticDefaults() => Tooltip.SetDefault("Right click the summoned peashooters to upgrade them to a higher tier, this will consume one star for each tier.\nThere's a Zombie on Your Lawn!");
 
         public override void SetDefaults()
@@ -31,9 +30,10 @@ namespace Regressus.Items.Weapons.Magic
             Item.DamageType = DamageClass.Summon;
             Item.noUseGraphic = true;
             Item.mana = 20;
+            Item.rare = 7;
             Item.reuseDelay = 50;
         }
-        public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
+        /*public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
             if (line.Index == 0)
             {
@@ -41,7 +41,7 @@ namespace Regressus.Items.Weapons.Magic
                 return false;
             }
             return true;
-        }
+        }*/
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Projectile.NewProjectile(source, Main.MouseWorld, velocity, type, damage, knockback, player.whoAmI);

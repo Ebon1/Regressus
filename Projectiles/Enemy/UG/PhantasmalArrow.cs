@@ -108,7 +108,7 @@ namespace Regressus.Projectiles.Enemy.UG
                     }
                 }
             }
-            if (target && Projectile.timeLeft > 45)
+            if (++Projectile.ai[0] % 5 == 0 && target && Projectile.timeLeft > 45 && Projectile.timeLeft < 450)
             {
                 AdjustMagnitude(ref move);
                 Projectile.velocity = (6.2f * Projectile.velocity + move) / 6.2f;

@@ -11,17 +11,23 @@ using ReLogic.Content;
 using Regressus.Dusts;
 using Regressus.Effects.Prims;
 using Terraria.ID;
+using System.Collections.Generic;
+using ReLogic.Graphics;
+using System.Linq;
+using Mono.Cecil.Cil;
 
 namespace Regressus
 {
     public class Regressus : Mod
     {
-        public RenderTarget2D render, render3, render4;
+        public RenderTarget2D render;
+        public List<RenderTarget2D> lineRender;
+        public List<DrawableTooltipLine> lines;
         public int a;
         public static Regressus Instance;
         public static Effect BeamShader, Lens, Test1, Test2, LavaRT, Galaxy, CrystalShine, TrailShader, RTAlpha;
         public static Effect Tentacle, TentacleBlack, TentacleRT, ScreenDistort, TextGradient, TextGradient2, TextGradientY;
-        public DrawableTooltipLine[] lines = new DrawableTooltipLine[Main.maxItems];
+        /*public DrawableTooltipLine[] lines = new DrawableTooltipLine[Main.maxItems];
         public DrawableTooltipLine activeLine;
         public static void GetLine(DrawableTooltipLine line, int index)
         {
@@ -34,7 +40,7 @@ namespace Regressus
                     r.activeLine = line;
                 }
             }
-        }
+        }*/
         public override void Load()
         {
             /*Particle.Load();
@@ -50,35 +56,44 @@ namespace Regressus
             TextGradient2 = ModContent.Request<Effect>("Regressus/Effects/TextGradient2", (AssetRequestMode)1).Value;
             TextGradientY = ModContent.Request<Effect>("Regressus/Effects/TextGradientY", (AssetRequestMode)1).Value;
             Test2 = ModContent.Request<Effect>("Regressus/Effects/Test2", (AssetRequestMode)1).Value;
-            Galaxy = ModContent.Request<Effect>("Regressus/Effects/Galaxy", (AssetRequestMode)1).Value;
-            LavaRT = ModContent.Request<Effect>("Regressus/Effects/LavaRT", (AssetRequestMode)1).Value;
+            //Galaxy = ModContent.Request<Effect>("Regressus/Effects/Galaxy", (AssetRequestMode)1).Value;
+            //LavaRT = ModContent.Request<Effect>("Regressus/Effects/LavaRT", (AssetRequestMode)1).Value;
             BeamShader = ModContent.Request<Effect>("Regressus/Effects/Beam", (AssetRequestMode)1).Value;
-            Lens = ModContent.Request<Effect>("Regressus/Effects/Lens", (AssetRequestMode)1).Value;
-            Tentacle = ModContent.Request<Effect>("Regressus/Effects/Tentacle", (AssetRequestMode)1).Value;
-            TentacleRT = ModContent.Request<Effect>("Regressus/Effects/TentacleRT", (AssetRequestMode)1).Value;
+            //Lens = ModContent.Request<Effect>("Regressus/Effects/Lens", (AssetRequestMode)1).Value;
+            //Tentacle = ModContent.Request<Effect>("Regressus/Effects/Tentacle", (AssetRequestMode)1).Value;
+            //TentacleRT = ModContent.Request<Effect>("Regressus/Effects/TentacleRT", (AssetRequestMode)1).Value;
             ScreenDistort = ModContent.Request<Effect>("Regressus/Effects/DistortMove", (AssetRequestMode)1).Value;
             TentacleBlack = ModContent.Request<Effect>("Regressus/Effects/TentacleBlack", (AssetRequestMode)1).Value;
             TrailShader = ModContent.Request<Effect>("Regressus/Effects/TrailShader", (AssetRequestMode)1).Value;
             Filters.Scene["Regressus:Oracle"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.16f, .42f, .87f).UseOpacity(0f), EffectPriority.Medium);
             SkyManager.Instance["Regressus:Oracle"] = new OracleSkyP1();
             Filters.Scene["Regressus:Oracle2"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.78f, .33f, 1.11f).UseOpacity(1f), EffectPriority.Medium);
-            Filters.Scene["Regressus:Oracle2Menu"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.78f, .33f, 1.11f).UseOpacity(.9f), EffectPriority.Medium);
+            //Filters.Scene["Regressus:Oracle2Menu"] = new Filter(new OracleShaderData("FilterMiniTower").UseColor(.78f, .33f, 1.11f).UseOpacity(.9f), EffectPriority.Medium);
             SkyManager.Instance["Regressus:Oracle2"] = new OracleSkyP2();
             Filters.Scene["Regressus:OracleSummon"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:Blindness"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:ScreenFlash"] = new Filter(new ScreenShaderData(new Ref<Effect>(ModContent.Request<Effect>("Regressus/Effects/ScreenFlash", (AssetRequestMode)1).Value), "Flash"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:OracleVoid1"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
-            Filters.Scene["Regressus:OracleVoid2"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
+            //Filters.Scene["Regressus:OracleVoid2"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
             On.Terraria.Main.DrawProjectiles += DrawPrimitives;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
+            On.Terraria.Main.Draw += Main_Draw;
             CreateRender();
 
-            // Vanilla resprites go here
-            TextureAssets.Item[ItemID.BrokenHeroSword] = ModContent.Request<Texture2D>("Regressus/Extras/Sprites/BrokenHeroSword", AssetRequestMode.ImmediateLoad);
             base.Load();
         }
-
+        public void Main_Draw(On.Terraria.Main.orig_Draw orig, Main self, GameTime gametime)
+        {
+            orig(self, gametime);
+            SpriteBatch sb = Main.spriteBatch;
+            sb.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            TestDust.DrawAll(sb);
+            FireDust.DrawAll(sb);
+            ColoredFireDust.DrawAll(sb);
+            GinnungagapDust.DrawAll(sb);
+            sb.End();
+        }
         private void DrawPrimitives(On.Terraria.Main.orig_DrawProjectiles orig, Main self)
         {
             for (int i = 0; i < Main.maxProjectiles; i++)
@@ -98,6 +113,7 @@ namespace Regressus
             On.Terraria.Graphics.Effects.FilterManager.EndCapture -= FilterManager_EndCapture;
             On.Terraria.Main.DrawProjectiles -= DrawPrimitives;
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
+            On.Terraria.Main.Draw -= Main_Draw;
             base.Unload();
         }
 
@@ -106,19 +122,11 @@ namespace Regressus
             CreateRender();
         }
 
-        private void Main_LoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
-        {
-            if (render != null)
-                CreateRender();
-        }
-
         public void CreateRender()
         {
             Main.QueueMainThreadAction(() =>
             {
                 render = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
-                render3 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
-                render4 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
             });
         }
 
@@ -145,8 +153,9 @@ namespace Regressus
         {
             GraphicsDevice gd = Main.instance.GraphicsDevice;
             SpriteBatch sb = Main.spriteBatch;
+
             #region "rt2d"
-            gd.SetRenderTarget(Main.screenTargetSwap);
+            /*gd.SetRenderTarget(Main.screenTargetSwap);
             gd.Clear(Color.Transparent);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
@@ -161,7 +170,7 @@ namespace Regressus
                 {
                     Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_03").Value, proj.Center - Main.screenPosition, null, Color.DarkViolet, proj.rotation, ModContent.Request<Texture2D>("Regressus/Extras/Extras2/scratch_03").Size() / 2, new Vector2(proj.ai[1] * proj.scale, (proj.ai[0] == 1 ? 0.5f : 1) * proj.scale), SpriteEffects.None, 0f);
                 }
-                if (proj.active && proj.timeLeft > 1 && proj.type == ModContent.ProjectileType<Projectiles.TentacleRT>() || proj.type == ModContent.ProjectileType<Projectiles.SmolTentacleRT>() || proj.type == ModContent.ProjectileType<Projectiles.Oracle.OracleBeamRT>())
+                if (proj.active && proj.timeLeft > 1 && proj.type == ModContent.ProjectileType<Projectiles.TentacleRT>() || proj.type == ModContent.ProjectileType<Projectiles.SmolTentacleRT>())
                 {
                     Color color = Color.White;
                     proj.ModProjectile.PreDraw(ref color);
@@ -183,9 +192,10 @@ namespace Regressus
             sb.End();
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             sb.End();
+            */
 
 
-
+            /*
             gd.SetRenderTarget(Main.screenTargetSwap);
             gd.Clear(Color.Transparent);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -195,6 +205,7 @@ namespace Regressus
             gd.SetRenderTarget(render);
             gd.Clear(Color.Transparent);
             sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            GinnungagapDust.DrawAll(sb);
             foreach (Projectile proj in Main.projectile)
             {
                 if (proj.active && proj.timeLeft > 1 && proj.type == ModContent.ProjectileType<Items.Accessories.GinnungagapP>())
@@ -225,7 +236,6 @@ namespace Regressus
             sb.End();
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             sb.End();
-
 
 
 
@@ -260,41 +270,35 @@ namespace Regressus
             sb.End();
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             sb.End();
+            */
 
+            /* gd.SetRenderTarget(Main.screenTargetSwap);
+             gd.Clear(Color.Transparent);
+             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+             sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+             sb.End();
 
-            gd.SetRenderTarget(Main.screenTargetSwap);
-            gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-            sb.End();
+             gd.SetRenderTarget(render);
+             gd.Clear(Color.Transparent);
+             sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+             TestDust.DrawAll(sb);
+             sb.End();
 
-            gd.SetRenderTarget(render);
-            gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            TestDust.DrawAll(sb);
-            sb.End();
+             gd.SetRenderTarget(Main.screenTarget);
+             gd.Clear(Color.Transparent);
+             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+             sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+             sb.End();
+             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+             gd.Textures[1] = ModContent.Request<Texture2D>("Regressus/Extras/starSky2", (AssetRequestMode)1).Value;
+             Test1.CurrentTechnique.Passes[0].Apply();
+             Test1.Parameters["m"].SetValue(0.62f);
+             Test1.Parameters["n"].SetValue(0.01f);
+             sb.Draw(render, Vector2.Zero, Color.White);*/
 
-            gd.SetRenderTarget(Main.screenTarget);
-            gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-            sb.End();
-            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            gd.Textures[1] = ModContent.Request<Texture2D>("Regressus/Extras/starSky2", (AssetRequestMode)1).Value;
-            Test1.CurrentTechnique.Passes[0].Apply();
-            Test1.Parameters["m"].SetValue(0.62f);
-            Test1.Parameters["n"].SetValue(0.01f);
-            sb.Draw(render, Vector2.Zero, Color.White);
-            sb.End();
-            sb.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            FireDust.DrawAll(sb);
-            ColoredFireDust.DrawAll(sb);
-            sb.End();
-            #endregion
-            #region "dev names"
             #endregion
             #region "lens"
-            RenderTarget2D render2 = Main.screenTargetSwap;
+            /*RenderTarget2D render2 = Main.screenTargetSwap;
             foreach (Projectile proj in Main.projectile)
             {
                 if (proj.active && proj.type == ModContent.ProjectileType<Projectiles.Lens2>())
@@ -352,10 +356,10 @@ namespace Regressus
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
                 Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
                 Main.spriteBatch.End();
-            }
+            }*/
             #endregion
             #region "ripple"
-            gd.SetRenderTarget(render3);
+            gd.SetRenderTarget(render);
             gd.Clear(Color.Transparent);
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
@@ -378,9 +382,10 @@ namespace Regressus
             Test2.CurrentTechnique.Passes[0].Apply();
             Test2.Parameters["tex0"].SetValue(Main.screenTargetSwap);
             Test2.Parameters["i"].SetValue(0.02f);
-            sb.Draw(render3, Vector2.Zero, Color.White);
+            sb.Draw(render, Vector2.Zero, Color.White);
             sb.End();
             #endregion
+
             /*
 
             gd.SetRenderTarget(render4);
@@ -415,7 +420,7 @@ namespace Regressus
             {
                 Filters.Scene["Regressus:OracleSummon"].Deactivate();
                 Filters.Scene["Regressus:OracleVoid1"].Deactivate();
-                Filters.Scene["Regressus:OracleVoid2"].Deactivate();
+                //Filters.Scene["Regressus:OracleVoid2"].Deactivate();
             }
         }
     }

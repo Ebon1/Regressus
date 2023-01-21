@@ -40,7 +40,7 @@ namespace Regressus
         public static bool SamaelShopOpen;
         public static int CloudTiles;
         public static int TempleBricks;
-        public override void PostUpdatePlayers()
+        /*public override void PostUpdatePlayers()
         {
             for (int i = 0; i < Main.maxPlayers; i++)
             {
@@ -50,7 +50,7 @@ namespace Regressus
                     RegreUtils.activePlayers[i] = player;
                 }
             }
-        }
+        }*/
         public override void PostWorldGen()
         {
             WorldGen.TileRunner(new Random().Next(WorldGen.UndergroundDesertLocation.Location.X, (int)WorldGen.UndergroundDesertLocation.BottomRight().X),
@@ -92,7 +92,7 @@ namespace Regressus
             }, InterfaceScaleType.UI));*/
             layers.Insert(textIndex2, new LegacyGameInterfaceLayer("Regressus: BiomeText", () =>
             {
-                RegreUtils.DrawBiomeTitle();
+                //RegreUtils.DrawBiomeTitle();
                 if (SamaelShopOpen)
                     Samael.DrawDialogue();
                 return true;
@@ -225,28 +225,29 @@ namespace Regressus
                 {
                     if (regrePlayer.CantEatBaguette)
                         regrePlayer.CantEatBaguette = false;
-                    if (AerialBudsCooldown > 0)
+                    /*if (AerialBudsCooldown > 0)
                     {
                         AerialBudsCooldown--;
                     }
+                    */
                     if (SamaelDay < 3)
                         SamaelDay++;
                     else
                         SamaelDay = 0;
-                    for (int i = 0; i < 3; i++)
+                    /*for (int i = 0; i < 3; i++)
                     {
                         if (regrePlayer.AerialBudItem[i] != 0)
                         {
                             //Projectile.NewProjectile(new EntitySource_Misc("Aerial Bud"), Main.LocalPlayer.Center - new Vector2(0, Main.screenHeight / 2), Vector2.Zero, ModContent.ProjectileType<NPCs.Sky.AerialBudGiveBack>(), 0, 0, Main.myPlayer, i);
                         }
-                    }
+                    }*/
                 }
             }
-            if (AerialBudsCooldown == 0 && regrePlayer.AerialBudsGiven >= regrePlayer.AerialBudsMax)
+            /*if (AerialBudsCooldown == 0 && regrePlayer.AerialBudsGiven >= regrePlayer.AerialBudsMax)
             {
                 AerialBudsCooldown = 5;
                 regrePlayer.AerialBudsGiven = 0;
-            }
+            }*/
             //Particles.Particle.UpdateParticles();
         }
         public static void ChangeCameraPos(Vector2 pos, int length, float zoom = 1.65f)

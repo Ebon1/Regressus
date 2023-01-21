@@ -18,7 +18,7 @@ namespace Regressus.Projectiles.Minibosses.Vagrant
         public override void SetDefaults()
         {
             Projectile.width = 25;
-            Projectile.height = 5000;
+            Projectile.height = Main.screenWidth;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
@@ -64,7 +64,7 @@ namespace Regressus.Projectiles.Minibosses.Vagrant
             }
             vel = Projectile.velocity;
             vel.Normalize();
-            Vector2 end = Projectile.Center + vel * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, 5000);
+            Vector2 end = Projectile.Center + vel * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, Main.screenWidth);
 
             Projectile.rotation = Projectile.velocity.ToRotation();
             //Projectile.velocity = -Vector2.UnitY.RotatedBy(MathHelper.ToRadians(Projectile.ai[1]));
@@ -76,7 +76,7 @@ namespace Regressus.Projectiles.Minibosses.Vagrant
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float _ = float.NaN;
-            Vector2 beamEndPos = Projectile.Center + vel * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, 5000);
+            Vector2 beamEndPos = Projectile.Center + vel * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, Main.screenWidth);
             return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, beamEndPos, 25 * Projectile.scale, ref _);
         }
         public override bool PreDraw(ref Color lightColor)
@@ -98,7 +98,7 @@ namespace Regressus.Projectiles.Minibosses.Vagrant
             BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
             Vector2 start = Projectile.Center;
-            Vector2 end = Projectile.Center + vel * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, 5000);
+            Vector2 end = Projectile.Center + vel * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, Main.screenWidth);
             float width = Projectile.width * Projectile.scale;
             // offset so i can make the triangles i want to kill myself
             Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;

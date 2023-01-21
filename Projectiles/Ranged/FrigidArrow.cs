@@ -32,9 +32,9 @@ namespace Regressus.Projectiles.Ranged
             for (int i = 0; i < 10; i++)
             {
                 Dust dust;
-                dust = Main.dust[Terraria.Dust.NewDust(Projectile.position, 2, 2, DustID.BlueCrystalShard, 0f, 0f, 0, new Color(255, 0, 201), 1f)];
+                dust = Main.dust[Terraria.Dust.NewDust(Projectile.Center, 2, 2, DustID.BlueCrystalShard, 0f, 0f, 0, new Color(255, 0, 201), 1f)];
                 dust.noGravity = true;
-            }           
+            }
 
             Lighting.AddLight(Projectile.position, TorchID.Ice);
         }

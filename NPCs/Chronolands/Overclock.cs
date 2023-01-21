@@ -93,14 +93,18 @@ namespace Regressus.NPCs.Chronolands
         float flashAlpha = 1f;
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            spriteBatch.Reload(BlendState.Additive);
-            spriteBatch.Draw(RegreUtils.GetExtraTexture("glow"), NPC.Center - screenPos, null, Color.DeepSkyBlue * flashAlpha, 0, RegreUtils.GetExtraTexture("glow").Size() / 2, 0.4f, SpriteEffects.None, 0);
-            spriteBatch.Draw(RegreUtils.GetExtraTexture("glow"), NPC.Center - screenPos, null, Color.White * flashAlpha, 0, RegreUtils.GetExtraTexture("glow").Size() / 2, 0.35f, SpriteEffects.None, 0);
-            spriteBatch.Reload(BlendState.AlphaBlend);
+            if (!NPC.IsABestiaryIconDummy)
+            {
+                spriteBatch.Reload(BlendState.Additive);
+                spriteBatch.Draw(RegreUtils.GetExtraTexture("glow"), NPC.Center - screenPos, null, Color.DeepSkyBlue * flashAlpha, 0, RegreUtils.GetExtraTexture("glow").Size() / 2, 0.4f, SpriteEffects.None, 0);
+                spriteBatch.Draw(RegreUtils.GetExtraTexture("glow"), NPC.Center - screenPos, null, Color.White * flashAlpha, 0, RegreUtils.GetExtraTexture("glow").Size() / 2, 0.35f, SpriteEffects.None, 0);
+                spriteBatch.Reload(BlendState.AlphaBlend);
+            }
         }
-        public override void OnKill()
+        public override bool PreKill()
         {
             NPC.NewNPCDirect(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<OverclockClock>());
+            return true;
         }
         public override void AI()
         {
@@ -212,6 +216,7 @@ namespace Regressus.NPCs.Chronolands
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Core");
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, new NPCID.Sets.NPCBestiaryDrawModifiers(0) { Hide = true, });
         }
         public override void SetDefaults()
         {
@@ -250,16 +255,17 @@ namespace Regressus.NPCs.Chronolands
             return true;
         }
         float c = 1f;
+        public override void OnSpawn(IEntitySource source)
+        {
+            for (int i = 1; i < 7; i++)
+            {
+                Projectile a = Projectile.NewProjectileDirect(NPC.InheritSource(NPC), NPC.Center + Vector2.UnitY * 15, Main.rand.NextVector2Unit() * 10, ModContent.ProjectileType<OverclockGore>(), 0, 0, Main.player[NPC.target].whoAmI);
+                a.ai[0] = NPC.whoAmI;
+                a.ai[1] = i;
+            }
+        }
         public override void AI()
         {
-
-            if (NPC.ai[0] == 1)
-                for (int i = 1; i < 7; i++)
-                {
-                    Projectile a = Projectile.NewProjectileDirect(NPC.InheritSource(NPC), NPC.Center, Main.rand.NextVector2Unit() * 10, ModContent.ProjectileType<OverclockGore>(), 0, 0, Main.player[NPC.target].whoAmI);
-                    a.ai[0] = NPC.whoAmI;
-                    a.ai[1] = i;
-                }
             NPC.ai[0]++;
             aaa--;
             if (aaa < 175)

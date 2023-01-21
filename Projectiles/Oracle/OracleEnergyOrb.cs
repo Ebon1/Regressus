@@ -20,7 +20,7 @@ namespace Regressus.Projectiles.Oracle
         {
             return Color.White * ((255 - Projectile.alpha) / 255f);
         }
-        public override bool PreDraw(ref Color lightColor)
+        /*public override bool PreDraw(ref Color lightColor)
         {
             SpriteEffects effects = Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
@@ -29,7 +29,7 @@ namespace Regressus.Projectiles.Oracle
             //Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Regressus/Projectiles/Oracle/OracleBlast_Glow").Value, Projectile.Center - Main.screenPosition, new Rectangle(0, Projectile.frame * 35, 65, 35), Color.White, Projectile.rotation, new Vector2(65, 35) / 2, 1, effects, 0f);
             RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
             return false;
-        }
+        }*/
         public override void SetDefaults()
         {
             Projectile.width = 46;

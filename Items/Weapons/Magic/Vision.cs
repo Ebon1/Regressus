@@ -24,6 +24,7 @@ namespace Regressus.Items.Weapons.Magic
             Item.crit = 45;
             Item.damage = 145;
             Item.useAnimation = 25;
+            Item.reuseDelay = 100;
             Item.useTime = 25;
             Item.noMelee = true;
             Item.autoReuse = true;
@@ -33,9 +34,9 @@ namespace Regressus.Items.Weapons.Magic
             Item.UseSound = SoundID.Item20;
             Item.rare = ItemRarityID.Purple;
             Item.shootSpeed = 20.5f;
-            Item.shoot = ModContent.ProjectileType<VisionP>();
+            Item.shoot = ModContent.ProjectileType<VisionP2>();
         }
-        public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
+        /*public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
             if (line.Index == 0)
             {
@@ -51,7 +52,7 @@ namespace Regressus.Items.Weapons.Magic
                 return false;
             }
             return true;
-        }
+        }*/
         /*public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             TooltipLine tooltipLine = tooltips.Find((TooltipLine x) => x.Name == "ItemName");
@@ -69,7 +70,23 @@ namespace Regressus.Items.Weapons.Magic
             player.itemRotation = (float)Math.Atan2(vector5.Y * (float)player.direction, vector5.X * (float)player.direction);
             NetMessage.SendData(13, -1, -1, null, player.whoAmI);
             NetMessage.SendData(41, -1, -1, null, player.whoAmI);
-            Projectile.NewProjectile(source, position, /*Utils.RotatedBy(velocity, (double)(MathHelper.ToRadians(16f) * (float)i))*/ -Vector2.UnitY * 15f, type, damage, knockback, player.whoAmI);
+            /*switch (Main.rand.Next(4))
+            {
+                case 0:
+                    Projectile.NewProjectile(source, position + Vector2.UnitX * (Main.screenWidth / 2), -Vector2.UnitX, type, damage, knockback, player.whoAmI);
+                    break;
+                case 1:
+                    Projectile.NewProjectile(source, position - Vector2.UnitX * (Main.screenWidth / 2), Vector2.UnitX, type, damage, knockback, player.whoAmI);
+                    break;
+                case 2:
+                    Projectile.NewProjectile(source, position + Vector2.UnitY * (Main.screenHeight / 2), -Vector2.UnitY, type, damage, knockback, player.whoAmI);
+                    break;
+                case 3:
+                    Projectile.NewProjectile(source, position - Vector2.UnitY * (Main.screenHeight / 2), Vector2.UnitY, type, damage, knockback, player.whoAmI);
+                    break;
+            }*/
+            Projectile.NewProjectile(source, new Vector2(Main.MouseWorld.X, position.Y) - Vector2.UnitY * (Main.screenHeight / 2), Vector2.UnitY, type, damage, knockback, player.whoAmI);
+            //Projectile.NewProjectile(source, position, /*Utils.RotatedBy(velocity, (double)(MathHelper.ToRadians(16f) * (float)i))*/ -Vector2.UnitY * 15f, type, damage, knockback, player.whoAmI);
             return false;
         }
     }
