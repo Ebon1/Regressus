@@ -20,20 +20,22 @@ namespace Regressus.Items.Accessories
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Starmycel");
-            Tooltip.SetDefault("Boosts summon damage by %10.\nSummons Starlads when hit by an enemy with a 80 second cooldown.");
+            Tooltip.SetDefault("Boosts mana regen and summon damage by %10.\nSummons Starlads when hit by an enemy with a 80 second cooldown.");
         }
 
-        public override void UpdateEquip(Player player)
+        public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<RegrePlayer>().starmycel = true;
+            player.manaRegenBonus += Math.Max(1, player.manaRegenBonus / 10);
         }
+
+  
         public override void SetDefaults()
         {
             Item.width = 36;
             Item.height = 58;
             Item.accessory = true;
             Item.rare = ItemRarityID.Lime;
-            Item.healMana = 10;
         }
 
     }
@@ -72,12 +74,6 @@ namespace Regressus.Items.Accessories
             SoundEngine.PlaySound(SoundID.Item4,Projectile.Center);
         }
 
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            
-            Projectile.Kill();
-            return false;
-        }
 
         public override bool PreDraw(ref Color lightColor)
         {
@@ -101,13 +97,13 @@ namespace Regressus.Items.Accessories
         {
             Projectile.width = 68;
             Projectile.height = 56;
-            Projectile.aiStyle = -1;
-            Projectile.penetrate = -1;
+            Projectile.aiStyle = 0;
+            Projectile.penetrate = 999999;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.damage = 12;
             Projectile.timeLeft = 360;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             
             
         }

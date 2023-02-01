@@ -177,7 +177,7 @@ namespace Regressus
              
                 for(float y = -2; y < 2; y++)
                 {
-                    Projectile.NewProjectileDirect(Player.GetSource_FromThis(),this.Player.position-new Vector2(150f,120*y),new Vector2(5f,0.8f), ModContent.ProjectileType<StarladProjectile>(),12,3f);
+                    Projectile.NewProjectileDirect(Player.GetSource_FromThis(),this.Player.position-Vector2.UnitY*240-new Vector2(Main.maxScreenW/2+20,120*y),new Vector2(5f,0.8f), ModContent.ProjectileType<StarladProjectile>(),12,3f,Player.whoAmI);
                 }
                 starladDelay = 0;
             }
@@ -257,7 +257,7 @@ namespace Regressus
             if (starmycel)
             {
                 starladDelay++;
-                Player.manaRegenBonus += Math.Max(1, Player.manaRegenBonus/10);
+                
             }
 
             if (bossTextProgress > 0)
