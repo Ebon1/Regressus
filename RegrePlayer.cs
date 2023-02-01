@@ -175,9 +175,9 @@ namespace Regressus
             if (starmycel && starladDelay >= 80 * 60)
             {
              
-                for(float y = -2; y < 2; y++)
+                for(float y = 0; y < 4; y++)
                 {
-                    Projectile.NewProjectileDirect(Player.GetSource_FromThis(),this.Player.position-Vector2.UnitY*240-new Vector2(Main.maxScreenW/2+20,120*y),new Vector2(5f,0.8f), ModContent.ProjectileType<StarladProjectile>(),12,3f,Player.whoAmI);
+                    Projectile.NewProjectileDirect(Player.GetSource_FromThis(),this.Player.position-Vector2.UnitY* 1000 - new Vector2(Main.maxScreenW/2+20,240*y),new Vector2(5f,0.8f), ModContent.ProjectileType<StarladProjectile>(),12,3f,Player.whoAmI);
                 }
                 starladDelay = 0;
             }
