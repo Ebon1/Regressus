@@ -196,6 +196,31 @@ namespace Regressus
                 damage += Math.Max(1, damage / 10);
             }
         }
+        
+        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        {
+            if (starladAcc)
+            {
+                if (target.life <= 0 && !target.SpawnedFromStatue && Player.ownedProjectileCounts[ModContent.ProjectileType<StarladProj>()] <= 1)
+                {
+                    for (int i = 0; i < 40; i++)
+                    {
+                        Dust dust = Main.dust[Dust.NewDust(target.position, target.width, target.height, DustID.UltraBrightTorch, 0f, -2f, 117, new Color(0, 255, 142), .6f)];
+
+                        dust.noGravity = true;
+                        dust.position.X += ((Main.rand.Next(-50, 51) / 20) - 1.5f);
+                        if (dust.position != target.Center)
+                            dust.velocity = target.DirectionTo(dust.position) * 6f;
+                    }
+
+                    int upperClamp = (int)MathHelper.Clamp(target.lifeMax, 0, 75);
+                    int p = Projectile.NewProjectile(item.GetSource_OnHit(target), target.position, new Vector2(Main.rand.Next(-6, 6), Main.rand.Next(-5, -1)), ModContent.ProjectileType<StarladProj>(), (int)MathHelper.Clamp((damage / 5 * 2), 0, upperClamp), knockback, Main.myPlayer);
+
+                    Main.projectile[p].DamageType = item.DamageType;
+                }
+            }
+        }
+         
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
