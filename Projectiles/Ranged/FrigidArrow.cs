@@ -48,7 +48,7 @@ namespace Regressus.Projectiles.Ranged
 
             for (int num331 = 0; num331 < 20; num331++)
             {
-                RegreDustHelper.DrawCircle(Projectile.Center, DustID.BlueCrystalShard, 2, 4, 4, 1, 2, nogravity: true);
+                RegreUtils.DrawCircle(Projectile.Center, DustID.BlueCrystalShard, 2, 4, 4, 1, 2, nogravity: true);
             }
         }
     }
