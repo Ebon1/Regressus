@@ -23,6 +23,9 @@ using Regressus.Buffs.Debuffs;
 using static System.Formats.Asn1.AsnWriter;
 using IL.Terraria.GameContent.Events;
 using System.IO;
+using Terraria.GameContent.ItemDropRules;
+using Regressus.Items.Tiles.Trophies;
+using Regressus.Items.Tiles.Relics;
 using Terraria.GameContent.UI;
 
 namespace Regressus.NPCs.Minibosses
@@ -98,6 +101,7 @@ namespace Regressus.NPCs.Minibosses
             get => NPC.ai[3];
             set => NPC.ai[3] = value;
         }
+        
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
@@ -105,7 +109,17 @@ namespace Regressus.NPCs.Minibosses
                 new FlavorTextBestiaryInfoElement("These beings are made out of pure light and pieces of holy metal. While they are usually sent for minor inconveniences, they are a force to be reckoned with"),
             });
         }
-        public override void FindFrame(int frameHeight)
+
+		public override void ModifyNPCLoot(NPCLoot npcLoot)
+		{
+			// Trophies are spawned with 1/10 chance
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<LuminaryTrophyItem>(), 10));
+
+			// ItemDropRule.MasterModeCommonDrop for the relic
+			npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<LuminaryRelicItem>()));
+		}
+
+		public override void FindFrame(int frameHeight)
         {
             if (AIState != Death)
                 NPC.frameCounter++;

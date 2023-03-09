@@ -31,6 +31,7 @@ namespace Regressus
         public int[] oldLife = new int[950], oldDir = new int[950];
         public bool reverseTime;
         public bool starshroomed;
+        public bool starmycel;
         public bool bladeSummon;
         public bool ginnungagap, ginnungagapHide, infectedIdol;
         int thing;
@@ -53,7 +54,7 @@ namespace Regressus
         public int itemComboReset;
         public int lastSelectedItem;
 
-        //public bool ShrineBiome = false;
+        public bool ShrineBiome = false;
         public bool hasEncounteredMoth;
         public override void UpdateBadLifeRegen()
         {
@@ -78,6 +79,7 @@ namespace Regressus
             AcornFairyPet = false;
             ginnungagapHide = false;
             bladeSummon = false;
+            starmycel = false;
 
             if (itemComboReset <= 0)
             {
@@ -167,10 +169,63 @@ namespace Regressus
             CantEatBaguette = boolList.Contains("Baguette");
             hasEncounteredMoth = boolList.Contains("Moth");
         }
+        int starladDelay=80*60;
+        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        {
+            if (starmycel && starladDelay >= 80 * 60)
+            {
+             
+                for(float y = 0; y < 4; y++)
+                {
+                    Projectile.NewProjectileDirect(Player.GetSource_FromThis(),this.Player.position-Vector2.UnitY* 160 - new Vector2(Main.maxScreenW/2+20,240*y),new Vector2(5f,0.8f), ModContent.ProjectileType<StarladProjectile>(),12,3f,Player.whoAmI);
+                }
+                starladDelay = 0;
+            }
+        }
+
+        
+
+
+
         float voidDelay;
+
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            if (starmycel && proj.minion)
+            {
+                damage += Math.Max(1, damage / 10);
+            }
+        }
+        
+        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        {
+            if (starladAcc)
+            {
+                if (target.life <= 0 && !target.SpawnedFromStatue && Player.ownedProjectileCounts[ModContent.ProjectileType<StarladProj>()] <= 1)
+                {
+                    for (int i = 0; i < 40; i++)
+                    {
+                        Dust dust = Main.dust[Dust.NewDust(target.position, target.width, target.height, DustID.UltraBrightTorch, 0f, -2f, 117, new Color(0, 255, 142), .6f)];
+
+                        dust.noGravity = true;
+                        dust.position.X += ((Main.rand.Next(-50, 51) / 20) - 1.5f);
+                        if (dust.position != target.Center)
+                            dust.velocity = target.DirectionTo(dust.position) * 6f;
+                    }
+
+                    int upperClamp = (int)MathHelper.Clamp(target.lifeMax, 0, 75);
+                    int p = Projectile.NewProjectile(item.GetSource_OnHit(target), target.position, new Vector2(Main.rand.Next(-6, 6), Main.rand.Next(-5, -1)), ModContent.ProjectileType<StarladProj>(), (int)MathHelper.Clamp((damage / 5 * 2), 0, upperClamp), knockback, Main.myPlayer);
+
+                    Main.projectile[p].DamageType = item.DamageType;
+                }
+            }
+        }
+         
+
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
             if (ginnungagap && voidDelay <= 0)
+            {
                 if (proj.DamageType == DamageClass.Magic && Player.ownedProjectileCounts[ModContent.ProjectileType<GinnungagapP>()] == 0)
                 {
                     if (Main.rand.NextBool(10))
@@ -184,6 +239,9 @@ namespace Regressus
                         Projectile.NewProjectile(proj.GetSource_FromThis(), Player.Center - Vector2.UnitY * 250, Vector2.Zero, ModContent.ProjectileType<GinnungagapP>(), 50, 0, Player.whoAmI);
                     }
                 }
+            }
+                
+           
         }
 
         public int flashTime;
@@ -219,6 +277,14 @@ namespace Regressus
             {
                 voidDelay--;
             }
+
+
+            if (starmycel)
+            {
+                starladDelay++;
+                
+            }
+
             if (bossTextProgress > 0)
                 bossTextProgress--;
             if (bossTextProgress == 0 && bossMaxProgress != 0)
