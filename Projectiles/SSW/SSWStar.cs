@@ -91,4 +91,85 @@ namespace Regressus.Projectiles.SSW
             return false;
         }
     }
+    public class SSWStarCurve : ModProjectile
+    {
+        public override string Texture => "Regressus/Projectiles/SSW/SSWStar";
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 50;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 3;
+        }
+        public override void Kill(int timeLeft)
+        {
+            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            Color newColor7 = Color.CornflowerBlue;
+            for (int num613 = 0; num613 < 7; num613++)
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 58, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default(Color), 0.8f);
+            }
+            for (float num614 = 0f; num614 < 1f; num614 += 0.125f)
+            {
+                Dust.NewDustPerfect(Projectile.Center, 278, Vector2.UnitY.RotatedBy(num614 * ((float)Math.PI * 2f) + Main.rand.NextFloat() * 0.5f) * (4f + Main.rand.NextFloat() * 4f), 150, newColor7).noGravity = true;
+            }
+            for (float num615 = 0f; num615 < 1f; num615 += 0.25f)
+            {
+                Dust.NewDustPerfect(Projectile.Center, 278, Vector2.UnitY.RotatedBy(num615 * ((float)Math.PI * 2f) + Main.rand.NextFloat() * 0.5f) * (2f + Main.rand.NextFloat() * 3f), 150, Color.Gold).noGravity = true;
+            }
+            Vector2 vector52 = new Vector2(Main.screenWidth, Main.screenHeight);
+            if (Projectile.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + vector52 / 2f, vector52 + new Vector2(400f))))
+            {
+                for (int num616 = 0; num616 < 7; num616++)
+                {
+                    Gore.NewGore(Projectile.GetSource_FromThis(), Projectile.position, Main.rand.NextVector2CircularEdge(0.5f, 0.5f) * Projectile.velocity.Length(), Utils.SelectRandom<int>(Main.rand, 16, 17, 17, 17, 17, 17, 17, 17));
+                }
+            }
+        }
+        public override void SetDefaults()
+        {
+            Projectile.width = 18;
+            Projectile.height = 18;
+            Projectile.aiStyle = -1;
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.timeLeft = 120;
+            Projectile.tileCollide = false;
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D tex = ModContent.Request<Texture2D>("Regressus/Projectiles/Magic/StarshroomStar_Glow").Value;
+            for (int i = 1; i < Projectile.oldPos.Length; i++)
+            {
+                float _scale = MathHelper.Lerp(1f, 0.95f, (float)(Projectile.oldPos.Length - i) / Projectile.oldPos.Length);
+                var fadeMult = 1f / Projectile.oldPos.Length;
+                for (int j = -1; j < 2; j++)
+                {
+                    if (j == 0)
+                        continue;
+                    Vector2 offset = new Vector2((float)Math.Sin(3 * sinething[i]) * 15 * j * i * 0.1f, 0).RotatedBy(Projectile.oldRot[i] + MathHelper.PiOver2);
+                    Main.spriteBatch.Draw(tex, Projectile.oldPos[i] - Main.screenPosition + Projectile.Size / 2 + offset, null, Color.Gold * (1f - fadeMult * i) * 0.5f * alpha, Projectile.oldRot[i], Projectile.Size / 2, (1f - fadeMult * i) * Projectile.scale * 0.75f, SpriteEffects.None, 0f);
+                }
+            }
+            return true;
+        }
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return Color.White * alpha;
+        }
+        float[] sinething = new float[50];
+        float alpha = 1;
+        public override void AI()
+        {
+
+            for (int num25 = sinething.Length - 1; num25 > 0; num25--)
+            {
+                sinething[num25] = sinething[num25 - 1];
+            }
+            sinething[0]++;
+            Projectile.velocity = Projectile.velocity.RotatedBy(MathHelper.ToRadians(Projectile.ai[0]));
+            if (Projectile.timeLeft < 20)
+                alpha -= 0.05f;
+            float progress = Utils.GetLerpValue(0, 120, Projectile.timeLeft);
+            Projectile.scale = MathHelper.Clamp((float)Math.Sin(progress * Math.PI) * 3, 0, 1);
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
@@ -90,7 +90,7 @@ namespace Regressus.Projectiles.Minibosses.Vagrant
             Texture2D bolt2 = RegreUtils.GetExtraTexture("Extras2/spark_07");
 
             // make the beam slightly change scale with time
-            float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
+            float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*//*) * 0.1f);
             // base scale for the flash so it actually connects with beam
             float scale = Projectile.scale * 4 * mult;
             Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Line").Value;
@@ -159,3 +159,4 @@ namespace Regressus.Projectiles.Minibosses.Vagrant
         }
     }
 }
+*/

@@ -247,14 +247,14 @@ namespace Regressus.Skies
         public override void Activate(Vector2 position, params object[] args)
         {
             isActive = true;
-            /*_pillars = new LightPillar[40];
+            _pillars = new LightPillar[40];
             for (int i = 0; i < _pillars.Length; i++)
             {
                 _pillars[i].Position.X = (float)i / (float)_pillars.Length * ((float)Main.maxTilesX * 16f + 20000f) + Main.rand.NextFloat() * 40f - 20f - 20000f;
                 _pillars[i].Position.Y = Main.rand.NextFloat() * 200f - 2000f;
                 _pillars[i].Depth = Main.rand.NextFloat() * 8f + 7f;
             }
-            Array.Sort(_pillars, SortMethod);*/
+            Array.Sort(_pillars, SortMethod);
         }
         private int SortMethod(LightPillar pillar1, LightPillar pillar2)
         {

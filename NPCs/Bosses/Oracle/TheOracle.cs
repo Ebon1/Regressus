@@ -642,7 +642,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 }
                 if (transformFrameCounter == 330)
                 {
-                    Projectile projectile = Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Ripple>(), 0, 0f, player.whoAmI, ai1: 0.01f)];
+                    Projectile projectile = Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<RippleOracle>(), 0, 0f, player.whoAmI, ai1: 0.01f)];
                 }
                 if (transformFrameCounter < 5)
                 {

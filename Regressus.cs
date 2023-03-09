@@ -78,14 +78,14 @@ namespace Regressus
             On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
             On.Terraria.Main.DrawProjectiles += DrawPrimitives;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
-            On.Terraria.Main.Draw += Main_Draw;
+            On.Terraria.Main.DrawDust += Main_Draw;
             CreateRender();
 
             base.Load();
         }
-        public void Main_Draw(On.Terraria.Main.orig_Draw orig, Main self, GameTime gametime)
+        public void Main_Draw(On.Terraria.Main.orig_DrawDust orig, Main self)
         {
-            orig(self, gametime);
+            orig(self);
             SpriteBatch sb = Main.spriteBatch;
             sb.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             TestDust.DrawAll(sb);
@@ -113,7 +113,7 @@ namespace Regressus
             On.Terraria.Graphics.Effects.FilterManager.EndCapture -= FilterManager_EndCapture;
             On.Terraria.Main.DrawProjectiles -= DrawPrimitives;
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
-            On.Terraria.Main.Draw -= Main_Draw;
+            On.Terraria.Main.DrawDust -= Main_Draw;
             base.Unload();
         }
 
@@ -369,7 +369,7 @@ namespace Regressus
             sb.Begin(SpriteSortMode.Deferred, BlendState.Additive);
             foreach (Projectile projectile in Main.projectile)
             {
-                if (projectile.active && (projectile.type == ModContent.ProjectileType<Projectiles.Ripple>() || projectile.type == ModContent.ProjectileType<Projectiles.RippleSmol>()))
+                if (projectile.active && (projectile.type == ModContent.ProjectileType<Projectiles.RippleOracle>() || projectile.type == ModContent.ProjectileType<Projectiles.RippleSmol>()))
                 {
                     Texture2D a = TextureAssets.Projectile[projectile.type].Value;
                     Main.spriteBatch.Draw(a, projectile.Center - Main.screenPosition, null, Color.White, 0, a.Size() / 2, projectile.ai[0], SpriteEffects.None, 0f);

@@ -43,6 +43,10 @@ namespace Regressus.NPCs.Bosses.Vagrant
             if (Main.getGoodWorld)
                 NPC.scale = 0.5f;
         }
+        public override void OnSpawn(IEntitySource source)
+        {
+            Main.NewLightning();
+        }
         public override void FindFrame(int frameHeight)
         {
             NPC.frameCounter++;
@@ -572,7 +576,7 @@ namespace Regressus.NPCs.Bosses.Vagrant
                 }
                 if (AITimer < 100 || (AITimer > 140 && AITimer < 200) || (AITimer > 250 && AITimer < 300) || (AITimer > 360 && AITimer < 400))
                 {
-                    NPC.damage = 0;
+                    //NPC.damage = 0;
                     NPC.velocity = Vector2.Zero;
                     NPC.Center = Vector2.Lerp(NPC.Center, player.Center + Vector2.UnitX * 550 * NPC.ai[3], 0.035f);
                 }

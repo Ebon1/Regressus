@@ -301,8 +301,21 @@ namespace Regressus.Projectiles.Dev
             float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
             // base scale for the flash so it actually connects with beam
             float scale = Projectile.scale * 4 * mult;
+            Texture2D bolt = RegreUtils.GetExtraTexture("laser4");
+            Vector2 start = Projectile.Center;
+            Vector2 end = Projectile.Center + Projectile.velocity * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, Main.screenWidth);
+            float num = Vector2.Distance(start, end);
+            Vector2 vector = (end - start) / num;
+            Vector2 vector2 = start;
+            float rotation = vector.ToRotation();
+            for (int i = 0; i < num; i++)
+            {
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, new Color(20, 63, 128), rotation, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.White, rotation, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                vector2 = start + i * vector;
+            }
             //float scale = Projectile.scale * 2 * mult;
-            BeamPacket packet = new BeamPacket();
+            /*BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
             Vector2 start = Projectile.Center;
             Vector2 end = Projectile.Center + Projectile.velocity * RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, Main.screenWidth);
@@ -349,7 +362,7 @@ namespace Regressus.Projectiles.Dev
             packet3.Add(end + offset * mult, BeamColor, new Vector2(1 + -off, 0));
             packet3.Send();
             RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);
-
+            */
             Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Extras2/circle_05").Value;
 
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Color.White, 0, new Vector2(texture.Width, texture.Height) / 2, scale * 0.05f, SpriteEffects.None, 0f);

@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿/*using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent;
@@ -135,7 +135,7 @@ namespace Regressus.Projectiles.Minibosses.Conjurer
 
             RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
             // make the beam slightly change scale with time
-            float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*/) * 0.1f);
+            float mult = (0.55f + (float)Math.Sin(Main.GlobalTimeWrappedHourly/* * 2*//*) * 0.1f);
             // base scale for the flash so it actually connects with beam
             float scale = Projectile.scale * 4 * mult;
             //float scale = Projectile.scale * 2 * mult;ddddddddddddd
@@ -209,3 +209,4 @@ namespace Regressus.Projectiles.Minibosses.Conjurer
         }
     }
 }
+*/

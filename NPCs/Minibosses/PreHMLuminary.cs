@@ -883,8 +883,7 @@ namespace Regressus.NPCs.Minibosses
             Projectile.rotation += 0.3f;
 
             RegreUtils.Reload(Main.spriteBatch, BlendState.Additive);
-            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
-            Texture2D bolt = RegreUtils.GetExtraTexture("laser");
+            //RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
             Texture2D bolt1 = RegreUtils.GetExtraTexture("laser2");
             Texture2D bolt2 = RegreUtils.GetExtraTexture("laser3");
 
@@ -894,14 +893,25 @@ namespace Regressus.NPCs.Minibosses
             float scale = Projectile.scale * 4 * mult;
             Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Line").Value;
             //float scale = Projectile.scale * 2 * mult;
-            BeamPacket packet = new BeamPacket();
-            packet.Pass = "Texture";
+            //float width = Projectile.width * Projectile.scale;
+            // offset so i can make the triangles i want to kill myself
+            //Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
+            Texture2D bolt = RegreUtils.GetExtraTexture("laser4");
             Vector2 start = Projectile.Center;
             Vector2 end = Projectile.Center + vel * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity,*/ Main.screenWidth;//);
-            float width = Projectile.width * Projectile.scale;
-            // offset so i can make the triangles i want to kill myself
-            Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
-
+            float num = Vector2.Distance(start, end);
+            Vector2 vector = (end - start) / num;
+            Vector2 vector2 = start;
+            float rotation = vector.ToRotation();
+            for (int i = 0; i < num; i++)
+            {
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.HotPink, rotation, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.White, rotation, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                vector2 = start + i * vector;
+            }
+            /*
+            BeamPacket packet = new BeamPacket();
+            packet.Pass = "Texture";
             BeamColor = Color.White;
             BeamPacket.SetTexture(0, bolt);
             float off = -Main.GlobalTimeWrappedHourly % 1;
@@ -939,7 +949,7 @@ namespace Regressus.NPCs.Minibosses
             packet2.Add(end - offset * 2 * mult, BeamColor, new Vector2(1 + off, 1));
             packet2.Add(end + offset * 2 * mult, BeamColor, new Vector2(1 + off, 0));
             packet2.Send();
-            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);
+            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);*/
 
             texture = ModContent.Request<Texture2D>("Regressus/Extras/Extras2/circle_05").Value;
 

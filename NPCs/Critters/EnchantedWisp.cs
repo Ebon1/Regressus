@@ -86,7 +86,7 @@ namespace Regressus.NPCs.Critters
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             //return !Main.dayTime && Main.hardMode ? 0.25f : 0;
-            return spawnInfo.Player.GetModPlayer<RegrePlayer>().ShrineBiome ? 1f : 0f;
+            return !Main.dayTime ? 0.76f : 0f;
         }
     }
 }

@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace Regressus.Projectiles
 {
-    class Ripple : ModProjectile
+    class RippleOracle : ModProjectile
     { //this one is for oracle
         public override bool PreDraw(ref Color lightColor)
         {
