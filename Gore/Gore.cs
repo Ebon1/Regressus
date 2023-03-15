@@ -73,4 +73,9 @@ namespace Regressus
         public override string Texture => "Regressus/Gore/" + this.Name;
         public override void SetStaticDefaults() => GoreID.Sets.SpecialAI[Type] = 0;
     }
+    public class ShotgunShell : ModGore
+    {
+        public override string Texture => "Regressus/Gore/" + this.Name;
+        public override void SetStaticDefaults() => GoreID.Sets.SpecialAI[Type] = 0;
+    }
 }
