@@ -82,7 +82,7 @@ namespace Regressus.NPCs.Overworld
             if (NPC.Center.Distance(player.Center) <= 30f && player.velocity.Y > 0)
             {
                 state = StateID.Bounced;
-                SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/Custom/ObeseladBounce"));
+                SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/Custom/ObeseladBounce"), NPC.Center);
 
                 player.velocity.Y = -10f;
             }
@@ -97,6 +97,12 @@ namespace Regressus.NPCs.Overworld
                 if (state == StateID.Walking)
                 {
                     NPC.velocity.X += NPC.direction * 0.05f;
+
+                    if (NPC.collideX)
+                    {
+                        NPC.velocity.X = -NPC.oldVelocity.X;
+                        storedDirection = -storedDirection;
+                    }
                 }
                 else
                 {
