@@ -74,6 +74,8 @@ namespace Regressus
             Filters.Scene["Regressus:Blindness"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:ScreenFlash"] = new Filter(new ScreenShaderData(new Ref<Effect>(ModContent.Request<Effect>("Regressus/Effects/ScreenFlash", (AssetRequestMode)1).Value), "Flash"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:OracleVoid1"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
+            //SSWBackground
+            ((EffectManager<CustomSky>)SkyManager.Instance)["SSWBackground"] = new Effects.SSW_Background();
             //Filters.Scene["Regressus:OracleVoid2"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
             On.Terraria.Main.DrawProjectiles += DrawPrimitives;
@@ -424,4 +426,32 @@ namespace Regressus
             }
         }
     }
+    //Toggles the effect
+    class EffectTest : ModCommand
+    {
+        public override CommandType Type
+        {
+            get { return CommandType.Chat; }
+        }
+
+        public override string Command
+        {
+            get { return "ssweffect"; }
+        }
+        public override void Action(CommandCaller caller, string input, string[] args)
+        {
+            bool evnt = ((EffectManager<CustomSky>)SkyManager.Instance)["SSWBackground"].IsActive();
+            if (Main.netMode != NetmodeID.Server && !evnt)
+            {
+                Main.NewText("active");
+                SkyManager.Instance.Activate("SSWBackground", default(Vector2));
+            }
+            else
+            {
+                Main.NewText("not active");
+                SkyManager.Instance.Deactivate("SSWBackground");
+            }
+        }
+    }
+
 }
