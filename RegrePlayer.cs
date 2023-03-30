@@ -201,7 +201,7 @@ namespace Regressus
         {
             if (starladAcc)
             {
-                if (target.life <= 0 && !target.SpawnedFromStatue && Player.ownedProjectileCounts[ModContent.ProjectileType<StarladProj>()] <= 1)
+                if (target.life <= 0 && !target.SpawnedFromStatue && Player.ownedProjectileCounts[ModContent.ProjectileType<StarladProjectile>()] <= 1)
                 {
                     for (int i = 0; i < 40; i++)
                     {
@@ -214,7 +214,7 @@ namespace Regressus
                     }
 
                     int upperClamp = (int)MathHelper.Clamp(target.lifeMax, 0, 75);
-                    int p = Projectile.NewProjectile(item.GetSource_OnHit(target), target.position, new Vector2(Main.rand.Next(-6, 6), Main.rand.Next(-5, -1)), ModContent.ProjectileType<StarladProj>(), (int)MathHelper.Clamp((damage / 5 * 2), 0, upperClamp), knockback, Main.myPlayer);
+                    int p = Projectile.NewProjectile(item.GetSource_OnHit(target), target.position, new Vector2(Main.rand.Next(-6, 6), Main.rand.Next(-5, -1)), ModContent.ProjectileType<StarladProjectile>(), (int)MathHelper.Clamp((damage / 5 * 2), 0, upperClamp), knockback, Main.myPlayer);
 
                     Main.projectile[p].DamageType = item.DamageType;
                 }
@@ -247,6 +247,8 @@ namespace Regressus
         public int flashTime;
         public int flashMaxTime;
         public Vector2 flashPosition;
+        private bool starladAcc;
+
         public void FlashScreen(Vector2 pos, int time)
         {
             flashMaxTime = time;
