@@ -55,7 +55,7 @@ namespace Regressus.Projectiles
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Utils.DrawLine(Main.spriteBatch, Projectile.Center, Projectile.Center + Projectile.velocity * Main.screenWidth, Color.White, Color.White, 5);
+            Utils.DrawLine(Main.spriteBatch, Projectile.Center, Projectile.Center + Projectile.velocity * Main.screenWidth, Color.White, Color.White, 2);
             return false;
         }
         /*private void DrawBeam(SpriteBatch spriteBatch, Texture2D texture, Vector2 startPosition, Vector2 endPosition, Vector2 drawScale, Color beamColor)

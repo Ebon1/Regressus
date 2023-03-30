@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿/*using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -56,4 +56,4 @@ namespace Regressus.Effects.Prims
             effect.Parameters["WVP"].SetValue(GetMatrix());
         }
     }
-}
+}*/

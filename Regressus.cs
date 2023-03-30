@@ -74,18 +74,20 @@ namespace Regressus
             Filters.Scene["Regressus:Blindness"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:ScreenFlash"] = new Filter(new ScreenShaderData(new Ref<Effect>(ModContent.Request<Effect>("Regressus/Effects/ScreenFlash", (AssetRequestMode)1).Value), "Flash"), EffectPriority.VeryHigh);
             Filters.Scene["Regressus:OracleVoid1"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
+            //SSWBackground
+            ((EffectManager<CustomSky>)SkyManager.Instance)["SSWBackground"] = new Effects.SSW_Background();
             //Filters.Scene["Regressus:OracleVoid2"] = new Filter(new ScreenShaderData("FilterCrystalWin"), EffectPriority.VeryHigh);
             On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
             On.Terraria.Main.DrawProjectiles += DrawPrimitives;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
-            On.Terraria.Main.Draw += Main_Draw;
+            On.Terraria.Main.DrawDust += Main_Draw;
             CreateRender();
 
             base.Load();
         }
-        public void Main_Draw(On.Terraria.Main.orig_Draw orig, Main self, GameTime gametime)
+        public void Main_Draw(On.Terraria.Main.orig_DrawDust orig, Main self)
         {
-            orig(self, gametime);
+            orig(self);
             SpriteBatch sb = Main.spriteBatch;
             sb.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             TestDust.DrawAll(sb);
@@ -113,7 +115,7 @@ namespace Regressus
             On.Terraria.Graphics.Effects.FilterManager.EndCapture -= FilterManager_EndCapture;
             On.Terraria.Main.DrawProjectiles -= DrawPrimitives;
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
-            On.Terraria.Main.Draw -= Main_Draw;
+            On.Terraria.Main.DrawDust -= Main_Draw;
             base.Unload();
         }
 
@@ -369,7 +371,7 @@ namespace Regressus
             sb.Begin(SpriteSortMode.Deferred, BlendState.Additive);
             foreach (Projectile projectile in Main.projectile)
             {
-                if (projectile.active && (projectile.type == ModContent.ProjectileType<Projectiles.Ripple>() || projectile.type == ModContent.ProjectileType<Projectiles.RippleSmol>()))
+                if (projectile.active && (projectile.type == ModContent.ProjectileType<Projectiles.RippleOracle>() || projectile.type == ModContent.ProjectileType<Projectiles.RippleSmol>()))
                 {
                     Texture2D a = TextureAssets.Projectile[projectile.type].Value;
                     Main.spriteBatch.Draw(a, projectile.Center - Main.screenPosition, null, Color.White, 0, a.Size() / 2, projectile.ai[0], SpriteEffects.None, 0f);
@@ -424,4 +426,32 @@ namespace Regressus
             }
         }
     }
+    //Toggles the effect
+    class EffectTest : ModCommand
+    {
+        public override CommandType Type
+        {
+            get { return CommandType.Chat; }
+        }
+
+        public override string Command
+        {
+            get { return "ssweffect"; }
+        }
+        public override void Action(CommandCaller caller, string input, string[] args)
+        {
+            bool evnt = ((EffectManager<CustomSky>)SkyManager.Instance)["SSWBackground"].IsActive();
+            if (Main.netMode != NetmodeID.Server && !evnt)
+            {
+                Main.NewText("active");
+                SkyManager.Instance.Activate("SSWBackground", default(Vector2));
+            }
+            else
+            {
+                Main.NewText("not active");
+                SkyManager.Instance.Deactivate("SSWBackground");
+            }
+        }
+    }
+
 }

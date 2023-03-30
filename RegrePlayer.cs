@@ -169,21 +169,21 @@ namespace Regressus
             CantEatBaguette = boolList.Contains("Baguette");
             hasEncounteredMoth = boolList.Contains("Moth");
         }
-        int starladDelay=80*60;
+        int starladDelay = 80 * 60;
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
         {
             if (starmycel && starladDelay >= 80 * 60)
             {
-             
-                for(float y = 0; y < 4; y++)
+
+                for (float y = 0; y < 4; y++)
                 {
-                    Projectile.NewProjectileDirect(Player.GetSource_FromThis(),this.Player.position-Vector2.UnitY* 160 - new Vector2(Main.maxScreenW/2+20,240*y),new Vector2(5f,0.8f), ModContent.ProjectileType<StarladProjectile>(),12,3f,Player.whoAmI);
+                    Projectile.NewProjectileDirect(Player.GetSource_FromThis(), this.Player.position - Vector2.UnitY * 160 - new Vector2(Main.maxScreenW / 2 + 20, 240 * y), new Vector2(5f, 0.8f), ModContent.ProjectileType<StarladProjectile>(), 12, 3f, Player.whoAmI);
                 }
                 starladDelay = 0;
             }
         }
 
-        
+
 
 
 
@@ -196,7 +196,7 @@ namespace Regressus
                 damage += Math.Max(1, damage / 10);
             }
         }
-        
+        /*
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
             if (starladAcc)
@@ -221,7 +221,7 @@ namespace Regressus
             }
         }
          
-
+        */
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
             if (ginnungagap && voidDelay <= 0)
@@ -240,8 +240,8 @@ namespace Regressus
                     }
                 }
             }
-                
-           
+
+
         }
 
         public int flashTime;
@@ -284,7 +284,7 @@ namespace Regressus
             if (starmycel)
             {
                 starladDelay++;
-                
+
             }
 
             if (bossTextProgress > 0)

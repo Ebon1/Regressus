@@ -101,10 +101,10 @@ namespace Regressus.Projectiles.Oracle
                 Main.NewText("get a better computer nerd", Color.Orange);
             //float scale = Projectile.scale * 2 * mult;
             RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
-            BeamPacket packet = new BeamPacket();
+            /*BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
             Vector2 start = Projectile.Center;
-            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, *//*Main.screenWidth/*)*//*;
             float width = Projectile.width * Projectile.scale;
             // offset so i can make the triangles
             Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
@@ -148,7 +148,20 @@ namespace Regressus.Projectiles.Oracle
             packet3.Add(end + offset * mult, BeamColor, new Vector2(1 + -off, 0));
             packet3.Send();
             RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);
-
+            */
+            Texture2D bolt = RegreUtils.GetExtraTexture("laser4");
+            Vector2 start = Projectile.Center;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity,*/ Main.screenWidth;//);
+            float num = Vector2.Distance(start, end);
+            Vector2 vector = (end - start) / num;
+            Vector2 vector2 = start;
+            float rotation2 = vector.ToRotation();
+            for (int i = 0; i < num; i++)
+            {
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.Cyan, rotation2, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.White, rotation2, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                vector2 = start + i * vector;
+            }
             texture = ModContent.Request<Texture2D>("Regressus/Extras/blueFlare").Value;
 
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Color.White, 0, new Vector2(texture.Width, texture.Height) / 2, scale * 0.25f, SpriteEffects.None, 0f);
@@ -277,10 +290,9 @@ namespace Regressus.Projectiles.Oracle
             float scale = Projectile.scale * 4 * mult;
             Texture2D texture = ModContent.Request<Texture2D>("Regressus/Extras/Line").Value;
             //float scale = Projectile.scale * 2 * mult;
-            BeamPacket packet = new BeamPacket();
+            /*BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
             Vector2 start = Projectile.Center;
-            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
             float width = Projectile.width * Projectile.scale;
             // offset so i can make the triangles
             Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
@@ -324,7 +336,20 @@ namespace Regressus.Projectiles.Oracle
             packet3.Add(end + offset * mult, BeamColor, new Vector2(1 + -off, 0));
             packet3.Send();
             RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);
-
+            */
+            Texture2D bolt = RegreUtils.GetExtraTexture("laser4");
+            Vector2 start = Projectile.Center;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity,*/ Main.screenWidth;//);
+            float num = Vector2.Distance(start, end);
+            Vector2 vector = (end - start) / num;
+            Vector2 vector2 = start;
+            float rotation = vector.ToRotation();
+            for (int i = 0; i < num; i++)
+            {
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.Cyan, rotation, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.White, rotation, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                vector2 = start + i * vector;
+            }
             texture = ModContent.Request<Texture2D>("Regressus/Extras/blueFlare").Value;
 
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Color.White, 0, new Vector2(texture.Width, texture.Height) / 2, scale * 0.25f, SpriteEffects.None, 0f);
@@ -449,14 +474,14 @@ namespace Regressus.Projectiles.Oracle
             // base scale for the flash so it actually connects with beam
             float scale = Projectile.scale * 4 * mult;
             //float scale = Projectile.scale * 2 * mult;
-            Vector2 start = Projectile.Center;
-            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
+            //Vector2 start = Projectile.Center;
+            //Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity, */Main.screenWidth/*)*/;
             float width = Projectile.width * Projectile.scale;
             // offset so i can make the triangles
-            Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
+            //Vector2 offset = (start - end).SafeNormalize(Vector2.Zero).RotatedBy(MathHelper.PiOver2) * width;
             float off = 0;
             RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
-            BeamPacket packet1 = new BeamPacket();
+            /*BeamPacket packet1 = new BeamPacket();
             packet1.Pass = "Texture";
 
             BeamColor = Color.DeepSkyBlue;
@@ -484,7 +509,21 @@ namespace Regressus.Projectiles.Oracle
             packet.Add(end - offset * 14f * mult, BeamColor, new Vector2(1 + off, 1));
             packet.Add(end + offset * 14f * mult, BeamColor, new Vector2(1 + off, 0));
             packet.Send();
-            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);
+            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);*/
+
+            Texture2D bolt = RegreUtils.GetExtraTexture("laser4");
+            Vector2 start = Projectile.Center;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity,*/ Main.screenWidth;//);
+            float num = Vector2.Distance(start, end);
+            Vector2 vector = (end - start) / num;
+            Vector2 vector2 = start;
+            float rotation = vector.ToRotation();
+            for (int i = 0; i < num; i++)
+            {
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.Cyan, rotation, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.White, rotation, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                vector2 = start + i * vector;
+            }
             RegreUtils.Reload(Main.spriteBatch, BlendState.AlphaBlend);
 
             return false;
@@ -552,7 +591,7 @@ namespace Regressus.Projectiles.Oracle
             //Main.spriteBatch.Draw(rune3, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), -rotation, new Vector2(rune3.Width, rune3.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
             Main.spriteBatch.Draw(rune4, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), rotation, new Vector2(rune4.Width, rune4.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
 
-            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
+            /*RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Immediate);
             BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
             Vector2 start = Projectile.Center;
@@ -599,8 +638,21 @@ namespace Regressus.Projectiles.Oracle
             packet3.Add(end - offset * mult, BeamColor, new Vector2(1 + -off, 1));
             packet3.Add(end + offset * mult, BeamColor, new Vector2(1 + -off, 0));
             packet3.Send();
-            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);
+            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);*/
 
+            Texture2D bolt = RegreUtils.GetExtraTexture("laser4");
+            Vector2 start = Projectile.Center;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity,*/ Main.screenWidth;//);
+            float num = Vector2.Distance(start, end);
+            Vector2 vector = (end - start) / num;
+            Vector2 vector2 = start;
+            float rotation2 = vector.ToRotation();
+            for (int i = 0; i < num; i++)
+            {
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.Cyan, rotation2, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.White, rotation2, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                vector2 = start + i * vector;
+            }
             texture = ModContent.Request<Texture2D>("Regressus/Extras/blueFlare").Value;
 
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Color.White, 0, new Vector2(texture.Width, texture.Height) / 2, scale * 0.25f, SpriteEffects.None, 0f);
@@ -693,7 +745,7 @@ namespace Regressus.Projectiles.Oracle
             Texture2D rune1 = ModContent.Request<Texture2D>("Regressus/Extras/rune_alt").Value;
             for (int i = 0; i < 2; i++)
                 Main.spriteBatch.Draw(rune1, Projectile.Center - Main.screenPosition, null, new Color(20, 63, 128), 0, new Vector2(rune1.Width, rune1.Height) / 2, scale * 0.5f, SpriteEffects.None, 0f);
-            BeamPacket packet = new BeamPacket();
+            /*BeamPacket packet = new BeamPacket();
             packet.Pass = "Texture";
             Vector2 start = Projectile.Center;
             Vector2 end = Projectile.Center + Projectile.velocity * Projectile.height;
@@ -739,7 +791,20 @@ namespace Regressus.Projectiles.Oracle
             packet3.Add(end - offset * mult, BeamColor, new Vector2(1 + -off, 1));
             packet3.Add(end + offset * mult, BeamColor, new Vector2(1 + -off, 0));
             packet3.Send();
-            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);
+            RegreUtils.Reload(Main.spriteBatch, SpriteSortMode.Deferred);*/
+            Texture2D bolt = RegreUtils.GetExtraTexture("laser4");
+            Vector2 start = Projectile.Center;
+            Vector2 end = Projectile.Center + Projectile.velocity * /*RegreUtils.TRay.CastLength(Projectile.Center, Projectile.velocity,*/ Main.screenWidth;//);
+            float num = Vector2.Distance(start, end);
+            Vector2 vector = (end - start) / num;
+            Vector2 vector2 = start;
+            float rotation = vector.ToRotation();
+            for (int i = 0; i < num; i++)
+            {
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.Cyan, rotation, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(bolt, vector2 - Main.screenPosition, null, Color.White, rotation, bolt.Size() / 2, new Vector2(1, Projectile.scale), SpriteEffects.None, 0f);
+                vector2 = start + i * vector;
+            }
 
             texture = ModContent.Request<Texture2D>("Regressus/Extras/blueFlare").Value;
 

@@ -31,12 +31,12 @@ namespace Regressus.Projectiles.Ranged
         }
         public override void AI()
         {
-            Projectile.velocity *= 0.95f;
-            //RegreUtils.DustExplosion(Projectile.Center, Projectile.Size, true, Color.Gold, false, false);
-            /*for (int num622 = 0; num622 < 10; num622++)
+            //Projectile.velocity *= 0.95f;
+            RegreUtils.DustExplosion(Projectile.Center, Projectile.Size, true, Color.Gold, false, false);
+            for (int num622 = 0; num622 < 10; num622++)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 57, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, default(Color), 1.2f);
-            }*/
+            }
         }
     }
 }

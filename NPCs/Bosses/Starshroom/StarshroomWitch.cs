@@ -62,7 +62,7 @@ namespace Regressus.NPCs.Bosses.Starshroom
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            if (AIState == Staff && AITimer < 180 && AITimer > 80)
+            if (AIState == Staff && AITimer < 240 && AITimer > 150)
             {
                 Texture2D tex = RegreUtils.GetExtraTexture("MagicCircle_2");
                 spriteBatch.Reload(BlendState.Additive);
@@ -92,6 +92,7 @@ namespace Regressus.NPCs.Bosses.Starshroom
         const int Intro = 0;
         const int Sacs = 1;
         const int Staff = 2;
+        const int Flail = 3;
         public float AIState
         {
             get => NPC.ai[0];
@@ -147,7 +148,7 @@ namespace Regressus.NPCs.Bosses.Starshroom
                 }
                 if (AITimer >= 180)
                 {
-                    AIState = Staff;
+                    AIState = Flail;
                     AITimer = 0;
                 }
             }
@@ -181,10 +182,13 @@ namespace Regressus.NPCs.Bosses.Starshroom
             }
             else if (AIState == Staff)
             {
+
                 AITimer++;
                 AITimer2++;
-                if (AITimer == 1)
+                if (AITimer == 80)
+                {
                     AITimer3 = 90;
+                }
                 if (AITimer < 80)
                 {
                     if (AITimer2 % 5 == 0)
@@ -193,12 +197,23 @@ namespace Regressus.NPCs.Bosses.Starshroom
                         {
                             if (i == 0)
                                 continue;
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, RegreUtils.FromAToB(NPC.Center, player.Center) * 2 * AITimer * 0.1f, ModContent.ProjectileType<SSWStar>(), 15, 0, player.whoAmI, i);
+                            float thing = MathHelper.Clamp(AITimer * 0.01f, 0, 1f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, RegreUtils.FromAToB(NPC.Center, player.Center) * 10, ModContent.ProjectileType<SSWStar>(), 15, 0, player.whoAmI, i * thing);
                         }
                     }
                 }
-                else AITimer3--;
-                if (AITimer == 150)
+                else if (AITimer > 80 && AITimer < 150)
+                {
+                    if (AITimer2 % 5 == 0)
+                        for (int i = -1; i < 2; i++)
+                        {
+                            if (i == 0)
+                                continue;
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, RegreUtils.FromAToB(NPC.Center, player.Center) * 10, ModContent.ProjectileType<SSWStarCurve>(), 15, 0, player.whoAmI, i * 3 * ((AITimer - 80) * 0.2f));
+                        }
+                }
+                if (AITimer >= 150) AITimer3--;
+                if (AITimer3 == 0 && AITimer > 150)
                 {
                     float rot = Main.rand.NextFloat(0, (float)Math.PI * 2);
                     for (float k = 0; k < 6.28f; k += .1f)
@@ -213,13 +228,22 @@ namespace Regressus.NPCs.Bosses.Starshroom
                         Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), pos, RegreUtils.FromAToB(NPC.Center, player.Center) * 7f, ModContent.ProjectileType<SSWStar>(), 15, 0, player.whoAmI, 0);
                         a.ai[1] = 1;
                     }
-                    for (int i = 0; i < 15; i++)
-                    {
-                        float angle = RegreUtils.CircleDividedEqually(i, 15);
-                        Vector2 vel = Vector2.UnitX.RotatedBy(angle) * 10f;
-                        Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<SSWStar>(), 15, 0, player.whoAmI, 0);
-                        a.ai[1] = 1;
-                    }
+                }
+                if (AITimer >= 330)
+                {
+                    NPC.velocity = Vector2.Zero;
+                    cachePos = Vector2.Zero;
+                    flying = false;
+                    AIState = Flail;
+                    AITimer = 0;
+                }
+            }
+            else if (AIState == Flail)
+            {
+                AITimer++;
+                if (AITimer == 1)
+                {
+                    Projectile.NewProjectile(NPC.InheritSource(NPC), NPC.Center, Vector2.Zero, ModContent.ProjectileType<BigAssBall>(), 20, 0, player.whoAmI, NPC.whoAmI);
                 }
             }
         }
