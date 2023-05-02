@@ -56,6 +56,7 @@ namespace Regressus
 
         public bool ShrineBiome = false;
         public bool hasEncounteredMoth;
+
         public override void UpdateBadLifeRegen()
         {
             if (starshroomed)
