@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Regressus.Dusts;
 using System;
 using Terraria;
 using Terraria.DataStructures;
