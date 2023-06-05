@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Regressus.Items.Critters;
 using Regressus.Common;
 
-namespace Regressus.Contnet.NPCs.Critters
+namespace Regressus.Content.NPCs.Critters
 {
     public class ArgonButterfly : ModNPC
     {
@@ -75,7 +75,7 @@ namespace Regressus.Contnet.NPCs.Critters
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            //Æ: Totally legit code, all mine aha
+            //Ã†: Totally legit code, all mine aha
             Texture2D glowTex = Request<Texture2D>("Regressus/NPCs/Critters/ArgonButterflyGlow").Value;
 
             float frame = 3f / (float)Main.npcFrameCount[NPC.type];
