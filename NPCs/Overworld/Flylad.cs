@@ -112,7 +112,7 @@ namespace Regressus.NPCs.Overworld
                     widthMod = 0.5f;
                 }
 
-                if (NPC.collideY)
+                if (NPC.collideY || (NPC.velocity.Y > 0.5f && heightMod == 2))
                 {
                     state = StateID.HitGround;
                     SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, NPC.Center);
@@ -178,6 +178,16 @@ namespace Regressus.NPCs.Overworld
 
             if (state == StateID.Stunned)
             {
+
+                if (NPC.Center.Distance(player.Center) <= 30f && player.velocity.Y > 0 && NPC.ai[3] == 0)
+                {
+                    NPC.ai[3] = 1;
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/Custom/ObeseladBounce"), NPC.Center);
+                    player.velocity.Y = -6;
+                    heightMod = 0.5f;
+                    widthMod = 2f;
+                    NPC.StrikeNPC(34, 0, 0);
+                }
                 NPC.damage = 0;
 
                 heightMod += (1 - heightMod) / 5f;
@@ -191,11 +201,11 @@ namespace Regressus.NPCs.Overworld
                 }
 
                 NPC.velocity.Y += 0.5f;
-                
+
                 if (NPC.ai[0] >= 150f)
                 {
                     NPC.ai[0] = 0f;
-
+                    NPC.ai[3] = 0;
                     state = StateID.Floating;
                 }
 
@@ -271,7 +281,7 @@ namespace Regressus.NPCs.Overworld
 
             if (state == StateID.Stunned)
             {
-                spriteBatch.Draw(texture, position + new Vector2(0, texture.Height / 2f - 10f) + (new Vector2((float)Math.Sin(timer + MathHelper.PiOver4) * 2f, (float)Math.Cos(timer + MathHelper.PiOver4) * 0.25f) * 15f), texture.Frame(), Color.White, NPC.rotation, 
+                spriteBatch.Draw(texture, position + new Vector2(0, texture.Height / 2f - 10f) + (new Vector2((float)Math.Sin(timer + MathHelper.PiOver4) * 2f, (float)Math.Cos(timer + MathHelper.PiOver4) * 0.25f) * 15f), texture.Frame(), Color.White, NPC.rotation,
                     new Vector2(texture.Width / 2f, texture.Height), 1f + (float)Math.Cos(timer + MathHelper.PiOver4) * 0.2f, spriteEffects, 0);
             }
 
@@ -295,7 +305,7 @@ namespace Regressus.NPCs.Overworld
 
             if (state == StateID.Stunned)
             {
-                spriteBatch.Draw(texture, position + new Vector2(0, texture.Height / 2f - 10f) + (new Vector2((float)Math.Sin(timer + Math.PI + MathHelper.PiOver4) * 2f, (float)Math.Cos(timer + Math.PI + MathHelper.PiOver4) * 0.25f) * 15f), texture.Frame(), Color.White, NPC.rotation, 
+                spriteBatch.Draw(texture, position + new Vector2(0, texture.Height / 2f - 10f) + (new Vector2((float)Math.Sin(timer + Math.PI + MathHelper.PiOver4) * 2f, (float)Math.Cos(timer + Math.PI + MathHelper.PiOver4) * 0.25f) * 15f), texture.Frame(), Color.White, NPC.rotation,
                     new Vector2(texture.Width / 2f, texture.Height), 1f + (float)Math.Cos(timer + Math.PI + MathHelper.PiOver4) * 0.2f, spriteEffects, 0);
             }
 

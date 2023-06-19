@@ -161,7 +161,7 @@ namespace Regressus.Items
     public class Starfall : ModBiome
     {
         public override int Music => MusicLoader.GetMusicSlot(Mod, "Sounds/Music/Starfall");
-        
+
         public override SceneEffectPriority Priority => SceneEffectPriority.Event;
 
         public override bool IsBiomeActive(Player player)
