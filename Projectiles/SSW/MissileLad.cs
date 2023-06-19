@@ -53,16 +53,19 @@ namespace Regressus.Projectiles.SSW
                 Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<StarExplosion2>(), Projectile.damage, Projectile.knockBack);
             }
         }
+        public override bool ShouldUpdatePosition() => Projectile.ai[0] > 40;
         public override void AI()
         {
             if (Projectile.ai[1] != 0)
                 Projectile.frame = (int)Projectile.ai[1];
             Player player = Main.player[Projectile.owner];
-            if (Projectile.ai[0] == 0)
+            Projectile.ai[0]++;
+            if (Projectile.ai[0] < 40)
             {
-                Projectile.ai[0] = 1;
+                Projectile.rotation += MathHelper.ToRadians(4);
             }
-
+            else
+                Projectile.rotation = Projectile.velocity.ToRotation();
             if (Projectile.frame == 0)
             {
 
@@ -73,7 +76,6 @@ namespace Regressus.Projectiles.SSW
                 //Projectile.velocity *= 1.1f;
                 Dust.NewDustPerfect(Projectile.Center - new Vector2(0, 24).RotatedBy(Projectile.rotation - MathHelper.PiOver2), ModContent.DustType<Smoke>(), Projectile.velocity, 0, new Color(161, 31, 197), 0.05f).noGravity = true;
             }
-            Projectile.rotation = Projectile.velocity.ToRotation();
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, RegreUtils.FromAToB(Projectile.Center, player.Center) * 10 * (Projectile.frame + 1), 0.01f);
         }
     }
@@ -123,7 +125,7 @@ namespace Regressus.Projectiles.SSW
         {
             Main.LocalPlayer.GetModPlayer<RegrePlayer>().FlashScreen(Projectile.Center, 20);
             RegreSystem.ScreenShakeAmount = 15;
-            Main.LocalPlayer.velocity = RegreUtils.FromAToB(Projectile.Center, Main.LocalPlayer.Center) * 30;
+            Main.LocalPlayer.velocity = RegreUtils.FromAToB(Projectile.Center, Main.LocalPlayer.Center) * 15;
         }
         public override bool ShouldUpdatePosition() => false;
         public override bool PreDraw(ref Color lightColor)
