@@ -126,6 +126,7 @@ namespace Regressus.Projectiles.SSW
             Main.LocalPlayer.GetModPlayer<RegrePlayer>().FlashScreen(Projectile.Center, 20);
             RegreSystem.ScreenShakeAmount = 15;
             Main.LocalPlayer.velocity = RegreUtils.FromAToB(Projectile.Center, Main.LocalPlayer.Center) * 15;
+            SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/Custom/HyperNuke"), Projectile.Center);
         }
         public override bool ShouldUpdatePosition() => false;
         public override bool PreDraw(ref Color lightColor)
