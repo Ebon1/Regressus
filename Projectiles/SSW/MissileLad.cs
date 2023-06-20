@@ -65,16 +65,18 @@ namespace Regressus.Projectiles.SSW
                 Projectile.rotation += MathHelper.ToRadians(4);
             }
             else
+            {
                 Projectile.rotation = Projectile.velocity.ToRotation();
-            if (Projectile.frame == 0)
-            {
+                if (Projectile.frame == 0)
+                {
 
-                Dust.NewDustPerfect(Projectile.Center - new Vector2(0, 24).RotatedBy(Projectile.rotation - MathHelper.PiOver2), ModContent.DustType<Smoke>(), Projectile.velocity, 0, new Color(255, 177, 0), 0.025f).noGravity = true;
-            }
-            else
-            {
-                //Projectile.velocity *= 1.1f;
-                Dust.NewDustPerfect(Projectile.Center - new Vector2(0, 24).RotatedBy(Projectile.rotation - MathHelper.PiOver2), ModContent.DustType<Smoke>(), Projectile.velocity, 0, new Color(161, 31, 197), 0.05f).noGravity = true;
+                    Dust.NewDustPerfect(Projectile.Center - new Vector2(0, 24).RotatedBy(Projectile.rotation - MathHelper.PiOver2), ModContent.DustType<Smoke>(), Projectile.velocity, 0, new Color(255, 177, 0), 0.025f).noGravity = true;
+                }
+                else
+                {
+                    //Projectile.velocity *= 1.1f;
+                    Dust.NewDustPerfect(Projectile.Center - new Vector2(0, 24).RotatedBy(Projectile.rotation - MathHelper.PiOver2), ModContent.DustType<Smoke>(), Projectile.velocity, 0, new Color(161, 31, 197), 0.05f).noGravity = true;
+                }
             }
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, RegreUtils.FromAToB(Projectile.Center, player.Center) * 10 * (Projectile.frame + 1), 0.01f);
         }
@@ -84,8 +86,8 @@ namespace Regressus.Projectiles.SSW
         public override string Texture => RegreUtils.Empty;
         public override void SetDefaults()
         {
-            Projectile.height = 300;
-            Projectile.width = 300;
+            Projectile.height = 150;
+            Projectile.width = 150;
             Projectile.hostile = true;
             Projectile.tileCollide = false;
             Projectile.friendly = false;
@@ -98,7 +100,7 @@ namespace Regressus.Projectiles.SSW
             Main.spriteBatch.Reload(BlendState.Additive);
             float alpha = MathHelper.Lerp(0.5f, 0, Projectile.ai[0]);
             Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, new Color(255, 177, 0) * alpha * 1.9f, Main.GameUpdateCount * 0.003f, tex.Size() / 2, Projectile.ai[0] * 1.1f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Color.White * alpha * 2, Projectile.rotation, tex.Size() / 2, Projectile.ai[0], SpriteEffects.None, 0);
+            //Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Color.White * alpha * 2, Projectile.rotation, tex.Size() / 2, Projectile.ai[0], SpriteEffects.None, 0);
             Main.spriteBatch.Reload(BlendState.AlphaBlend);
             return false;
         }
