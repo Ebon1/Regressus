@@ -58,22 +58,22 @@ namespace Regressus.NPCs.Overworld
             }
 
             Color newColor7 = Color.CornflowerBlue;
-            for (int num613 = 0; num613 < 7; num613++)
+            for (int num613 = 0; num613 < 20; num613++)
             {
                 Dust.NewDust(NPC.position, NPC.width, NPC.height, 58, NPC.velocity.X * 0.1f, NPC.velocity.Y * 0.1f, 150, default, 0.8f);
             }
-            for (float num614 = 0f; num614 < 1f; num614 += 0.125f)
+            for (float num614 = 0f; num614 < 2f; num614 += 0.125f)
             {
                 Dust.NewDustPerfect(NPC.Center, 278, Vector2.UnitY.RotatedBy(num614 * ((float)Math.PI * 2f) + Main.rand.NextFloat() * 0.5f) * (4f + Main.rand.NextFloat() * 4f), 150, newColor7).noGravity = true;
             }
-            for (float num615 = 0f; num615 < 1f; num615 += 0.25f)
+            for (float num615 = 0f; num615 < 2f; num615 += 0.25f)
             {
                 Dust.NewDustPerfect(NPC.Center, 278, Vector2.UnitY.RotatedBy(num615 * ((float)Math.PI * 2f) + Main.rand.NextFloat() * 0.5f) * (2f + Main.rand.NextFloat() * 3f), 150, Color.Gold).noGravity = true;
             }
             Vector2 vector52 = new Vector2(Main.screenWidth, Main.screenHeight);
             if (NPC.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + vector52 / 2f, vector52 + new Vector2(400f))))
             {
-                for (int num616 = 0; num616 < 7; num616++)
+                for (int num616 = 0; num616 < 20; num616++)
                 {
                     Gore.NewGore(NPC.GetSource_FromThis(), NPC.position, Main.rand.NextVector2CircularEdge(0.5f, 0.5f) * NPC.velocity.Length(), Utils.SelectRandom(Main.rand, 16, 17, 17, 17, 17, 17, 17, 17));
                 }

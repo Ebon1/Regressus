@@ -131,6 +131,7 @@ namespace Regressus.Effects
                     }
                     else
                     {
+                        starlads[i].pos.X += starlads[i].depth * Main.rand.NextFloat();
                         starlads[i].pos.Y += starlads[i].depth * 3;
                         if (starlads[i].pos.Y > Main.screenHeight + 100)
                         {

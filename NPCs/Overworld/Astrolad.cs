@@ -138,11 +138,15 @@ namespace Regressus.NPCs.Overworld
         public override void HitEffect(int hitDirection, double damage)
         {
             if (damage > NPC.life)
+            {
                 for (int i = 0; i < lads.Length; i++)
                 {
                     Projectile a = Projectile.NewProjectileDirect(NPC.GetSource_Death(), NPC.Center + lads[i].position, RegreUtils.FromAToB(lads[i].position, Main.player[NPC.target].Center) * 10, ModContent.ProjectileType<MissileLad>(), lads[i].hyper ? 50 : 20, 0, Main.player[NPC.target].whoAmI);
                     a.frame = lads[i].hyper ? 1 : 0;
                 }
+
+                Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<StarExplosion>(), NPC.damage, 0);
+            }
         }
         public override void AI()
         {
