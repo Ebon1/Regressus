@@ -177,6 +177,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 if (aiTimer == 40)
                 {
                     NPC.velocity = Vector2.Zero;
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                     for (int i = (projectileNum - projectileNum - projectileNum); i <= projectileNum; i++)
                     {
                         Vector2 vel = Utils.RotatedBy(Vector2.UnitY, (double)(MathHelper.ToRadians(21f) * (float)i));
@@ -186,6 +187,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 }
                 if (++aiTimer >= 65)
                 {
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                     RegreSystem.ScreenShakeAmount = 5f;
                     aiTimer = 0;
                     for (int i = (projectileNum - projectileNum - projectileNum); i <= projectileNum; i++)

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using ReLogic.Graphics;
 using System.Linq;
 using Mono.Cecil.Cil;
+using System.Reflection;
 
 namespace Regressus
 {
@@ -24,7 +25,6 @@ namespace Regressus
         public List<RenderTarget2D> lineRender;
         public List<DrawableTooltipLine> lines;
         public int a;
-        public static Regressus Instance;
         public static Effect BeamShader, Lens, Test1, Test2, LavaRT, Galaxy, CrystalShine, TrailShader, RTAlpha;
         public static Effect Tentacle, TentacleBlack, TentacleRT, ScreenDistort, TextGradient, TextGradient2, TextGradientY;
         /*public DrawableTooltipLine[] lines = new DrawableTooltipLine[Main.maxItems];
@@ -41,6 +41,19 @@ namespace Regressus
                 }
             }
         }*/
+        public class TemporaryFix : PreJITFilter
+        {
+            public override bool ShouldJIT(MemberInfo member) => false;
+        }
+
+        public static Regressus Instance { get; set; }
+
+        public Regressus()
+        {
+            Instance = this;
+            PreJITFilter = new TemporaryFix();
+        }
+
         public override void Load()
         {
             /*Particle.Load();

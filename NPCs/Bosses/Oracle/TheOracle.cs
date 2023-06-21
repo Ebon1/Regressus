@@ -11,6 +11,7 @@ using ReLogic.Content;
 using Regressus.Buffs.Debuffs;
 using ReLogic.Graphics;
 using Terraria.GameContent.Bestiary;
+using Terraria.Audio;
 
 namespace Regressus.NPCs.Bosses.Oracle
 {
@@ -346,6 +347,8 @@ namespace Regressus.NPCs.Bosses.Oracle
             {
                 if (player.Center.Distance(arenaCenter) >= (1322 / 2) * (2.5f))
                 {
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
+
                     player.velocity = RegreUtils.FromAToB(player.Center, arenaCenter) * 10f;
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<RippleSmol>(), 0, 0f);
                     player.wingTime = player.wingTimeMax;
@@ -360,6 +363,7 @@ namespace Regressus.NPCs.Bosses.Oracle
             }
             if (player.chaosState && player.ownedProjectileCounts[ModContent.ProjectileType<OracleRoDRift>()] < 1)
             {
+                SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                 Projectile.NewProjectile(NPC.GetSource_FromThis(), /*(Main.MouseWorld.Distance(arenaCenter) < (1322 / 2) * 2.5f ? Main.MouseWorld : */(arenaCenter), Vector2.Zero, ModContent.ProjectileType<OracleRoDRift>(), 0, 0, player.whoAmI);
             }
             if (!phase2 && !NPC.AnyNPCs(ModContent.NPCType<OracleCrystal>()) && AIState != PreIntro && AIState != Transform)
@@ -373,6 +377,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 {
                     if (player.ownedProjectileCounts[ModContent.ProjectileType<OracleOrbs>()] <= 0)
                     {
+                        SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                         for (int i = 0; i < 4; i++)
                         {
                             Projectile projectile = Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OracleOrbs>(), 0, 0, Main.myPlayer, NPC.whoAmI)];
@@ -631,6 +636,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 }
                 if (transformFrameCounter == 80)
                 {
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                     /*for (int i = 0; i < 15; i++)
                     {
                         float angle = 2f * (float)Math.PI / 15f * i;
@@ -642,6 +648,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 }
                 if (transformFrameCounter == 330)
                 {
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                     Projectile projectile = Main.projectile[Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<RippleOracle>(), 0, 0f, player.whoAmI, ai1: 0.01f)];
                 }
                 if (transformFrameCounter < 5)
@@ -845,6 +852,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 }
                 if (AITimer == 10)
                 {
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                     for (int k = 0; k < 5; k++)
                     {
                         float angle = 2f * (float)Math.PI / 5f * k;
@@ -855,6 +863,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 }
                 if (AITimer == 40)
                 {
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                     for (int k = 0; k < 5; k++)
                     {
                         float angle = 2f * (float)Math.PI / 5f * k;
@@ -865,6 +874,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 }
                 if (AITimer >= 70 && AITimer <= 340)
                 {
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                     AIValue += 46f / 2;
                     Vector2 velocity = new Vector2(1.5f, 1.5f).RotatedBy(MathHelper.ToRadians(AIValue));
                     if (velocity.Length() < 3) velocity = Vector2.Normalize(velocity) * 3f;
@@ -903,6 +913,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 if (AITimer2 == 10)
                 {
                     random[6] = new Vector2(player.Center.X, Main.screenPosition.Y + Main.screenHeight + 200);
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                     for (int i = 0; i < 6; i++)
                     {
                         random[i] = new Vector2(Main.screenPosition.X + Main.screenWidth * Main.rand.NextFloat(), Main.screenPosition.Y + Main.screenHeight + 200);
@@ -916,6 +927,7 @@ namespace Regressus.NPCs.Bosses.Oracle
                 {
                     RegreSystem.ScreenShakeAmount = 5f;
                     AITimer2 = 0;
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/fard"), NPC.Center);
                     for (int i = 0; i < 6; i++)
                     {
                         int projectilea = Projectile.NewProjectile(NPC.GetSource_FromThis(), random[i], -Vector2.UnitY, ModContent.ProjectileType<OracleBeam>(), 45, 0, player.whoAmI, 0, 1.875f);

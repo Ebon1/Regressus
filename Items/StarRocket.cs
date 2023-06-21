@@ -54,13 +54,17 @@ namespace Regressus.Items
 
     public class StarRocketPro : ModProjectile
     {
+        Color[] colorFromList = new Color[8] { new Color(0, 0, 0), new Color(255, 0, 0), new Color(255, 125, 0), new Color(225, 255, 0), new Color(0, 255, 0), new Color(0, 255, 225), new Color(0, 0, 255), new Color(255, 0, 255) };
+
+        bool showTrail = false;
+
         public override string Texture => "Regressus/Items/StarRocket";
 
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Star Rocket");
 
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         }
 
@@ -71,7 +75,7 @@ namespace Regressus.Items
             Projectile.hostile = false;
 
             Projectile.scale = 1f;
-            Projectile.Size = new Vector2(26, 26);
+            Projectile.Size = new Vector2(26);
 
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
@@ -92,9 +96,15 @@ namespace Regressus.Items
             {
                 Projectile.tileCollide = false;
 
+                showTrail = true;
+
                 Projectile.velocity += (Projectile.rotation - MathHelper.PiOver2).ToRotationVector2();
 
-                Dust.NewDustPerfect(Projectile.Center - new Vector2(0, -26).RotatedBy(Projectile.rotation), DustID.Torch, Main.rand.NextFloat(-4, 4).ToRotationVector2(), 0, default, 2).noGravity = true;
+                for (int k = 0; k < 3; k++)
+                {
+                    Dust.NewDustPerfect(Projectile.Center - new Vector2(0, -26).RotatedBy(Projectile.rotation), ModContent.DustType<Glow>(), Main.rand.NextFloat(-4, 4).ToRotationVector2(), 0, new Color(255, 108, 23), Main.rand.NextFloat(0.5f, 0.7f)).noGravity = true;
+                }
+
                 Dust.NewDustPerfect(Projectile.Center - new Vector2(0, -26).RotatedBy(Projectile.rotation), ModContent.DustType<Smoke>(), Main.rand.NextFloat(-4, 4).ToRotationVector2(), 0, new Color(255, 177, 0), 1).noGravity = true;
             }
             else
@@ -133,7 +143,7 @@ namespace Regressus.Items
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
 
             int frameHeight = texture.Height / Main.projFrames[Projectile.type];
             int frameY = frameHeight * Projectile.frame;
@@ -145,12 +155,24 @@ namespace Regressus.Items
 
             SpriteEffects spriteEffects = SpriteEffects.None;
 
-            for (int k = 0; k < Projectile.oldPos.Length; k++)
+            if (showTrail)
             {
-                Vector2 oldPosition = Projectile.oldPos[k] + (sourceRectangle.Size() / 2f) - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(default, BlendState.Additive, default, default, default, default, Main.GameViewMatrix.ZoomMatrix);
 
-                Main.EntitySpriteDraw(texture, oldPosition, sourceRectangle, color, Projectile.rotation, origin, new Vector2(1f - (Projectile.velocity.Length() * 0.01f), 1f + (Projectile.velocity.Length() * 0.01f)), spriteEffects, 0);
+                for (int k = 0; k < Projectile.oldPos.Length; k++)
+                {
+                    Main.EntitySpriteDraw(texture, Projectile.oldPos[k] - Projectile.position + Projectile.Center - Main.screenPosition, sourceRectangle, Projectile.GetAlpha(colorFromList[k]), Projectile.rotation, origin, new Vector2(1f - (Projectile.velocity.Length() * 0.01f), 1f + (Projectile.velocity.Length() * 0.01f)), spriteEffects, 0);
+                }
+
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(default, default, default, default, default, default, Main.GameViewMatrix.ZoomMatrix);
             }
+
+            texture = ModContent.Request<Texture2D>(Texture).Value;
+            
+            sourceRectangle = new Rectangle(0, frameY, texture.Width, frameHeight);
+            origin = sourceRectangle.Size() / 2f;
 
             Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, origin, new Vector2(1f - (Projectile.velocity.Length() * 0.01f), 1f + (Projectile.velocity.Length() * 0.01f)), spriteEffects, 0);
 
