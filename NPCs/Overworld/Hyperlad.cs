@@ -107,6 +107,7 @@ TURNS INTO A BOUNCING HYPER SPEED COMET*/
                 NPC.ai[1] -= .025f;
                 if (NPC.ai[1] <= 0)
                 {
+                    SoundEngine.PlaySound(new SoundStyle("Regressus/Sounds/Custom/Hyper"), NPC.Center);
                     NPC.life = 0;
                     NPC.checkDead();
                     Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, new Vector2(RegreUtils.FromAToB(NPC.Center, player.Center).X * 5, -10), ModContent.ProjectileType<HyperComet>(), 10, 0);

@@ -188,7 +188,7 @@ namespace Regressus.Items
 
         public override bool IsBiomeActive(Player player)
         {
-            return (player.ZoneNormalSpace || player.ZoneOverworldHeight || player.ZoneDirtLayerHeight) && !Main.dayTime;
+            return !player.ZoneRockLayerHeight && !player.ZoneUnderworldHeight && !Main.dayTime;
         }
 
         public override void OnEnter(Player player)
